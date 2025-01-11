@@ -97,6 +97,7 @@
         <module>reactify-client</module>
         <module>reactify-core</module>
         <module>reactify-utils</module>
+        <module>reactify-test</module>
     </modules>
 
     <!-- =========================================== -->

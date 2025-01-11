@@ -1,0 +1,27 @@
+server:
+  port: 8899
+logging:
+#  pattern:
+#    console: "%d{dd/MM/yy HH:mm:ss}|%X{traceId}|%m%n"
+  level:
+    root: INFO
+    io.r2dbc.postgresql.QUERY: DEBUG
+    io.r2dbc.postgresql.PARAM: DEBUG
+
+# spring config
+spring:
+  application:
+    name: auth-service
+  main:
+    web-application-type: reactive
+    allow-bean-definition-overriding: true
+  messages:
+    basename: i18n/messages
+
+# web client config
+client:
+  base-currency:
+    address: http://www.geoplugin.net
+    name: baseCurrencyClient
+
+

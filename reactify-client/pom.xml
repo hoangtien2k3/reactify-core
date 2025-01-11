@@ -12,7 +12,7 @@
 	<version>1.1.8</version>
 	<name>reactify-client</name>
 	<packaging>jar</packaging>
-	<description>Java lib base all api rest and soap</description>
+	<description>Java lib base all api rest and soap using web client</description>
 	<url>https://github.com/hoangtien2k3/reactify-core</url>
 
 	<licenses>
@@ -76,15 +76,11 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter</artifactId>
+			<groupId>io.github.hoangtien2k3</groupId>
+			<artifactId>reactify-utils</artifactId>
+			<version>1.1.8</version>
 		</dependency>
 
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
-		</dependency>
 	</dependencies>
 
 	<build>

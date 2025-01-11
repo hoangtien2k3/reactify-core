@@ -15,10 +15,10 @@
  */
 package com.reactify;
 
-import java.io.StringReader;
-import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.List;
+import lombok.extern.slf4j.Slf4j;
+import org.w3c.dom.Document;
+import org.xml.sax.InputSource;
+
 import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -28,10 +28,22 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import org.w3c.dom.Document;
-import org.xml.sax.InputSource;
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.List;
 
+/**
+ * Utility class for data manipulation and processing. This class contains
+ * static methods for various data-related operations.
+ */
+@Slf4j
 public class DataWsUtil {
+
+    /**
+     * Constructs a new instance of {@code DataWsUtil}.
+     */
+    public DataWsUtil() {}
 
     /**
      * <p>
@@ -39,12 +51,12 @@ public class DataWsUtil {
      * </p>
      *
      * @param realData
-     *            a {@link java.lang.String} object
+     *            a {@link String} object
      * @param fromKey
-     *            a {@link java.lang.String} object
+     *            a {@link String} object
      * @param toKey
-     *            a {@link java.lang.String} object
-     * @return a {@link java.lang.String} object
+     *            a {@link String} object
+     * @return a {@link String} object
      */
     public static String getDataByTag(String realData, String fromKey, String toKey) {
         String data = "";
@@ -63,12 +75,12 @@ public class DataWsUtil {
      * </p>
      *
      * @param data
-     *            a {@link java.lang.String} object
+     *            a {@link String} object
      * @param openTag
-     *            a {@link java.lang.String} object
+     *            a {@link String} object
      * @param closeTag
-     *            a {@link java.lang.String} object
-     * @return a {@link java.lang.String} object
+     *            a {@link String} object
+     * @return a {@link String} object
      */
     public static String wrapTag(String data, String openTag, String closeTag) {
         if (DataUtil.isNullOrEmpty(openTag) || DataUtil.isNullOrEmpty(closeTag) || DataUtil.isNullOrEmpty(data)) {
@@ -79,13 +91,49 @@ public class DataWsUtil {
 
     /**
      * <p>
+     * wrapTagReturn.
+     * </p>
+     *
+     * @param data
+     *            a {@link String} object
+     * @return a {@link String} object
+     */
+    public static String wrapTagReturn(String data) {
+        return wrapTag(data, "<return>", "<return>");
+    }
+
+    /**
+     * <p>
+     * xmlToObj.
+     * </p>
+     *
+     * @param xml
+     *            a {@link String} object
+     * @param clz
+     *            a {@link Class} object
+     * @param <T>
+     *            a T class
+     * @return a T object
+     */
+    public static <T> T xmlToObj(String xml, Class<?> clz) {
+        try {
+            StringReader reader = new StringReader(xml.trim());
+            return (T) UnmarshallerFactory.getInstance(clz).unmarshal(reader);
+        } catch (Exception ex) {
+            log.error("Parse data error {}  :", clz.getName() + ex.getMessage(), ex);
+        }
+        return null;
+    }
+
+    /**
+     * <p>
      * parseXmlFile.
      * </p>
      *
      * @param in
-     *            a {@link java.lang.String} object
-     * @return a {@link org.w3c.dom.Document} object
-     * @throws java.lang.Exception
+     *            a {@link String} object
+     * @return a {@link Document} object
+     * @throws Exception
      *             if any.
      */
     public static Document parseXmlFile(String in) throws Exception {
@@ -106,8 +154,8 @@ public class DataWsUtil {
      * </p>
      *
      * @param dbf
-     *            a {@link javax.xml.parsers.DocumentBuilderFactory} object
-     * @throws javax.xml.parsers.ParserConfigurationException
+     *            a {@link DocumentBuilderFactory} object
+     * @throws ParserConfigurationException
      *             if any.
      */
     public static void fixSecurityDocumentBuilder(DocumentBuilderFactory dbf) throws ParserConfigurationException {
@@ -139,8 +187,8 @@ public class DataWsUtil {
      * getDocumentBuilderFactory.
      * </p>
      *
-     * @return a {@link javax.xml.parsers.DocumentBuilderFactory} object
-     * @throws javax.xml.parsers.ParserConfigurationException
+     * @return a {@link DocumentBuilderFactory} object
+     * @throws ParserConfigurationException
      *             if any.
      */
     public static DocumentBuilderFactory getDocumentBuilderFactory() throws ParserConfigurationException {
@@ -156,8 +204,8 @@ public class DataWsUtil {
      * </p>
      *
      * @param unformattedXml
-     *            a {@link java.lang.String} object
-     * @return a {@link java.lang.String} object
+     *            a {@link String} object
+     * @return a {@link String} object
      */
     public static String formatXML(String unformattedXml) {
         try {
@@ -172,6 +220,7 @@ public class DataWsUtil {
             transformer.transform(source, xmlOutput);
             return xmlOutput.getWriter().toString();
         } catch (Exception e) {
+            log.error("formatXML error: ", e);
             return "";
         }
     }
@@ -182,12 +231,12 @@ public class DataWsUtil {
      * </p>
      *
      * @param realData
-     *            a {@link java.lang.String} object
+     *            a {@link String} object
      * @param fromKey
-     *            a {@link java.lang.String} object
+     *            a {@link String} object
      * @param toKey
-     *            a {@link java.lang.String} object
-     * @return a {@link java.util.List} object
+     *            a {@link String} object
+     * @return a {@link List} object
      */
     public static List<String> getListDataByTag(String realData, String fromKey, String toKey) {
         List<String> list = new ArrayList<>();

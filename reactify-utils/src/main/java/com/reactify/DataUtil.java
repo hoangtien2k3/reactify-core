@@ -394,18 +394,17 @@ public class DataUtil {
      *            the type of the object
      * @return the parsed object or a new instance of the class if parsing fails
      */
-    public static <T> T parseStringToObject(String content, Class<T> clz) {
+    public static <T> T parseStringToObject(String content, Class<?> clz) {
         if (isNullOrEmpty(content)) {
             return null;
         }
         try {
-            return ObjectMapperFactory.getInstance().readValue(safeToString(content), clz);
-        } catch (JsonProcessingException ignored) {
-        }
+            return (T) ObjectMapperFactory.getInstance().readValue(safeToString(content), clz);
+        } catch (JsonProcessingException ignored) {}
         try {
-            return clz.getDeclaredConstructor().newInstance();
+            return (T) clz.newInstance();
         } catch (Exception e) {
-            return null;
+            return (T) new Object();
         }
     }
 
