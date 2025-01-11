@@ -3,7 +3,7 @@
 
 <a href="https://github.com/hoangtien2k3/reactify/blob/main/docs/en/README.md">📚Docs</a> |
 <a href="https://github.com/hoangtien2k3/reactify/blob/main/docs/en/README.md">💬Chat</a> |
-<a href="https://github.com/hoangtien2k3/reactify/blob/main/docs/en/README.md">✨Live Demo</a>
+<a href="https://github.com/hoangtien2k3/keycloak-auth-service">✨Live Demo</a>
 </h3>
 
 ##
@@ -57,46 +57,45 @@ Click [here](https://central.sonatype.com/namespace/io.github.hoangtien2k3) for 
 
 Here is a quick teaser of a complete Spring Boot application in Java:
 
-### Start Using `reactify-core`
+## Start Using Lib `reactify-core`
+
+### 1. Use annotation [`@ComponentScan`]() to scan all libraries
 
 ```java
 
-@SpringBootApplication
 @ComponentScan(basePackages = {
-        "com.reactify.*",
-        "com.example.myproject"
+        "com.reactify.*",           // add default: com.reactify.*
+        "com.example.myproject"     // varies depending on your project
 })
-public class Example {
-
-    @RequestMapping("/")
-    String home() {
-        return "Hello World!";
-    }
-
+@SpringBootApplication
+public class ExampleApplication {
     public static void main(String[] args) {
         SpringApplication.run(Example.class, args);
     }
 }
 ```
 
-## Using Lib Reactify-Core Demo:
-
-1. `LocalCache`
-
-```java
-
-@LocalCache(durationInMinute = 30, maxRecord = 10000, autoCache = true)
-public Mono<List<OptionSetValue>> findByOptionSetCode(String optionSetCode) {
-    return optionSetValueRepository.findByOptionSetCode(optionSetCode).collectList();
-}
-```
-
-2. `Keycloak`
-
-application.yml
+### 2. Config your project file `application.yml` or `application.properties`
 
 ```yml
+# spring config
 spring:
+  main:
+    web-application-type: reactive
+    allow-bean-definition-overriding: true
+  messages:
+    basename: i18n/messages
+
+  #connect db R2DBC PostgreSQL
+  r2dbc:
+    url: r2dbc:postgresql://localhost:5434/auth
+    username: admin
+    password: admin
+    pool:
+      max-size: 10
+      initial-size: 5
+
+  # Config connect Keycloak
   security:
     oauth2:
       client:
@@ -114,52 +113,85 @@ spring:
       keycloak:
         client-id: ${keycloak.clientId}
 
+# Web client config
+client:
+  #keycloak
+  keycloak:
+    address: http://localhost:8080/realms/ezbuy-server/protocol/openid-connect
+    name: keycloak
+    auth:
+      client-id: ezbuy-client
+      client-secret: mI92QDfvi20tZgFtjpRAPWu8TR6eMHmw
+  #notification
+  notification:
+    internal-oauth: true
+    address: http://localhost:7777/v1/transmission
+    name: notiServiceClient
+    pool:
+      max-size: 100
+      max-pending-acquire: 100
+    timeout:
+      read: 60000
+      write: 1000
+
+# Unauthenticated endpoints config
+application:
+  http-logging:
+    request:
+      enable: true
+      header: true
+      param: true
+      body: true
+    response:
+      enable: true
+      body: true
+  whiteList:
+    - uri: /v1/auth/generate-otp
+      methods:
+        - POST
+    - uri: /**
+      methods:
+        - OPTIONS
+    - uri: /v1/auth/get-all
+      methods:
+        - GET
+  data:
+    sync-data:
+      limit: 500
+
+#keycloak client config
+keycloak:
+  clientId: ezbuy-client
+  clientSecret: mI92QDfvi20tZgFtjpRAPWu8TR6eMHmw
+  realm: ezbuy-server
+  serverUrl: http://localhost:8080
+  grantType: password
+  host: localhost
+
+# minio server config
+minio:
+  bucket: ezbuy-bucket
+  enabled: true
+  baseUrl: http://localhost:9000
+  publicUrl: http://localhost:9000/ezbuy-bucket
+  accessKey: 4DoaZ0KdzpXdDlVK104t
+  secretKey: nuRiQUIJNVygMOHhmtR4LT1etAa7F8PQOsRGP5oj
+  private:
+    bucket: ezbuy-private
 ```
 
-```java
+### 3. After completing the configuration, start running the project.
 
-@Override
-public Mono<Optional<AccessToken>> getToken(LoginRequest loginRequest) {
-    MultiValueMap<String, String> formParameters = new LinkedMultiValueMap<>();
-    formParameters.add(OAuth2ParameterNames.GRANT_TYPE, OAuth2ParameterNames.PASSWORD);
-    formParameters.add(OAuth2ParameterNames.USERNAME, loginRequest.getUsername());
-    formParameters.add(OAuth2ParameterNames.PASSWORD, loginRequest.getPassword());
-    String clientId = loginRequest.getClientId();
-    if (!DataUtil.isNullOrEmpty(clientId)) {
-        return keycloakProvider
-                .getClientWithSecret(clientId)
-                .flatMap(clientRepresentation -> {
-                    formParameters.add(OAuth2ParameterNames.CLIENT_ID, clientId);
-                    formParameters.add(OAuth2ParameterNames.CLIENT_SECRET, clientRepresentation.getSecret());
-                    return requestToken(formParameters);
-                })
-                .switchIfEmpty(Mono.error(new BusinessException(CommonErrorCode.INVALID_PARAMS, "client.id.not.valid")));
-    } else {
-        formParameters.add(OAuth2ParameterNames.CLIENT_ID, keyCloakConfig.getAuth().clientId());
-        formParameters.add(OAuth2ParameterNames.CLIENT_SECRET, keyCloakConfig.getAuth().clientSecret());
-    }
-    return requestToken(formParameters);
-}
+```yaml
+  # Using Maven
+  mvn spring-boot:run
+
+  # Using Gradle
+  gradle bootRun
 ```
 
-3. Call Api Using BaseRest and BaseSoap Client
-
-```java
-public Mono<String> getEmailsByUsername(String username) {
-    var payload = new LinkedMultiValueMap<>();
-    payload.set("username", username);
-    return SecurityUtils.getTokenUser().flatMap(token -> {
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "Bearer " + token);
-        return baseRestClient
-                .get(authClient, "/user/keycloak", headers, payload, String.class)
-                .map(response -> {
-                    Optional<?> optionalEmail = (Optional<?>) response;
-                    return DataUtil.safeToString(optionalEmail.orElse(null));
-                });
-    });
-}
-```
+### 4. Refer to the following project, used
+`reactify-core` library for webflux microservice project: [keycloak-auth-service](https://github.com/hoangtien2k3/keycloak-auth-service)
 
 ## Contributing
 
@@ -179,8 +211,8 @@ If you would like to contribute to the development of this project, please follo
 
 ## Contributors ✨
 
-<a href="https://github.com/hoangtien2k3/reactify/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=hoangtien2k3/reactify" />
+<a href="https://github.com/hoangtien2k3/reactify/graphs/contributors" target="_blank" rel="noopener noreferrer">
+  <img src="https://contrib.rocks/image?repo=hoangtien2k3/reactify" alt="Contributors" />
 </a>
 
 ## License
@@ -188,22 +220,17 @@ If you would like to contribute to the development of this project, please follo
 This project is licensed under the [Apache License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0)
 
 ```
-Apache License
-Copyright (c) 2024 Hoàng Anh Tiến
+Copyright 2024-2025 the original author Hoàng Anh Tiến.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     https://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
 ```
-
-## Lead to This Project 🌈
-
-<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
-<!-- prettier-ignore-start -->
-<!-- markdownlint-disable -->
-<table>
-  <tr>
-    <td align="center"><a href="https://www.linkedin.com/in/hoangtien2k3/"><img src="https://avatars.githubusercontent.com/u/122768076?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Hoàng Anh Tiến</b></sub></a><br /><a href="https://github.com/hoangtien2k3/news-app/commits?author=hoangtien2k3" title="Code">💻</a> <a href="#maintenance-hoangtien2k3" title="Maintenance">🚧</a> <a href="#ideas-hoangtien2k3" title="Ideas, Planning, & Feedback">🤔</a> <a href="#design-hoangtien2k3" title="Design">🎨</a> <a href="https://github.com/hoangtien2k3/news-app/issues?q=author%hoangtien2k3" title="Bug reports">🐛</a></td>
-  </tr>
-
-</table>
-
-<!-- markdownlint-restore -->
-<!-- prettier-ignore-end -->
-<!-- ALL-CONTRIBUTORS-LIST:END -->
