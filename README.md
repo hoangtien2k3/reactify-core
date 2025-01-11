@@ -1,5 +1,5 @@
 <h3 align="center">
-<img src="docs/images/reactify_banner.png" alt="Ezbuy" width="300" />
+<img src="docs/images/reactify_banner.png" alt="reactify-core" width="300" />
 
 <a href="https://github.com/hoangtien2k3/reactify/blob/main/docs/en/README.md">📚Docs</a> |
 <a href="https://discord.com/invite/dhCKEJmG">💬Chat</a> |
