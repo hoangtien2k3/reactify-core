@@ -59,7 +59,7 @@ Here is a quick teaser of a complete Spring Boot application in Java:
 
 ## Start Using Lib `reactify-core`
 
-### 1. Use annotation [`@ComponentScan`]() to scan all libraries
+#### 1. Use annotation [`@ComponentScan`]() to scan all libraries
 
 ```java
 
@@ -75,7 +75,7 @@ public class ExampleApplication {
 }
 ```
 
-### 2. Config your project file `application.yml` or `application.properties`
+#### 2. Config your project file `application.yml` or `application.properties`
 
 ```yml
 # spring config
@@ -180,7 +180,7 @@ minio:
     bucket: ezbuy-private
 ```
 
-### 3. After completing the configuration, start running the project.
+#### 3. After completing the configuration, start running the project.
 
 ```yaml
   # Using Maven
@@ -190,7 +190,7 @@ minio:
   gradle bootRun
 ```
 
-### 4. Refer to the following project, used
+#### 4. Refer to the following project, used
 `reactify-core` library for webflux microservice project: [keycloak-auth-service](https://github.com/hoangtien2k3/keycloak-auth-service)
 
 ## Contributing
