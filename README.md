@@ -2,16 +2,16 @@
 <img src="docs/images/reactify_banner.png" alt="Ezbuy" width="300" />
 
 <a href="https://github.com/hoangtien2k3/reactify/blob/main/docs/en/README.md">📚Docs</a> |
-<a href="https://github.com/hoangtien2k3/reactify/blob/main/docs/en/README.md">💬Chat</a> |
+<a href="https://discord.com/invite/dhCKEJmG">💬Chat</a> |
 <a href="https://github.com/hoangtien2k3/keycloak-auth-service">✨Live Demo</a>
 </h3>
 
 ##
 
-Reactify [a commons Java lib]() with spring boot framework, Supports using keycloak, filter, trace log, cached, minio
+Reactify-core `Java lib` with spring boot framework, Supports using keycloak, filter, trace log, cached, minio
 server, exception handler, validate and call API with webclient
 
-This README provides quickstart instructions on running [`reactify`]() on bare metal project spring boot.
+This README provides quickstart instructions on running [`reactify-core`]() on bare metal project spring boot.
 
 [![SonarCloud](https://sonarcloud.io/images/project_badges/sonarcloud-white.svg)](https://sonarcloud.io/summary/new_code?id=hoangtien2k3_reactify)
 
