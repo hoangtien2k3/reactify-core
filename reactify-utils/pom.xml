@@ -58,7 +58,6 @@
 			<url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
 		</repository>
 	</distributionManagement>
-
 	<properties>
 		<reactify.version>1.2.0</reactify.version>
 		<!-- confix version lib -->
@@ -88,7 +87,6 @@
 		<sonar.organization>hoangtien2k3</sonar.organization>
 		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
 	</properties>
-
 	<dependencies>
 		<dependency>
 			<groupId>org.json</groupId>
@@ -225,28 +223,6 @@
 							<goal>check</goal>
 						</goals>
 						<phase>validate</phase>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>com.mycila</groupId>
-				<artifactId>license-maven-plugin</artifactId>
-				<version>4.0.rc2</version>
-				<configuration>
-					<licenseSets>
-						<licenseSet>
-							<header>HEADER.txt</header>
-							<includes>
-								<include>**/*.java</include>
-							</includes>
-						</licenseSet>
-					</licenseSets>
-				</configuration>
-				<executions>
-					<execution>
-						<goals>
-							<goal>format</goal>
-						</goals>
 					</execution>
 				</executions>
 			</plugin>

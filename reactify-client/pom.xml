@@ -24,7 +24,7 @@
 		<relativePath/>
 	</parent>
 	<artifactId>reactify-client</artifactId>
-	<version>1.2.1</version>
+	<version>1.2.2</version>
 	<name>reactify-client</name>
 	<packaging>jar</packaging>
 	<description>Java lib base all api rest and soap using web client</description>

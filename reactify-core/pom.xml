@@ -24,7 +24,7 @@
         <relativePath/>
     </parent>
     <artifactId>reactify-core</artifactId>
-    <version>1.2.1</version>
+    <version>1.2.2</version>
     <name>reactify-core</name>
     <packaging>jar</packaging>
     <description>Java Library for Developing Reactive Backend Systems with Keycloak Authentication,
@@ -364,28 +364,6 @@
                             <goal>check</goal>
                         </goals>
                         <phase>validate</phase>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>com.mycila</groupId>
-                <artifactId>license-maven-plugin</artifactId>
-                <version>4.0.rc2</version>
-                <configuration>
-                    <licenseSets>
-                        <licenseSet>
-                            <header>HEADER.txt</header>
-                            <includes>
-                                <include>**/*.java</include>
-                            </includes>
-                        </licenseSet>
-                    </licenseSets>
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>format</goal>
-                        </goals>
                     </execution>
                 </executions>
             </plugin>
