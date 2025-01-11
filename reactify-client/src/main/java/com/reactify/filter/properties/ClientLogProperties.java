@@ -16,7 +16,6 @@
 package com.reactify.filter.properties;
 
 import com.reactify.constants.Constants;
-
 import java.util.List;
 
 /**

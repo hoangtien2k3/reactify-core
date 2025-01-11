@@ -15,14 +15,13 @@
  */
 package com.reactify;
 
-import lombok.extern.slf4j.Slf4j;
-
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
 import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * <p>
@@ -80,11 +79,11 @@ public class MarshallerFactory {
      * @param obj
      *            the object to be converted to XML
      * @param cls
-     *            the {@link Class} of the object being converted, used
-     *            for creating and retrieving the appropriate
-     *            {@link javax.xml.bind.Marshaller} instance
-     * @return a {@link String} representing the XML format of the object,
-     *         or an empty string if an error occurs during conversion
+     *            the {@link Class} of the object being converted, used for creating
+     *            and retrieving the appropriate {@link javax.xml.bind.Marshaller}
+     *            instance
+     * @return a {@link String} representing the XML format of the object, or an
+     *         empty string if an error occurs during conversion
      * @throws IllegalArgumentException
      *             if {@code obj} or {@code cls} is null
      */

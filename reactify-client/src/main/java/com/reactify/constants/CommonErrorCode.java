@@ -45,8 +45,8 @@ package com.reactify.constants;
  * <li>{@link #PARSE_TOKEN_ERROR} - Indicates an error occurred while parsing
  * the authentication token.</li>
  * <li>{@link #SQL_ERROR} - Indicates that an SQL error occurred while
- * processing a database operation.</li>
- * group information could not be found.</li>
+ * processing a database operation.</li> group information could not be
+ * found.</li>
  * <li>{@link #SUCCESS} - Indicates a successful operation.</li>
  * <li>{@link #UN_DESERIALIZE} - Indicates an error occurred during
  * deserialization.</li>

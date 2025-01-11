@@ -15,10 +15,9 @@
  */
 package com.reactify.filter.properties;
 
+import java.util.List;
 import lombok.Data;
 import org.springframework.web.reactive.function.client.ExchangeFilterFunction;
-
-import java.util.List;
 
 /**
  * Configuration properties for a WebClient instance, encapsulating connection,

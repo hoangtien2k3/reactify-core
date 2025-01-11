@@ -400,7 +400,8 @@ public class DataUtil {
         }
         try {
             return (T) ObjectMapperFactory.getInstance().readValue(safeToString(content), clz);
-        } catch (JsonProcessingException ignored) {}
+        } catch (JsonProcessingException ignored) {
+        }
         try {
             return (T) clz.newInstance();
         } catch (Exception e) {

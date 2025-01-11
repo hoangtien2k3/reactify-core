@@ -15,10 +15,6 @@
  */
 package com.reactify;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.extern.log4j.Log4j2;
-
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -26,6 +22,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 @Getter

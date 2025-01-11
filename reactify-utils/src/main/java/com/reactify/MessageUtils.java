@@ -15,12 +15,11 @@
  */
 package com.reactify;
 
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.i18n.LocaleContextHolder;
-
 import java.text.MessageFormat;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.i18n.LocaleContextHolder;
 
 /**
  * Utility class for data manipulation and processing. This class contains

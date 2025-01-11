@@ -15,6 +15,8 @@
  */
 package com.reactify;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 import com.reactify.constants.Constants;
 import com.reactify.filter.properties.ProxyProperties;
 import com.reactify.filter.properties.WebClientProperties;
@@ -25,6 +27,9 @@ import io.netty.channel.epoll.EpollChannelOption;
 import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
+import java.time.Duration;
+import java.util.Base64;
+import java.util.List;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
@@ -40,34 +45,25 @@ import reactor.netty.http.client.HttpClient;
 import reactor.netty.resources.ConnectionProvider;
 import reactor.netty.transport.ProxyProvider;
 
-import java.time.Duration;
-import java.util.Base64;
-import java.util.List;
-
-import static java.nio.charset.StandardCharsets.UTF_8;
-
 /**
  * <p>
  * The {@code WebClientFactory} class is responsible for creating and managing
- * instances of
- * {@link WebClient} configured
- * with various properties. It integrates with Spring's application context to
- * register the created clients as beans for dependency injection. This class
- * supports OAuth2 authentication, connection pooling, and various customization
- * options such as logging, retry handling, and proxy configuration.
+ * instances of {@link WebClient} configured with various properties. It
+ * integrates with Spring's application context to register the created clients
+ * as beans for dependency injection. This class supports OAuth2 authentication,
+ * connection pooling, and various customization options such as logging, retry
+ * handling, and proxy configuration.
  * </p>
  *
  * <p>
- * The class implements the
- * {@link InitializingBean} interface, which
- * triggers the initialization of web clients after the bean properties have
- * been set. Each web client is created based on the specified
+ * The class implements the {@link InitializingBean} interface, which triggers
+ * the initialization of web clients after the bean properties have been set.
+ * Each web client is created based on the specified
  * {@link WebClientProperties}.
  * </p>
  *
  * <p>
- * The factory allows dynamic creation of multiple
- * {@link WebClient} instances
+ * The factory allows dynamic creation of multiple {@link WebClient} instances
  * based on provided configurations, enabling flexible and efficient HTTP
  * communication in reactive applications.
  * </p>
@@ -84,8 +80,7 @@ public class WebClientFactory implements InitializingBean {
      * Creates an instance of {@code WebClientFactory} with the specified
      * application context and authorized client manager.
      */
-    public WebClientFactory(
-            ApplicationContext applicationContext) {
+    public WebClientFactory(ApplicationContext applicationContext) {
         this.applicationContext = applicationContext;
     }
 
@@ -104,14 +99,13 @@ public class WebClientFactory implements InitializingBean {
     /**
      * <p>
      * Initializes web clients based on the provided list of
-     * {@link WebClientProperties}. Each client is
-     * created and registered as a singleton bean in the application context.
+     * {@link WebClientProperties}. Each client is created and registered as a
+     * singleton bean in the application context.
      * </p>
      *
      * @param webClients
-     *            a {@link List} of
-     *            {@link WebClientProperties} objects
-     *            containing configuration for each web client
+     *            a {@link List} of {@link WebClientProperties} objects containing
+     *            configuration for each web client
      */
     public void initWebClients(List<WebClientProperties> webClients) {
         final ConfigurableListableBeanFactory beanFactory =
@@ -126,19 +120,17 @@ public class WebClientFactory implements InitializingBean {
 
     /**
      * <p>
-     * Creates a new instance of
-     * {@link WebClient} using the
-     * provided {@link WebClientProperties}. The
-     * client is configured with connection pooling, timeout settings, and
-     * additional filters based on the properties specified.
+     * Creates a new instance of {@link WebClient} using the provided
+     * {@link WebClientProperties}. The client is configured with connection
+     * pooling, timeout settings, and additional filters based on the properties
+     * specified.
      * </p>
      *
      * @param webClientProperties
-     *            a {@link WebClientProperties}
-     *            object containing configuration for the web client
-     * @return a {@link WebClient}
-     *         object configured based on the given properties, or {@code null} if
-     *         the properties are invalid
+     *            a {@link WebClientProperties} object containing configuration for
+     *            the web client
+     * @return a {@link WebClient} object configured based on the given properties,
+     *         or {@code null} if the properties are invalid
      */
     public WebClient createNewClient(WebClientProperties webClientProperties) {
         if (!isValidProperties(webClientProperties)) {

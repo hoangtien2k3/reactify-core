@@ -17,9 +17,8 @@ package com.reactify.filter.properties;
 
 import io.netty.channel.ConnectTimeoutException;
 import io.netty.handler.timeout.ReadTimeoutException;
-import org.springframework.http.HttpMethod;
-
 import java.util.List;
+import org.springframework.http.HttpMethod;
 
 /**
  * <p>

@@ -15,11 +15,10 @@
  */
 package com.reactify;
 
+import java.time.Duration;
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
-
-import java.time.Duration;
 
 /**
  * Utility class for data manipulation and processing. This class contains
