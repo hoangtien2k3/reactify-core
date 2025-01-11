@@ -20,6 +20,9 @@ import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 
 import javax.xml.XMLConstants;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -31,7 +34,9 @@ import javax.xml.transform.stream.StreamResult;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Utility class for data manipulation and processing. This class contains
@@ -118,7 +123,7 @@ public class DataWsUtil {
     public static <T> T xmlToObj(String xml, Class<?> clz) {
         try {
             StringReader reader = new StringReader(xml.trim());
-            return (T) UnmarshallerFactory.getInstance(clz).unmarshal(reader);
+            return (T) getInstance(clz).unmarshal(reader);
         } catch (Exception ex) {
             log.error("Parse data error {}  :", clz.getName() + ex.getMessage(), ex);
         }
@@ -252,5 +257,45 @@ public class DataWsUtil {
         }
 
         return list;
+    }
+
+    /**
+     * Cache to hold {@link Unmarshaller} instances for specific classes.
+     */
+    private static final Map<Class<?>, Unmarshaller> instance = new HashMap<>();
+
+    /**
+     * <p>
+     * Provides an {@link javax.xml.bind.Unmarshaller} instance for the specified
+     * class. If an {@link javax.xml.bind.Unmarshaller} has already been created for
+     * the class, it is retrieved from the cache. Otherwise, a new instance is
+     * created and cached.
+     * </p>
+     *
+     * @param clz
+     *            the {@link Class} type for which to retrieve an
+     *            {@link javax.xml.bind.Unmarshaller}
+     * @return an {@link javax.xml.bind.Unmarshaller} instance configured for the
+     *         specified class, or {@code null} if an error occurs during
+     *         instantiation
+     */
+    public static Unmarshaller getInstance(Class<?> clz) {
+        // Attempt to retrieve a cached unmarshaller for the class
+        Unmarshaller obj = instance.get(clz);
+        if (obj != null) return obj;
+
+        try {
+            // Create a new JAXB context and unmarshaller for the class
+            JAXBContext jaxbContext = JAXBContext.newInstance(clz);
+            Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+
+            // Cache the created unmarshaller
+            instance.put(clz, unmarshaller);
+            return unmarshaller;
+        } catch (JAXBException e) {
+            // Log error if unmarshaller creation fails
+            log.error("Init Unmarshaller error", e);
+            return null;
+        }
     }
 }
