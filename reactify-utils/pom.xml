@@ -3,12 +3,11 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.3.5</version>
+		<groupId>io.github.hoangtien2k3</groupId>
+		<artifactId>reactify-parent</artifactId>
+		<version>1.1.8</version>
 		<relativePath/>
 	</parent>
-	<groupId>io.github.hoangtien2k3</groupId>
 	<artifactId>reactify-utils</artifactId>
 	<version>1.1.8</version>
 	<packaging>jar</packaging>
@@ -96,6 +95,8 @@
 				<extensions>true</extensions>
 				<configuration>
 					<publishingServerId>central</publishingServerId>
+					<autoPublish>true</autoPublish>
+					<waitUntil>published</waitUntil>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -208,10 +209,14 @@
 				<artifactId>license-maven-plugin</artifactId>
 				<version>4.0.rc2</version>
 				<configuration>
-					<header>src/main/resources/license-header.txt</header>
-					<includes>
-						<include>**/*.java</include>
-					</includes>
+					<licenseSets>
+						<licenseSet>
+							<header>${project.basedir}/src/main/resources/HEADER.txt</header>
+							<includes>
+								<include>**/*.java</include>
+							</includes>
+						</licenseSet>
+					</licenseSets>
 				</configuration>
 				<executions>
 					<execution>
@@ -223,5 +228,4 @@
 			</plugin>
 		</plugins>
 	</build>
-
 </project>
