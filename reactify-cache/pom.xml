@@ -10,11 +10,11 @@
 	</parent>
 	<groupId>io.github.hoangtien2k3</groupId>
 	<artifactId>reactify-cache</artifactId>
-	<version>1.1.7</version>
+	<version>1.1.8</version>
 	<name>reactify-cache</name>
 	<packaging>jar</packaging>
 	<description>Java lib using caffeine cache</description>
-	<url>https://github.com/hoangtien2k3/reactify</url>
+	<url>https://github.com/hoangtien2k3/reactify-core</url>
 
 	<licenses>
 		<license>
@@ -31,9 +31,9 @@
 		</developer>
 	</developers>
 	<scm>
-		<connection>scm:git:git://github.com/hoangtien2k3/reactify.git</connection>
-		<developerConnection>scm:git:ssh://git@github.com:hoangtien2k3/reactify.git</developerConnection>
-		<url>https://github.com/hoangtien2k3/reactify</url>
+		<connection>scm:git:git://github.com/hoangtien2k3/reactify-core.git</connection>
+		<developerConnection>scm:git:ssh://git@github.com:hoangtien2k3/reactify-core.git</developerConnection>
+		<url>https://github.com/hoangtien2k3/reactify-core</url>
 	</scm>
 	<distributionManagement>
 		<snapshotRepository>
