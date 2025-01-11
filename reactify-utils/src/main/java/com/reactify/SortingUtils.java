@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 the original author Hoàng Anh Tiến.
+ * Copyright 2024-2025 the original author Hoàng Anh Tiến.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.reactify.utils;
+package com.reactify;
 
-import static com.reactify.utils.ValidateUtils.CAMELCASE;
+import static com.reactify.ValidateUtils.CAMELCASE;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;

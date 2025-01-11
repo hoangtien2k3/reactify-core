@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 the original author Hoàng Anh Tiến.
+ * Copyright 2024-2025 the original author Hoàng Anh Tiến.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.reactify.cache;
+package com.reactify;
 
 import java.lang.reflect.Method;
 import lombok.RequiredArgsConstructor;
@@ -24,15 +24,15 @@ import reactor.core.publisher.Mono;
 /**
  * <p>
  * The CacheUtils class provides utility methods for working with caching
- * functionality in the application. It contains methods to invoke
- * cached methods dynamically at runtime, allowing for efficient cache
- * management and retrieval.
+ * functionality in the application. It contains methods to invoke cached
+ * methods dynamically at runtime, allowing for efficient cache management and
+ * retrieval.
  * </p>
  *
  * <p>
- * This class is particularly useful for autoloading cache entries based
- * on the methods annotated with {@link LocalCache} and managing their
- * execution in a reactive manner using Project Reactor.
+ * This class is particularly useful for autoloading cache entries based on the
+ * methods annotated with {@link LocalCache} and managing their execution in a
+ * reactive manner using Project Reactor.
  * </p>
  *
  * @author hoangtien2k3
@@ -44,14 +44,14 @@ public class CacheUtils {
 
     /**
      * <p>
-     * Invokes the specified method and subscribes to its result, enabling
-     * the execution of the method in a reactive context. This method
-     * retrieves the bean instance of the declaring class from the Spring
-     * application context and calls the specified method.
+     * Invokes the specified method and subscribes to its result, enabling the
+     * execution of the method in a reactive context. This method retrieves the bean
+     * instance of the declaring class from the Spring application context and calls
+     * the specified method.
      * </p>
      *
-     * @param method a {@link Method} object representing the method to be
-     *               invoked
+     * @param method
+     *            a {@link Method} object representing the method to be invoked
      */
     public static void invokeMethod(Method method) {
         try {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 the original author Hoàng Anh Tiến.
+ * Copyright 2024-2025 the original author Hoàng Anh Tiến.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.reactify.utils;
+package com.reactify;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -193,7 +193,8 @@ public class DataUtil {
         Boolean result = null;
         try {
             result = obj1 == null ? null : (Boolean) obj1;
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
         return result;
     }
 
@@ -399,14 +400,14 @@ public class DataUtil {
         }
         try {
             return ObjectMapperFactory.getInstance().readValue(safeToString(content), clz);
-        } catch (JsonProcessingException ignored) {}
+        } catch (JsonProcessingException ignored) {
+        }
         try {
             return clz.getDeclaredConstructor().newInstance();
         } catch (Exception e) {
             return null;
         }
     }
-
 
     /**
      * Parses a JSON string to an object of the specified type.
@@ -667,8 +668,7 @@ public class DataUtil {
                 case Double v -> {
                     return v.floatValue();
                 }
-                default -> {
-                }
+                default -> {}
             }
             try {
                 result = Float.parseFloat(obj1.toString());

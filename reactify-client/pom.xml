@@ -6,7 +6,7 @@
 		<groupId>io.github.hoangtien2k3</groupId>
 		<artifactId>reactify-parent</artifactId>
 		<version>1.1.8</version>
-		<relativePath/>
+		<relativePath>../pom.xml</relativePath>
 	</parent>
 	<artifactId>reactify-client</artifactId>
 	<version>1.1.8</version>
@@ -211,28 +211,6 @@
 							<goal>check</goal>
 						</goals>
 						<phase>validate</phase>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>com.mycila</groupId>
-				<artifactId>license-maven-plugin</artifactId>
-				<version>4.0.rc2</version>
-				<configuration>
-					<licenseSets>
-						<licenseSet>
-							<header>${project.basedir}/src/main/resources/HEADER.txt</header>
-							<includes>
-								<include>**/*.java</include>
-							</includes>
-						</licenseSet>
-					</licenseSets>
-				</configuration>
-				<executions>
-					<execution>
-						<goals>
-							<goal>format</goal>
-						</goals>
 					</execution>
 				</executions>
 			</plugin>
