@@ -76,9 +76,4 @@ public class MinioProperties {
      *
      */
     private String bucket;
-
-    /**
-     * Constructs a new instance of {@code MinioProperties}.
-     */
-    public MinioProperties() {}
 }

@@ -20,6 +20,7 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.context.annotation.Configuration;
+import reactor.core.publisher.Mono;
 
 /**
  * <p>
@@ -70,9 +71,9 @@ public class LoggerAspect {
      * client packages that should be logged for performance metrics.
      * </p>
      */
-    @Pointcut("(execution(* com.reactify.*.controller..*(..)) || " + "execution(* com.reactify.*.service..*(..))  ||  "
-            + "execution(* com.reactify.*.repository..*(..)) || " + "execution(* com.reactify.*.client..*(..))) &&"
-            + "!execution(* org.springframework.boot.actuate..*(..))")
+    @Pointcut("execution(* com.reactify.*.controller..*(..)) || " + "execution(* com.reactify.*.service..*(..)) || "
+            + "execution(* com.reactify.*.repository..*(..)) || " + "execution(* com.reactify.*.client..*(..)) && "
+            + "!execution(* org.springframework.boot.actuate..*(..)) && " + "!within(com.reactify.*.config..*)")
     public void performancePointCut() {}
 
     /**
@@ -96,7 +97,7 @@ public class LoggerAspect {
      *             if any.
      */
     @Around("performancePointCut() || logPerfMethods()")
-    public Object logAround(ProceedingJoinPoint joinPoint) throws Throwable {
+    public Mono<Object> logAround(ProceedingJoinPoint joinPoint) throws Throwable {
         return loggerAspectUtils.logAround(joinPoint);
     }
 }

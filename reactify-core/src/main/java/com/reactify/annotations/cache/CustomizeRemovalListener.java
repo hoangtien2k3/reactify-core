@@ -40,6 +40,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
  */
 @Slf4j
 public class CustomizeRemovalListener implements RemovalListener<Object, Object> {
+
     private final Method method;
 
     /**

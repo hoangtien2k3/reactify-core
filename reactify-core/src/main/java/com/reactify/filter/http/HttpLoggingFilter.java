@@ -58,6 +58,7 @@ import reactor.core.publisher.Mono;
 @Component
 @Slf4j
 public class HttpLoggingFilter implements WebFilter, Ordered {
+
     private final HttpLogProperties httpLogProperties;
 
     /**

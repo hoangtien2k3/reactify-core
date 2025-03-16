@@ -42,8 +42,6 @@ public class PasswordService {
 
     private static PasswordService instance;
 
-    private PasswordService() {}
-
     /**
      * <p>
      * Encrypts the given plaintext string.

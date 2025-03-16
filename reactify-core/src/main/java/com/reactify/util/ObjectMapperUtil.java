@@ -39,6 +39,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 public class ObjectMapperUtil {
+
     private static final ObjectMapper objectMapper = new ObjectMapper();
     private static final DateFormat dateFormatYMdHms = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 

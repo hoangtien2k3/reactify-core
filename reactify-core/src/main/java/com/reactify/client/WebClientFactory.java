@@ -35,6 +35,7 @@ import java.util.List;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -80,23 +81,33 @@ import reactor.netty.transport.ProxyProvider;
 @Slf4j
 @Data
 public class WebClientFactory implements InitializingBean {
-    private final ApplicationContext applicationContext;
-    private final ReactiveOAuth2AuthorizedClientManager authorizedClientManager;
+    @Autowired
+    private ApplicationContext applicationContext;
+
+    @Autowired
+    private ReactiveOAuth2AuthorizedClientManager authorizedClientManager;
+
     private List<WebClientProperties> webClients;
 
     /**
-     * Creates an instance of {@code WebClientFactory} with the specified
-     * application context and authorized client manager.
-     *
-     * @param applicationContext
-     *            the application context used to access beans and configuration
-     * @param authorizedClientManager
-     *            the manager handling OAuth2 client authorizations
+     * Creates a default instance of {@code WebClientFactory} with no initial
+     * configuration. This constructor is typically used by Spring for dependency
+     * injection.
      */
-    public WebClientFactory(
-            ApplicationContext applicationContext, ReactiveOAuth2AuthorizedClientManager authorizedClientManager) {
-        this.applicationContext = applicationContext;
-        this.authorizedClientManager = authorizedClientManager;
+    public WebClientFactory() {}
+
+    /**
+     * Creates an instance of {@code WebClientFactory} with a specified list of
+     * {@code WebClientProperties}. This constructor allows pre-configuring the
+     * factory with properties that define how {@code WebClient} instances will be
+     * created.
+     *
+     * @param webClients
+     *            a list of {@code WebClientProperties} containing configuration
+     *            details for creating {@code WebClient} instances
+     */
+    public WebClientFactory(List<WebClientProperties> webClients) {
+        this.webClients = webClients;
     }
 
     /**

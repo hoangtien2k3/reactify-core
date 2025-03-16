@@ -85,7 +85,6 @@ public record WebClientMonitoringFilter(MeterRegistry meterRegistry) implements 
                                     clientRequest.url(),
                                     clientResponse.statusCode());
                         }
-
                         // record the execution time
                         long duration = System.nanoTime() - startTime;
                         Timer.builder("http.client.requests")
@@ -93,7 +92,6 @@ public record WebClientMonitoringFilter(MeterRegistry meterRegistry) implements 
                                 .publishPercentiles(0.95, 0.99)
                                 .register(meterRegistry)
                                 .record(duration, TimeUnit.NANOSECONDS);
-
                         log.info(
                                 "Monitoring WebClient API {}: {} s",
                                 clientRequest.url(),

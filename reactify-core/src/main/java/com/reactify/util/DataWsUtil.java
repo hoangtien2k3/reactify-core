@@ -42,11 +42,6 @@ import org.xml.sax.InputSource;
 public class DataWsUtil {
 
     /**
-     * Constructs a new instance of {@code DataWsUtil}.
-     */
-    public DataWsUtil() {}
-
-    /**
      * <p>
      * getDataByTag.
      * </p>

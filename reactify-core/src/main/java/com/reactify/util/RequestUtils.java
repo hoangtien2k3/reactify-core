@@ -36,11 +36,6 @@ public class RequestUtils {
     private static final String UNKNOWN = "unknown";
 
     /**
-     * Constructs a new instance of {@code RequestUtils}.
-     */
-    public RequestUtils() {}
-
-    /**
      * Retrieves the real IP address from the request headers. Checks various
      * headers to find the IP address, falling back to the remote address if
      * necessary.

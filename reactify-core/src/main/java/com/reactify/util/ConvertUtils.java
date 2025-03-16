@@ -22,15 +22,34 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+/**
+ * Utility class providing methods for string manipulation, number conversion,
+ * and comparison operations.
+ */
 public class ConvertUtils {
 
     private static final Logger log = LogManager.getLogger(ConvertUtils.class);
     private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#.###");
 
+    /**
+     * Converts a raw string value into a JSON string format. If the input is null
+     * or empty, returns an empty JSON string.
+     *
+     * @param valueRaw
+     *            the raw string to be converted
+     * @return the converted JSON string
+     */
     public static String convertStringJsonRawValue(String valueRaw) {
         return !DataUtil.isNullOrEmpty(valueRaw) ? "\"".concat(valueRaw).concat("\"") : "\"\"";
     }
 
+    /**
+     * Removes all HTML/XML tags from the given string.
+     *
+     * @param str
+     *            the input string containing potential tags
+     * @return the string without any tags
+     */
     public static String stripTags(String str) {
         int startPosition = str.indexOf('<');
         int endPosition;
@@ -42,6 +61,15 @@ public class ConvertUtils {
         return str;
     }
 
+    /**
+     * Converts a {@link Number} to a formatted string with custom separators. The
+     * grouping separator is '.' and the decimal separator is ','. Returns "0" if
+     * the input is null.
+     *
+     * @param number
+     *            the {@link Number} to be formatted
+     * @return the formatted string representation of the number
+     */
     public static String convertNumber(Number number) {
         if (number == null) {
             return "0";
@@ -55,6 +83,14 @@ public class ConvertUtils {
         }
     }
 
+    /**
+     * Converts a string representation of a number to a {@link Number} object. If
+     * the input is null or cannot be parsed, returns 0.
+     *
+     * @param number
+     *            the string representation of the number
+     * @return the parsed {@link Number} object
+     */
     public static Number convertNumber(String number) {
         if (number == null) {
             return 0;
@@ -67,10 +103,38 @@ public class ConvertUtils {
         }
     }
 
+    /**
+     * Compares an object with a target string for equality. Returns true if the
+     * object is non-null and its string representation is equal to the target
+     * string.
+     *
+     * @param obj
+     *            the object to compare
+     * @param target
+     *            the target string to compare with
+     * @return {@code true} if the object equals the target string, {@code false}
+     *         otherwise
+     */
     public static boolean compareSpecial(Object obj, String target) {
         return obj != null && obj.toString().equals(target);
     }
 
+    /**
+     * Determines the registration status of a package based on its code. Returns:
+     * <ul>
+     * <li>3 if the package is in the canceled list</li>
+     * <li>1 if the package is in the currently used list</li>
+     * <li>0 if the package is in neither list</li>
+     * </ul>
+     *
+     * @param code
+     *            the package code to check
+     * @param packUsing
+     *            the list of currently used packages
+     * @param canceledList
+     *            the list of canceled packages
+     * @return the registration status of the package
+     */
     public static int getRegPackage(String code, List<String> packUsing, List<String> canceledList) {
         if (canceledList.contains(code)) {
             return 3;

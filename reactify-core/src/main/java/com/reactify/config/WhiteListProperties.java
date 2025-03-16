@@ -48,19 +48,4 @@ public class WhiteListProperties {
      * @return a {@link List} of {@link WhiteList} objects.
      */
     private List<WhiteList> whiteList;
-
-    /**
-     * Constructs a new instance of {@code WhiteListProperties}.
-     *
-     * @param whiteList
-     *            a list of {@link WhiteList} objects that are whitelisted.
-     */
-    public WhiteListProperties(List<WhiteList> whiteList) {
-        this.whiteList = whiteList;
-    }
-
-    /**
-     * Constructs a new instance of {@code WhiteListProperties}.
-     */
-    public WhiteListProperties() {}
 }

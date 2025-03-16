@@ -57,8 +57,6 @@ import javax.xml.transform.stream.StreamResult;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.util.ObjectUtils;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
@@ -70,12 +68,6 @@ import reactor.core.publisher.Mono;
  */
 @Slf4j
 public class DataUtil {
-    private static final Logger LOGGER = LoggerFactory.getLogger(DataUtil.class);
-
-    /**
-     * Constructs a new instance of {@code DataUtil}.
-     */
-    public DataUtil() {}
 
     /** Constant <code>FORMAT_YMD</code> */
     public static final SimpleDateFormat FORMAT_YMD = new SimpleDateFormat(CommonConstant.DATE_FORMAT_YMD);
@@ -756,7 +748,7 @@ public class DataUtil {
         try {
             new JSONObject(json);
         } catch (JSONException e) {
-            LOGGER.info(e.getMessage());
+            log.info(e.getMessage());
             return false;
         }
         return true;

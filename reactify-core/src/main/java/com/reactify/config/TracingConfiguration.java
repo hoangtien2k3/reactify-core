@@ -41,11 +41,6 @@ import org.springframework.context.annotation.Configuration;
 public class TracingConfiguration {
 
     /**
-     * Constructs a new instance of {@code TracingConfiguration}.
-     */
-    public TracingConfiguration() {}
-
-    /**
      * <p>
      * Creates a Tracer bean. This method returns a NOOP Tracer instance which means
      * that it does not perform any actual tracing. You may replace it with a real

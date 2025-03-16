@@ -35,6 +35,7 @@ import reactor.core.scheduler.Schedulers;
  */
 @Component
 public class Translator {
+
     private static final Locale defaultLocale = Locale.forLanguageTag("vi");
     private static ReloadableResourceBundleMessageSource messageSource;
 

@@ -61,15 +61,6 @@ import lombok.extern.slf4j.Slf4j;
 public class UnmarshallerFactory {
 
     /**
-     * Constructs a new instance of {@code UnmarshallerFactory}.
-     * <p>
-     * This default constructor is provided for compatibility purposes and does not
-     * perform any initialization.
-     * </p>
-     */
-    public UnmarshallerFactory() {}
-
-    /**
      * Cache to hold {@link Unmarshaller} instances for specific classes.
      */
     private static final Map<Class<?>, Unmarshaller> instance = new HashMap<>();

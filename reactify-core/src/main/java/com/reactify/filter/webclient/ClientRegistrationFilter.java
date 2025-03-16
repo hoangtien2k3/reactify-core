@@ -49,11 +49,6 @@ import org.springframework.security.oauth2.client.registration.ReactiveClientReg
 public class ClientRegistrationFilter {
 
     /**
-     * Constructs a new instance of {@code ClientRegistrationFilter}.
-     */
-    public ClientRegistrationFilter() {}
-
-    /**
      * <p>
      * Creates a
      * {@link org.springframework.security.oauth2.client.ReactiveOAuth2AuthorizedClientManager}

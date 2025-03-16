@@ -17,7 +17,6 @@ package com.reactify.util;
 
 import com.reactify.constants.Constants;
 import com.reactify.constants.Regex;
-import com.reactify.model.TokenUser;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -30,24 +29,6 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 public class SortingUtils {
-
-    /**
-     * Constructs a new instance of {@code SortingUtils}.
-     */
-    public SortingUtils() {}
-
-    /**
-     * <p>
-     * main.
-     * </p>
-     *
-     * @param args
-     *            an array of {@link java.lang.String} objects
-     */
-    public static void main(String[] args) {
-        String sort = "-username,+id,++object";
-        System.out.println(parseSorting(sort, TokenUser.class));
-    }
 
     /**
      * Parses the sorting configuration string and converts it to a database query

@@ -39,11 +39,6 @@ import reactor.core.publisher.Mono;
 public class KeycloakConfiguration {
 
     /**
-     * Constructs a new instance of {@code KeycloakConfiguration}.
-     */
-    public KeycloakConfiguration() {}
-
-    /**
      * Creates a converter that extracts granted authorities from a JWT token issued
      * by Keycloak. The {@code clientId} is used to identify the client for which
      * the authorities are to be extracted.

@@ -43,11 +43,6 @@ import reactor.core.publisher.Mono;
 public class CacheUtils {
 
     /**
-     * Constructs a new instance of {@code CacheUtils}.
-     */
-    public CacheUtils() {}
-
-    /**
      * <p>
      * Invokes a specified method and subscribes to the returned
      * {@link reactor.core.publisher.Mono} object to trigger any asynchronous cache

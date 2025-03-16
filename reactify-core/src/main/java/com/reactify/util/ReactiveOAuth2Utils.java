@@ -25,11 +25,6 @@ import org.springframework.security.oauth2.client.registration.ReactiveClientReg
 public class ReactiveOAuth2Utils {
 
     /**
-     * Constructs a new instance of {@code ReactiveOAuth2Utils}.
-     */
-    public ReactiveOAuth2Utils() {}
-
-    /**
      * <p>
      * createAuthorizedClientManager.
      * </p>

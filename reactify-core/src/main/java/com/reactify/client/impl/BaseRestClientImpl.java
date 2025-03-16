@@ -70,15 +70,6 @@ import reactor.netty.transport.ProxyProvider;
 public class BaseRestClientImpl<T> implements BaseRestClient<T> {
 
     /**
-     * Constructs a new instance of {@code BaseRestClientImpl}.
-     * <p>
-     * This default constructor is provided for compatibility purposes and does not
-     * perform any initialization.
-     * </p>
-     */
-    public BaseRestClientImpl() {}
-
-    /**
      * {@inheritDoc}
      *
      * Executes a GET request with specified headers and query parameters.

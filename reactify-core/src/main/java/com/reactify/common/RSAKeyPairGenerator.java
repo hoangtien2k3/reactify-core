@@ -34,10 +34,12 @@ import lombok.Getter;
  *
  * @author hoangtien2k3
  */
-@Getter
 public class RSAKeyPairGenerator {
 
+    @Getter
     private final PrivateKey privateKey;
+
+    @Getter
     private final PublicKey publicKey;
 
     /**
@@ -77,7 +79,6 @@ public class RSAKeyPairGenerator {
                 .encodeToString(rsaKeyPairGenerator.getPublicKey().getEncoded());
         String privateKey = Base64.getEncoder()
                 .encodeToString(rsaKeyPairGenerator.getPrivateKey().getEncoded());
-        // ham nay dung de sinh ra cap key
         System.out.println("publicKey: " + publicKey);
         System.out.println("privateKey: " + privateKey);
     }

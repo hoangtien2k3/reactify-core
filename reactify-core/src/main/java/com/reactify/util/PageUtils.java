@@ -22,11 +22,6 @@ package com.reactify.util;
 public class PageUtils {
 
     /**
-     * Constructs a new instance of {@code PageUtils}.
-     */
-    public PageUtils() {}
-
-    /**
      * <p>
      * getOffset.
      * </p>

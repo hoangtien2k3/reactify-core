@@ -49,15 +49,6 @@ public class ApplicationContextProvider implements ApplicationContextAware {
     private static ApplicationContext context;
 
     /**
-     * Constructs a new instance of {@code ApplicationContextProvider}.
-     * <p>
-     * This default constructor is provided for compatibility purposes and does not
-     * perform any initialization.
-     * </p>
-     */
-    public ApplicationContextProvider() {}
-
-    /**
      * <p>
      * getApplicationContext.
      * </p>

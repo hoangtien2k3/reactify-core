@@ -63,11 +63,6 @@ import reactor.core.publisher.Mono;
 public class DatabaseConversion {
 
     /**
-     * Constructs a new instance of {@code DatabaseConversion}.
-     */
-    public DatabaseConversion() {}
-
-    /**
      * <p>
      * Retrieves a
      * {@link org.springframework.data.r2dbc.convert.MappingR2dbcConverter}

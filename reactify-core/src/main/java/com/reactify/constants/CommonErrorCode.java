@@ -82,11 +82,6 @@ package com.reactify.constants;
  */
 public class CommonErrorCode {
 
-    /**
-     * Constructs a new instance of {@code CommonErrorCode}.
-     */
-    public CommonErrorCode() {}
-
     /** Constant <code>BAD_REQUEST="bad_request"</code> */
     public static final String BAD_REQUEST = "bad_request";
     /** Constant <code>NOT_FOUND="not_found"</code> */

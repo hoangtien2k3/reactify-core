@@ -20,6 +20,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.Logger;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.core.io.buffer.DataBufferUtils;
@@ -34,12 +35,8 @@ import org.springframework.http.MediaType;
  * @since 20/07/2024
  * @author hoangtien2k3
  */
+@Slf4j
 public class LogUtils {
-
-    /**
-     * Constructs a new instance of {@code LogUtils}.
-     */
-    public LogUtils() {}
 
     /**
      * List of media types that are considered legal for logging.
@@ -124,7 +121,7 @@ public class LogUtils {
             }
             in_b = swapStream.toByteArray();
         } catch (Exception e) {
-            e.printStackTrace();
+            log.info("Exception error , ", e);
         }
         return in_b;
     }

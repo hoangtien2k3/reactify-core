@@ -40,11 +40,6 @@ import reactor.core.publisher.Mono;
 public class SecurityUtils {
 
     /**
-     * Constructs a new instance of {@code SecurityUtils}.
-     */
-    public SecurityUtils() {}
-
-    /**
      * Retrieves the current authenticated user as a TokenUser.
      *
      * @return a Mono containing the TokenUser, or empty if no user is authenticated
@@ -155,7 +150,7 @@ public class SecurityUtils {
      * @return the UserDTO, or null if an error occurs during extraction
      */
     public static UserDTO getUserByAccessToken(String accessToken) {
-        SignedJWT signedJWT = null;
+        SignedJWT signedJWT;
         try {
             signedJWT = SignedJWT.parse(accessToken);
             String data = signedJWT.getPayload().toString();
@@ -163,5 +158,17 @@ public class SecurityUtils {
         } catch (Exception e) {
             return null;
         }
+    }
+
+    /**
+     * Checks if the current user has a specific authority/role.
+     */
+    public static Mono<Boolean> hasAuthority(String authority) {
+        return ReactiveSecurityContextHolder.getContext()
+                .map(SecurityContext::getAuthentication)
+                .map(auth -> auth != null
+                        && auth.getAuthorities().stream()
+                                .anyMatch(granted -> granted.getAuthority().equals(authority)))
+                .switchIfEmpty(Mono.just(false));
     }
 }

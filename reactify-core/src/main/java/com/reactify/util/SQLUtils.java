@@ -24,11 +24,6 @@ import org.apache.commons.lang3.StringUtils;
 public class SQLUtils {
 
     /**
-     * Constructs a new instance of {@code SQLUtils}.
-     */
-    public SQLUtils() {}
-
-    /**
      * <p>
      * replaceSpecialDigit.
      * </p>

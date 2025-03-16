@@ -44,11 +44,6 @@ import org.springframework.web.reactive.config.WebFluxConfigurer;
 @EnableWebFlux
 public class WebSecurityCorsFilter implements WebFluxConfigurer {
 
-    /**
-     * Constructs a new instance of {@code WebSecurityCorsFilter}.
-     */
-    public WebSecurityCorsFilter() {}
-
     /** {@inheritDoc} */
     @Override
     public void addCorsMappings(CorsRegistry corsRegistry) {

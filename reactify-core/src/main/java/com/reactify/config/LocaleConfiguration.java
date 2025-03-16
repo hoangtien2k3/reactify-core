@@ -43,11 +43,6 @@ import org.springframework.web.server.i18n.LocaleContextResolver;
 public class LocaleConfiguration {
 
     /**
-     * Constructs a new instance of {@code LocaleConfiguration}.
-     */
-    public LocaleConfiguration() {}
-
-    /**
      * <p>
      * Creates a {@link org.springframework.web.server.i18n.LocaleContextResolver}
      * bean that resolves the locale from the HTTP Accept-Language header. The

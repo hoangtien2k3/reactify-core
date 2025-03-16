@@ -19,7 +19,6 @@ import static com.reactify.constants.Regex.LINK;
 import static com.reactify.constants.Regex.NUMBER_REGEX;
 
 import java.util.UUID;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import lombok.extern.slf4j.Slf4j;
 
@@ -31,11 +30,6 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 public class ValidateUtils {
-
-    /**
-     * Constructs a new instance of {@code ValidateUtils}.
-     */
-    public ValidateUtils() {}
 
     /**
      * Validates the input string against the given regular expression pattern.
@@ -65,7 +59,6 @@ public class ValidateUtils {
         if (!phone.matches(NUMBER_REGEX)) {
             return false;
         }
-
         return phone.length() >= 9 && phone.length() <= 11;
     }
 
@@ -99,10 +92,6 @@ public class ValidateUtils {
         if (DataUtil.isNullOrEmpty(link)) {
             return false;
         }
-
-        Pattern pattern = Pattern.compile(LINK);
-        Matcher matcher = pattern.matcher(link);
-
-        return matcher.matches();
+        return Pattern.compile(LINK).matcher(link).matches();
     }
 }

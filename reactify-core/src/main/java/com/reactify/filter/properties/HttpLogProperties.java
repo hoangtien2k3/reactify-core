@@ -18,6 +18,7 @@ package com.reactify.filter.properties;
 import com.reactify.model.logging.HttpLogRequest;
 import com.reactify.model.logging.HttpLogResponse;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
@@ -38,9 +39,10 @@ import org.springframework.stereotype.Component;
  *
  * @author hoangtien2k3
  */
-@Component
-@ConfigurationProperties(prefix = "application.http-logging", ignoreInvalidFields = true)
 @Data
+@Component
+@RequiredArgsConstructor
+@ConfigurationProperties(prefix = "application.http-logging", ignoreInvalidFields = true)
 public class HttpLogProperties {
 
     /**
@@ -52,22 +54,4 @@ public class HttpLogProperties {
      * Properties related to HTTP response logging.
      */
     private HttpLogResponse response = new HttpLogResponse();
-
-    /**
-     * Constructs a new instance of {@code HttpLogProperties}.
-     *
-     * @param request
-     *            the HTTP log request details.
-     * @param response
-     *            the HTTP log response details.
-     */
-    public HttpLogProperties(HttpLogRequest request, HttpLogResponse response) {
-        this.request = request;
-        this.response = response;
-    }
-
-    /**
-     * Constructs a new instance of {@code HttpLogProperties}.
-     */
-    public HttpLogProperties() {}
 }

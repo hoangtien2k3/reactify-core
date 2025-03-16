@@ -28,15 +28,6 @@ import reactor.core.scheduler.Schedulers;
 public class AppUtils {
 
     /**
-     * Constructs a new instance of {@code AppUtils}.
-     * <p>
-     * This default constructor is provided for compatibility purposes and does not
-     * perform any initialization.
-     * </p>
-     */
-    public AppUtils() {}
-
-    /**
      * Runs a Mono stream on a bounded elastic scheduler with a timeout of 2
      * minutes. Logs any errors that occur during the execution.
      *

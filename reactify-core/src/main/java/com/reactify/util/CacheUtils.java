@@ -19,13 +19,13 @@ import com.github.benmanes.caffeine.cache.AsyncCache;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.LoadingCache;
-import jakarta.validation.constraints.NotNull;
 import java.time.Duration;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import lombok.NonNull;
 import lombok.extern.log4j.Log4j2;
 import org.checkerframework.checker.index.qual.NonNegative;
+import org.jetbrains.annotations.NotNull;
 import reactor.core.publisher.Mono;
 
 /**
@@ -36,8 +36,6 @@ import reactor.core.publisher.Mono;
 public class CacheUtils {
 
     private static final String FIXED_KEY = "FIXED_KEY";
-
-    private CacheUtils() {}
 
     /**
      * <p>
@@ -72,7 +70,7 @@ public class CacheUtils {
      *            a T class
      * @return a {@link java.util.function.Supplier} object
      */
-    public static <T> Supplier<T> of(@NotNull Duration duration, @NotNull Supplier<T> supplier) {
+    public static <T> Supplier<T> of(Duration duration, Supplier<T> supplier) {
         Function<String, T> fn = of(duration, k -> supplier.get());
         return () -> fn.apply(FIXED_KEY);
     }
@@ -114,7 +112,6 @@ public class CacheUtils {
         return Mono.defer(() -> monoFn.apply(FIXED_KEY));
     }
 
-    // TODO : close cache metrics to build test local
     /**
      * <p>
      * caffeine.

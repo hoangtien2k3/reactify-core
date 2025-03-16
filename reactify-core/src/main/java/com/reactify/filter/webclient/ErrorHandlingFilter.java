@@ -44,11 +44,6 @@ import reactor.core.publisher.Mono;
 public class ErrorHandlingFilter implements ExchangeFilterFunction {
 
     /**
-     * Constructs a new instance of {@code ErrorHandlingFilter}.
-     */
-    public ErrorHandlingFilter() {}
-
-    /**
      * {@inheritDoc}
      *
      * <p>

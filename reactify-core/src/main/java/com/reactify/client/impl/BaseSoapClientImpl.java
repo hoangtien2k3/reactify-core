@@ -71,15 +71,6 @@ import reactor.core.publisher.Mono;
 public class BaseSoapClientImpl<T> implements BaseSoapClient<T> {
 
     /**
-     * Constructs a new instance of {@code BaseSoapClientImpl}.
-     * <p>
-     * This default constructor is provided for compatibility purposes and does not
-     * perform any initialization.
-     * </p>
-     */
-    public BaseSoapClientImpl() {}
-
-    /**
      * {@inheritDoc}
      *
      * Executes a SOAP API call and returns an Optional result of the specified

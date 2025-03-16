@@ -38,11 +38,6 @@ package com.reactify.constants;
  */
 public class CommonConstant {
 
-    /**
-     * Constructs a new instance of {@code CommonConstant}.
-     */
-    public CommonConstant() {}
-
     /** Constant <code>MSISDN_TOKEN="msisdn"</code> */
     public static final String MSISDN_TOKEN = "msisdn";
     /** Constant <code>NAME_PARAM="name"</code> */

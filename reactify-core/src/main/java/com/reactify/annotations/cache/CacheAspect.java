@@ -60,11 +60,6 @@ import reactor.core.publisher.Signal;
 public class CacheAspect {
 
     /**
-     * Constructs a new instance of {@code CacheAspect}.
-     */
-    public CacheAspect() {}
-
-    /**
      * <p>
      * Pointcut that matches methods annotated with
      * {@link com.reactify.annotations.LocalCache}.
@@ -98,7 +93,6 @@ public class CacheAspect {
         String name = ClassUtils.getUserClass(joinPoint.getTarget().getClass()).getSimpleName() + "."
                 + joinPoint.getSignature().getName();
         Cache<Object, Object> cache = CacheStore.getCache(name);
-        // return cached mono
         return CacheMono.lookup(k -> Mono.justOrEmpty(cache.getIfPresent(key)).map(Signal::next), key)
                 .onCacheMissResume((Mono<Object>) joinPoint.proceed(args))
                 .andWriteWith((k, sig) -> Mono.fromRunnable(() -> {

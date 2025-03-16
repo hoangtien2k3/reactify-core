@@ -29,11 +29,6 @@ import org.apache.commons.lang3.RandomStringUtils;
 public class PasswordGenerator {
 
     /**
-     * Constructs a new instance of {@code PasswordGenerator}.
-     */
-    public PasswordGenerator() {}
-
-    /**
      * Generates a random password using Apache Commons Lang's RandomStringUtils.
      * The password contains a mix of upper case letters, lower case letters, and
      * numbers.
@@ -52,16 +47,5 @@ public class PasswordGenerator {
         return pwdChars.stream()
                 .collect(StringBuilder::new, StringBuilder::append, StringBuilder::append)
                 .toString();
-    }
-
-    /**
-     * Main method for testing the password generation. Prints a randomly generated
-     * password to the console.
-     *
-     * @param args
-     *            command line arguments
-     */
-    public static void main(String[] args) {
-        System.out.println(generateCommonLangPassword());
     }
 }

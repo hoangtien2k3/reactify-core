@@ -78,9 +78,4 @@ public class ModelMapperFactory {
     public static ModelMapper getInstance() {
         return modelMapper;
     }
-
-    /**
-     * Constructs a new instance of {@code ModelMapperFactory}.
-     */
-    public ModelMapperFactory() {}
 }

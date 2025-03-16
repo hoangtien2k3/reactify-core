@@ -33,6 +33,7 @@ import java.util.List;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -73,15 +74,17 @@ import reactor.netty.transport.ProxyProvider;
 @Slf4j
 @Data
 public class WebClientFactory implements InitializingBean {
-    private final ApplicationContext applicationContext;
+
+    @Autowired
+    private ApplicationContext applicationContext;
     private List<WebClientProperties> webClients;
 
     /**
      * Creates an instance of {@code WebClientFactory} with the specified
      * application context and authorized client manager.
      */
-    public WebClientFactory(ApplicationContext applicationContext) {
-        this.applicationContext = applicationContext;
+    public WebClientFactory(List<WebClientProperties> webClients) {
+        this.webClients = webClients;
     }
 
     /**

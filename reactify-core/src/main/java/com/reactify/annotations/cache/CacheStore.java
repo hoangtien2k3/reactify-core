@@ -83,11 +83,6 @@ public class CacheStore implements ApplicationContextAware {
     private static String reflectionPath;
 
     /**
-     * Constructs a new instance of {@code CacheStore}.
-     */
-    public CacheStore() {}
-
-    /**
      * <p>
      * Initializes the cache store by scanning for methods annotated with
      * {@link LocalCache} and creating caches according to the annotation's

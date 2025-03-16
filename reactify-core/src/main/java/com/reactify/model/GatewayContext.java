@@ -45,11 +45,6 @@ import org.springframework.util.MultiValueMap;
 @ToString
 public class GatewayContext {
 
-    /**
-     * Constructs a new instance of {@code GatewayContext}.
-     */
-    public GatewayContext() {}
-
     /** Constant <code>CACHE_GATEWAY_CONTEXT="cacheGatewayContext"</code> */
     public static final String CACHE_GATEWAY_CONTEXT = "cacheGatewayContext";
 

@@ -95,7 +95,7 @@ public class LoggerAspectUtils {
      * @throws java.lang.Throwable
      *             if any error occurs during the execution of the method
      */
-    public Object logAround(ProceedingJoinPoint joinPoint) throws Throwable {
+    public Mono<Object> logAround(ProceedingJoinPoint joinPoint) throws Throwable {
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         Method method = signature.getMethod();
         LogPerformance logPerformance = method.getAnnotation(LogPerformance.class);
@@ -122,17 +122,36 @@ public class LoggerAspectUtils {
         }
 
         Span newSpan = tracer.nextSpan().name(name);
-
         var result = joinPoint.proceed();
         if (result instanceof Mono) {
             return logMonoResult(
-                    joinPoint, start, (Mono<?>) result, newSpan, name, logType, actionType, logOutput, logInput, title);
+                    joinPoint,
+                    start,
+                    (Mono<Object>) result,
+                    newSpan,
+                    name,
+                    logType,
+                    actionType,
+                    logOutput,
+                    logInput,
+                    title);
         }
         if (result instanceof Flux) {
             return logFluxResult(
-                    joinPoint, start, (Flux<?>) result, newSpan, name, logType, actionType, logOutput, logInput, title);
+                            joinPoint,
+                            start,
+                            (Flux<Object>) result,
+                            newSpan,
+                            name,
+                            logType,
+                            actionType,
+                            logOutput,
+                            logInput,
+                            title)
+                    .collectList()
+                    .map(list -> (Object) list);
         } else {
-            return result;
+            return Mono.just(result);
         }
     }
 
@@ -165,10 +184,10 @@ public class LoggerAspectUtils {
      *            a title for the log entry
      * @return a {@link Mono} containing the logged result
      */
-    private Mono<?> logMonoResult(
+    private Mono<Object> logMonoResult(
             ProceedingJoinPoint joinPoint,
             long start,
-            Mono<?> result,
+            Mono<Object> result,
             Span newSpan,
             String name,
             String logType,
@@ -233,10 +252,10 @@ public class LoggerAspectUtils {
      *            a title for the log entry
      * @return a {@link Flux} containing the logged result
      */
-    private Flux<?> logFluxResult(
+    private Flux<Object> logFluxResult(
             ProceedingJoinPoint joinPoint,
             long start,
-            Flux<?> result,
+            Flux<Object> result,
             Span newSpan,
             String name,
             String logType,

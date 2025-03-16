@@ -46,11 +46,6 @@ package com.reactify.constants;
 public class MessageConstant {
 
     /**
-     * Constructs a new instance of {@code MessageConstant}.
-     */
-    public MessageConstant() {}
-
-    /**
      * Constant <code>SUCCESS="success"</code>
      *
      * <p>

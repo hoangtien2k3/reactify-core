@@ -23,17 +23,10 @@ import org.springframework.http.ResponseEntity;
 import reactor.core.publisher.Mono;
 
 /**
- * Utility class for handling HTTP responses. Provides methods to create
- * ResponseEntity objects and to process DataResponse objects.
- *
- * @author hoangtien2k3
+ * Utility class for handling responses in the application. This class provides
+ * static methods to create and manipulate response objects.
  */
 public class ResponseUtils {
-
-    /**
-     * Constructs a new instance of {@code ResponseUtils}.
-     */
-    public ResponseUtils() {}
 
     /**
      * Creates a ResponseEntity with a DataResponse containing the given data and a

@@ -99,7 +99,6 @@ public class WebConfig {
     public SecurityWebFilterChain springSecurityFilterChain(
             ServerHttpSecurity http, Converter<Jwt, Mono<AbstractAuthenticationToken>> jwtAuthenticationConverter) {
         http.csrf(ServerHttpSecurity.CsrfSpec::disable);
-
         List<WhiteList> whiteListList = whiteListProperties.getWhiteList();
         if (!DataUtil.isNullOrEmpty(whiteListList)) {
             for (WhiteList whiteList : whiteListList) {
@@ -118,15 +117,12 @@ public class WebConfig {
                 }
             }
         }
-
         http.cors(corsSpec -> corsSpec.configurationSource(corsConfigurationSource()))
                 .authorizeExchange(authorize -> authorize.anyExchange().authenticated())
                 .oauth2ResourceServer(
                         oauth2 -> oauth2.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter)));
-
         http.headers(headers -> headers.frameOptions(
                 frameOptions -> frameOptions.mode(XFrameOptionsServerHttpHeadersWriter.Mode.SAMEORIGIN)));
-
         return http.build();
     }
 

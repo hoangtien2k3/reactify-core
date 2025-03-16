@@ -57,11 +57,6 @@ public class MarshallerFactory {
     private static final Map<Class<?>, Marshaller> instance = new HashMap<>();
 
     /**
-     * Constructs a new instance of {@code MarshallerFactory}.
-     */
-    public MarshallerFactory() {}
-
-    /**
      * Converts a given Java object to its XML representation.
      *
      * <p>

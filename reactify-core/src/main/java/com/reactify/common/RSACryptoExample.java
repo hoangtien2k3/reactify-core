@@ -39,14 +39,8 @@ import javax.crypto.Cipher;
  * dependencies.
  * </p>
  *
- * @author hoangtien2k3
  */
 public class RSACryptoExample {
-
-    /**
-     * Constructs a new instance of {@code RSACryptoExample}.
-     */
-    public RSACryptoExample() {}
 
     /**
      * Converts a Base64 encoded string representation of a public key to a

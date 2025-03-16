@@ -57,6 +57,7 @@ import org.springframework.util.ObjectUtils;
  * @author hoangtien2k3
  */
 public class KeycloakGrantedAuthoritiesConverter implements Converter<Jwt, Collection<GrantedAuthority>> {
+
     private static final String ROLES = "roles";
     private static final String CLAIM_REALM_ACCESS = "realm_access";
     private static final String RESOURCE_ACCESS = "resource_access";

@@ -33,11 +33,6 @@ import org.springframework.http.MediaType;
 public final class Constants {
 
     /**
-     * Constructs a new instance of {@code Constants}.
-     */
-    public Constants() {}
-
-    /**
      * Regular expression pattern for validating names.
      * <p>
      * The pattern allows uppercase and lowercase letters, as well as Vietnamese

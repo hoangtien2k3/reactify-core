@@ -31,11 +31,6 @@ public class MessageUtils {
     private static final String BASE_NAME = "messages";
 
     /**
-     * Constructs a new instance of {@code MessageUtils}.
-     */
-    public MessageUtils() {}
-
-    /**
      * <p>
      * getMessage.
      * </p>

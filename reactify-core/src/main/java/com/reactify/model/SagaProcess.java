@@ -46,11 +46,6 @@ import reactor.core.scheduler.Schedulers;
 public abstract class SagaProcess {
 
     /**
-     * Constructs a new instance of {@code SagaProcess}.
-     */
-    public SagaProcess() {}
-
-    /**
      * <p>
      * getSteps.
      * </p>

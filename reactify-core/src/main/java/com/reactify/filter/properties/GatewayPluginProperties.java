@@ -54,11 +54,6 @@ import org.springframework.util.CollectionUtils;
 public class GatewayPluginProperties implements InitializingBean {
 
     /**
-     * Constructs a new instance of {@code GatewayPluginProperties}.
-     */
-    public GatewayPluginProperties() {}
-
-    /**
      * Constant <code>GATEWAY_PLUGIN_PROPERTIES_PREFIX="spring.plugin.config"</code>
      * The prefix for the properties related to the gateway plugin configuration.
      */

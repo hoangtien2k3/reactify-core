@@ -73,6 +73,7 @@ import reactor.core.scheduler.Schedulers;
 @Log4j2
 @Profile("!prod")
 public class GatewayContextFilter implements WebFilter, Ordered {
+
     private final HttpLogProperties httpLogProperties;
     private final CodecConfigurer codecConfigurer;
 

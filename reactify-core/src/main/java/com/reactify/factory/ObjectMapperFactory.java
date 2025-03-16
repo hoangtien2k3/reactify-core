@@ -61,11 +61,6 @@ import java.io.IOException;
 public class ObjectMapperFactory {
 
     /**
-     * Constructs a new instance of {@code ObjectMapperFactory}.
-     */
-    public ObjectMapperFactory() {}
-
-    /**
      * Singleton instance for a custom-configured {@link ObjectMapper}.
      */
     private static ObjectMapper objectMapper;

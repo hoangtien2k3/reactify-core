@@ -45,11 +45,6 @@ package com.reactify.constants;
 public class ErrorCodeConstant {
 
     /**
-     * Constructs a new instance of {@code ErrorCodeConstant}.
-     */
-    public ErrorCodeConstant() {}
-
-    /**
      * Constant <code>ORGANIZATION_INVALID="user_not_exist_organization"</code>
      *
      * <p>

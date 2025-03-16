@@ -70,7 +70,6 @@ public record WebClientRetryHandler(RetryProperties properties) implements Excha
                     log.warn("Retrying: {}; Cause: {}.", retrySignal.totalRetries(), retrySignal.failure());
                 })
                 .onRetryExhaustedThrow(((retrySpec, retrySignal) -> retrySignal.failure()));
-
         return next.exchange(request).retryWhen(retry);
     }
 }

@@ -32,11 +32,6 @@ import org.springframework.util.MultiValueMap;
 public class TruncateUtils {
 
     /**
-     * Constructs a new instance of {@code TruncateUtils}.
-     */
-    public TruncateUtils() {}
-
-    /**
      * <p>
      * truncate.
      * </p>
@@ -78,8 +73,6 @@ public class TruncateUtils {
         int b = 0;
         for (int i = 0; i < s.length(); i++) {
             char c = s.charAt(i);
-
-            // ranges from http://en.wikipedia.org/wiki/UTF-8
             int skip = 0;
             int more;
             if (c <= 0x007f) {
@@ -89,13 +82,11 @@ public class TruncateUtils {
             } else if (c <= 0xd7ff) {
                 more = 3;
             } else if (c <= 0xDFFF) {
-                // surrogate area, consume next char as well
                 more = 4;
                 skip = 1;
             } else {
                 more = 3;
             }
-
             if (b + more > maxByte) {
                 return s.substring(0, i);
             }
@@ -128,7 +119,7 @@ public class TruncateUtils {
         StringBuilder messageResponse = new StringBuilder();
         Set<String> keys = formData.keySet();
         for (String key : keys) {
-            messageResponse.append(key + ":" + truncateBody(formData.get(key)));
+            messageResponse.append(key).append(":").append(truncateBody(formData.get(key)));
         }
         return messageResponse.toString();
     }

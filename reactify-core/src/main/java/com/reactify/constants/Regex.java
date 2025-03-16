@@ -33,11 +33,6 @@ package com.reactify.constants;
 public class Regex {
 
     /**
-     * Constructs a new instance of {@code Regex}.
-     */
-    public Regex() {}
-
-    /**
      * Regular expression to validate Vietnamese phone numbers.
      * <p>
      * This regex supports phone numbers starting with "+84", "84", or "0" and
