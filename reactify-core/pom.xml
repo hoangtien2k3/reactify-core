@@ -68,7 +68,7 @@
         <spring-cloud.version>2023.0.2</spring-cloud.version>
         <spotless.version>2.43.0</spotless.version>
         <log4j.version>2.23.1</log4j.version>
-        <minio.version>8.5.11</minio.version>
+        <minio.version>8.5.17</minio.version>
         <mapstruct.version>1.5.5.Final</mapstruct.version>
         <mapstruct.processor.version>1.5.5.Final</mapstruct.processor.version>
         <modelmapper.version>3.2.0</modelmapper.version>
