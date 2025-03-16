@@ -15,10 +15,9 @@ This README provides quickstart instructions on running [`reactify-core`]() on b
 
 [![SonarCloud](https://sonarcloud.io/images/project_badges/sonarcloud-white.svg)](https://sonarcloud.io/summary/new_code?id=hoangtien2k3_reactify)
 
-[![CircleCI](https://circleci.com/gh/hoangtien2k3/reactify.svg?style=svg)](https://app.circleci.com/pipelines/github/hoangtien2k3/reactify)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=hoangtien2k3_reactify&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=hoangtien2k3_reactify)
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=hoangtien2k3_reactify&metric=ncloc)](https://sonarcloud.io/summary/overall?id=hoangtien2k3_reactify)
-[![GitHub Release](https://img.shields.io/github/v/release/hoangtien2k3/reactify?label=latest%20release)](https://mvnrepository.com/artifact/io.github.hoangtien2k3/reactify)
+[![GitHub Release](https://img.shields.io/github/v/release/hoangtien2k3/reactify?label=latest%20release)](https://mvnrepository.com/artifact/io.github.hoangtien2k3/reactify-core)
 [![License](https://img.shields.io/badge/license-Apache--2.0-green.svg)](https://www.apache.org/licenses/LICENSE-2.0.html)
 [![OpenSSF Best Practices](https://www.bestpractices.dev/projects/9383/badge)](https://www.bestpractices.dev/projects/9383)
 [![Build status](https://github.com/ponfee/commons-core/workflows/build-with-maven/badge.svg)](https://github.com/hoangtien2k3/reactify/actions)
@@ -77,6 +76,39 @@ public class ExampleApplication {
 
 #### 2. Config your project file `application.yml` or `application.properties`
 
+**Required oauth2 configuration**:
+```yml
+spring:
+   # Config OAuth2 Keycloak
+   security:
+      oauth2:
+         client:
+            provider:
+               oidc:
+                  token-uri: ${keycloak.serverUrl}/realms/${keycloak.realm}/protocol/openid-connect/token
+            registration:
+               oidc:
+                  client-id: ${keycloak.clientId}
+                  client-secret: ${keycloak.clientSecret}
+                  authorization-grant-type: ${keycloak.grantType} #password || #client_credentials
+         resourceserver:
+            jwt:
+               jwk-set-uri: ${keycloak.serverUrl}/realms/${keycloak.realm}/protocol/openid-connect/certs
+         keycloak:
+            client-id: ${keycloak.clientId}
+            
+#keycloak client config
+keycloak:
+   clientId: ezbuy-client
+   clientSecret: mI92QDfvi20tZgFtjpRAPWu8TR6eMHmw
+   realm: ezbuy-server
+   serverUrl: http://localhost:8080
+   grantType: password
+   host: localhost
+```
+
+**Configure further if required**:
+
 ```yml
 # spring config
 spring:
@@ -86,7 +118,7 @@ spring:
   messages:
     basename: i18n/messages
 
-  #connect db R2DBC PostgreSQL
+  #connect db R2DBC PostgreSQL || MySQL || MariaDB ...
   r2dbc:
     url: r2dbc:postgresql://localhost:5434/auth
     username: admin
