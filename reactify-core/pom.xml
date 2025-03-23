@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  Copyright 2024-2025 the original author Hoàng Anh Tiến.
+  Copyright 2024-2025 the original author Hoàng Anh Tiến
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -23,13 +23,20 @@
         <version>3.3.5</version>
         <relativePath/>
     </parent>
+
+    <!-- =========================================== -->
+    <!-- The maven central for all the library       -->
+    <!-- =========================================== -->
     <groupId>io.github.hoangtien2k3</groupId>
     <artifactId>reactify-core</artifactId>
-    <version>1.2.5</version>
+    <version>1.2.6</version>
     <name>reactify-core</name>
     <description>Java library for developing reactive programming(reactor-core) backend systems in microservices</description>
     <url>https://github.com/hoangtien2k3/reactify-core</url>
 
+    <!-- =========================================== -->
+    <!-- The info developers for all the library     -->
+    <!-- =========================================== -->
     <licenses>
         <license>
             <name>Apache License, Version 2.0</name>
@@ -60,12 +67,14 @@
         </repository>
     </distributionManagement>
 
+    <!-- =========================================== -->
+    <!-- The properties for all the library          -->
+    <!-- =========================================== -->
     <properties>
         <java.version>21</java.version>
         <micrometer.tracing.version>1.4.3</micrometer.tracing.version>
         <micrometer.registry.version>1.4.3</micrometer.registry.version>
         <micrometer.core.version>1.14.4</micrometer.core.version>
-        <spring-cloud.version>2023.0.2</spring-cloud.version>
         <spotless.version>2.43.0</spotless.version>
         <log4j.version>2.23.1</log4j.version>
         <minio.version>8.5.11</minio.version>
@@ -94,18 +103,9 @@
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     </properties>
 
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-dependencies</artifactId>
-                <version>${spring-cloud.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
-
+    <!-- =========================================== -->
+    <!-- The dependencies for all the library        -->
+    <!-- =========================================== -->
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -210,6 +210,9 @@
         </dependency>
     </dependencies>
 
+    <!-- =========================================== -->
+    <!-- The plugins for all the library             -->
+    <!-- =========================================== -->
     <build>
         <plugins>
             <plugin>

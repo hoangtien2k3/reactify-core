@@ -1,5 +1,5 @@
 /*
- * Copyright 2024-2025 the original author Hoàng Anh Tiến.
+ * Copyright 2024-2025 the original author Hoàng Anh Tiến
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -81,6 +81,7 @@ import reactor.netty.transport.ProxyProvider;
 @Slf4j
 @Data
 public class WebClientFactory implements InitializingBean {
+
     @Autowired
     private ApplicationContext applicationContext;
 

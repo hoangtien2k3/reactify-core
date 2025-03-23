@@ -1,5 +1,5 @@
 /*
- * Copyright 2024-2025 the original author Hoàng Anh Tiến.
+ * Copyright 2024-2025 the original author Hoàng Anh Tiến
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -63,7 +63,7 @@ public class ObjectMapperFactory {
     /**
      * Singleton instance for a custom-configured {@link ObjectMapper}.
      */
-    private static ObjectMapper objectMapper;
+    private static volatile ObjectMapper objectMapper;
 
     /**
      * Singleton instance for a secondary {@link ObjectMapper} with alternative
@@ -93,19 +93,23 @@ public class ObjectMapperFactory {
      */
     public static ObjectMapper getInstance() {
         if (objectMapper == null) {
-            objectMapper = new ObjectMapper();
-            objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-            objectMapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
-            objectMapper.configure(DeserializationFeature.UNWRAP_SINGLE_VALUE_ARRAYS, true);
+            synchronized (ObjectMapperFactory.class) {
+                if (objectMapper == null) {
+                    objectMapper = new ObjectMapper();
+                    objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+                    objectMapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
+                    objectMapper.configure(DeserializationFeature.UNWRAP_SINGLE_VALUE_ARRAYS, true);
 
-            // Register custom deserializer for boolean values represented as numbers
-            SimpleModule module = new SimpleModule();
-            module.addDeserializer(boolean.class, new NumericBooleanDeserializer());
-            module.addDeserializer(Boolean.class, new NumericBooleanDeserializer());
+                    // Register custom deserializer for boolean values represented as numbers
+                    SimpleModule module = new SimpleModule();
+                    module.addDeserializer(boolean.class, new NumericBooleanDeserializer());
+                    module.addDeserializer(Boolean.class, new NumericBooleanDeserializer());
 
-            // Register modules for Java time handling
-            objectMapper.registerModule(new JavaTimeModule());
-            objectMapper.registerModule(module);
+                    // Register modules for Java time handling
+                    objectMapper.registerModule(new JavaTimeModule());
+                    objectMapper.registerModule(module);
+                }
+            }
         }
         return objectMapper;
     }
@@ -164,14 +168,12 @@ public class ObjectMapperFactory {
     private static class NumericBooleanDeserializer extends JsonDeserializer<Boolean> {
         @Override
         public Boolean deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
-            String text = p.getText();
-            if ("1".equals(text) || "true".equalsIgnoreCase(text)) {
-                return Boolean.TRUE;
-            }
-            if ("0".equals(text) || "false".equalsIgnoreCase(text)) {
-                return Boolean.FALSE;
-            }
-            return null;
+            String text = p.getText().trim();
+            return switch (text) {
+                case "1", "true" -> Boolean.TRUE;
+                case "0", "false" -> Boolean.FALSE;
+                default -> null;
+            };
         }
     }
 }

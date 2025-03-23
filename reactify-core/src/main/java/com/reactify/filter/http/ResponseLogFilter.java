@@ -1,5 +1,5 @@
 /*
- * Copyright 2024-2025 the original author Hoàng Anh Tiến.
+ * Copyright 2024-2025 the original author Hoàng Anh Tiến
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -69,6 +69,7 @@ import reactor.core.publisher.Mono;
 @Log4j2
 @Component
 public class ResponseLogFilter implements WebFilter, Ordered {
+
     private final ExchangeStrategies exchangeStrategies = ExchangeStrategies.builder()
             .codecs(cl -> cl.defaultCodecs().maxInMemorySize(50 * 1024 * 1024))
             .build();
@@ -122,11 +123,11 @@ public class ResponseLogFilter implements WebFilter, Ordered {
                 final MediaType contentType = super.getHeaders().getContentType();
                 if (LogUtils.legalLogMediaTypes.contains(contentType)) {
                     if (body instanceof Mono) {
-                        final Mono<DataBuffer> monoBody = (Mono<DataBuffer>) body;
+                        final Mono<DataBuffer> monoBody = Mono.from(body);
                         return super.writeWith(
                                 monoBody.publishOn(single()).map(buffer -> logRequestBody(buffer, exchange)));
                     } else if (body instanceof Flux) {
-                        final Flux<DataBuffer> monoBody = (Flux<DataBuffer>) body;
+                        final Flux<DataBuffer> monoBody = Flux.from(body);
                         return super.writeWith(
                                 monoBody.publishOn(single()).map(buffer -> logRequestBody(buffer, exchange)));
                     }
@@ -206,11 +207,7 @@ public class ResponseLogFilter implements WebFilter, Ordered {
             this.headers = headers;
             this.statusCode = statusCode;
             this.cookies = cookies;
-            if (body instanceof Flux) {
-                flux = (Flux<DataBuffer>) body;
-            } else {
-                flux = ((Mono<DataBuffer>) body).flux();
-            }
+            flux = Flux.from(body);
         }
 
         /**

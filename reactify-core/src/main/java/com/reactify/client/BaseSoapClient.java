@@ -1,5 +1,5 @@
 /*
- * Copyright 2024-2025 the original author Hoàng Anh Tiến.
+ * Copyright 2024-2025 the original author Hoàng Anh Tiến
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -65,37 +65,6 @@ public interface BaseSoapClient<T> {
      * @return a Mono containing the raw response as a string.
      */
     Mono<String> callRaw(WebClient webClient, Map<String, String> headerList, String payload);
-
-    /**
-     * Parses the SOAP response data into an instance of the specified class type.
-     *
-     * @param realData
-     *            the raw response data as a string.
-     * @param clz
-     *            the class to which the data should be converted.
-     * @return an instance of type {@code T} containing the parsed response data.
-     */
-    T parseData(String realData, Class<?> clz);
-
-    /**
-     * Calls a specific API to retrieve the customer profile data using the provided
-     * WebClient instance, HTTP headers, and payload. The response is returned as an
-     * optional result wrapped in a reactive Mono.
-     *
-     * @param webClient
-     *            the WebClient instance used to make the SOAP call.
-     * @param headerList
-     *            a map of HTTP headers to include in the request.
-     * @param payload
-     *            the SOAP request payload as a string.
-     * @param resultClass
-     *            the class of the expected response object type.
-     * @return a Mono containing an Optional result of type {@code T}, representing
-     *         the customer profile data, or an empty Optional if no data was
-     *         returned.
-     */
-    Mono<Optional<T>> callApiGetProfileKHDN(
-            WebClient webClient, Map<String, String> headerList, String payload, Class<?> resultClass);
 
     /**
      * Makes a SOAP call using version 2 of the API configuration, with the provided

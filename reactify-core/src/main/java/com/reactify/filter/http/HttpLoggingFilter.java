@@ -1,5 +1,5 @@
 /*
- * Copyright 2024-2025 the original author Hoàng Anh Tiến.
+ * Copyright 2024-2025 the original author Hoàng Anh Tiến
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,6 +32,7 @@ import org.jetbrains.annotations.NotNull;
 import org.reactivestreams.Publisher;
 import org.springframework.core.Ordered;
 import org.springframework.core.io.buffer.DataBuffer;
+import org.springframework.core.io.buffer.DataBufferUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.server.reactive.ServerHttpRequest;
@@ -98,11 +99,11 @@ public class HttpLoggingFilter implements WebFilter, Ordered {
                             final MediaType contentType = super.getHeaders().getContentType();
                             if (Constants.VISIBLE_TYPES.contains(contentType)) {
                                 if (body instanceof Mono) {
-                                    final Mono<DataBuffer> monoBody = (Mono<DataBuffer>) body;
+                                    final Mono<DataBuffer> monoBody = Mono.from(body);
                                     return super.writeWith(monoBody.publishOn(single())
                                             .map(buffer -> logResponseBody(buffer, exchange)));
                                 } else if (body instanceof Flux) {
-                                    final Flux<DataBuffer> fluxBody = (Flux<DataBuffer>) body;
+                                    final Flux<DataBuffer> fluxBody = Flux.from(body);
                                     return super.writeWith(fluxBody.publishOn(single())
                                             .map(buffer -> logResponseBody(buffer, exchange)));
                                 }
@@ -256,11 +257,19 @@ public class HttpLoggingFilter implements WebFilter, Ordered {
      */
     private DataBuffer logResponseBody(DataBuffer buffer, ServerWebExchange exchange) {
         StringBuilder msg = new StringBuilder();
-        Integer capacity = buffer.capacity();
-        if (capacity < Constants.LoggingTitle.BODY_SIZE_RESPONSE_MAX) {
-            msg.append(String.format("%s", StandardCharsets.UTF_8.decode(buffer.asByteBuffer())));
-        } else {
-            msg.append(String.format("%s", "response too log to log"));
+        int capacity = buffer.readableByteCount();
+        try {
+            if (capacity < 1000) {
+                byte[] bytes = new byte[capacity];
+                buffer.read(bytes);
+                msg.append(new String(bytes, StandardCharsets.UTF_8));
+            } else {
+                msg.append("response too long to log");
+            }
+        } catch (Exception ex) {
+            log.error("Failed to log response body", ex);
+        } finally {
+            DataBufferUtils.release(buffer);
         }
         GatewayContext gatewayContext = exchange.getAttribute(GatewayContext.CACHE_GATEWAY_CONTEXT);
         if (gatewayContext != null) {
@@ -283,12 +292,12 @@ public class HttpLoggingFilter implements WebFilter, Ordered {
         msg.append(Constants.LoggingTitle.REQUEST_BODY);
         String message = "body request too long to log";
         try {
-            Integer capacity = dataBuffer.capacity();
-            if (capacity < Constants.LoggingTitle.BODY_SIZE_REQUEST_MAX) {
-                message = StandardCharsets.UTF_8
-                        .decode(dataBuffer.asByteBuffer())
-                        .toString()
-                        .replaceAll("\\s", "");
+            int capacity = dataBuffer.capacity();
+            if (capacity < 1000) {
+                byte[] bytes = new byte[capacity];
+                dataBuffer.read(bytes);
+                DataBufferUtils.release(dataBuffer);
+                message = new String(bytes, StandardCharsets.UTF_8).replaceAll("\\s", "");
             }
         } catch (Exception ex) {
             log.error("Convert body request to string error ", ex);

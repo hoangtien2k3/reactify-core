@@ -1,5 +1,5 @@
 /*
- * Copyright 2024-2025 the original author Hoàng Anh Tiến.
+ * Copyright 2024-2025 the original author Hoàng Anh Tiến
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -94,10 +94,12 @@ public class BaseRestClientImpl<T> implements BaseRestClient<T> {
                 .map(response -> {
                     log.info("Rest response {}", response);
                     if (DataUtil.isNullOrEmpty(response)) {
-                        return this.getDefaultValue();
+                        return Optional.<T>empty();
                     }
                     if (DataUtil.safeEqual(resultClass.getSimpleName(), "String")) {
-                        return Optional.of((T) response);
+                        @SuppressWarnings("unchecked")
+                        T stringResponse = (T) response;
+                        return Optional.of(stringResponse);
                     }
                     T result = DataUtil.parseStringToObject(response, resultClass);
                     return Optional.ofNullable(result);
@@ -210,7 +212,7 @@ public class BaseRestClientImpl<T> implements BaseRestClient<T> {
     @Override
     public Optional<T> processReturn(String response, Class<?> resultClass) {
         if (DataUtil.isNullOrEmpty(response)) {
-            return this.getDefaultValue();
+            return Optional.empty();
         }
         T result = DataUtil.parseStringToObject(response, resultClass);
         return Optional.ofNullable(result);
@@ -460,15 +462,6 @@ public class BaseRestClientImpl<T> implements BaseRestClient<T> {
                     log.error("call rest api ", e);
                     return Mono.just("");
                 });
-    }
-
-    /**
-     * Provides a default empty Optional value.
-     *
-     * @return an Optional containing no value.
-     */
-    private Optional<T> getDefaultValue() {
-        return Optional.empty();
     }
 
     /**

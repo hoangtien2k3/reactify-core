@@ -1,5 +1,5 @@
 /*
- * Copyright 2024-2025 the original author Hoàng Anh Tiến.
+ * Copyright 2024-2025 the original author Hoàng Anh Tiến
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
  */
 package com.reactify.annotations.logging;
 
+import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -52,18 +53,10 @@ import reactor.core.publisher.Mono;
  */
 @Aspect
 @Configuration
+@RequiredArgsConstructor
 public class LoggerAspect {
-    private final LoggerAspectUtils loggerAspectUtils;
 
-    /**
-     * Constructs a new instance of {@code LoggerAspect}.
-     *
-     * @param loggerAspectUtils
-     *            the utility class for logging aspects.
-     */
-    public LoggerAspect(LoggerAspectUtils loggerAspectUtils) {
-        this.loggerAspectUtils = loggerAspectUtils;
-    }
+    private final LoggerAspectUtils loggerAspectUtils;
 
     /**
      * <p>
@@ -73,7 +66,7 @@ public class LoggerAspect {
      */
     @Pointcut("execution(* com.reactify.*.controller..*(..)) || " + "execution(* com.reactify.*.service..*(..)) || "
             + "execution(* com.reactify.*.repository..*(..)) || " + "execution(* com.reactify.*.client..*(..)) && "
-            + "!execution(* org.springframework.boot.actuate..*(..)) && " + "!within(com.reactify.*.config..*)")
+            + "!execution(* org.springframework.boot.actuate..*(..))")
     public void performancePointCut() {}
 
     /**

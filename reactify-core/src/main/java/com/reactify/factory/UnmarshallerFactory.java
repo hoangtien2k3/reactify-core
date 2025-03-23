@@ -1,5 +1,5 @@
 /*
- * Copyright 2024-2025 the original author Hoàng Anh Tiến.
+ * Copyright 2024-2025 the original author Hoàng Anh Tiến
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,9 @@
  */
 package com.reactify.factory;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
@@ -63,7 +64,7 @@ public class UnmarshallerFactory {
     /**
      * Cache to hold {@link Unmarshaller} instances for specific classes.
      */
-    private static final Map<Class<?>, Unmarshaller> instance = new HashMap<>();
+    private static final Map<Class<?>, Unmarshaller> instance = new ConcurrentHashMap<>();
 
     /**
      * <p>
@@ -81,22 +82,15 @@ public class UnmarshallerFactory {
      *         instantiation
      */
     public static Unmarshaller getInstance(Class<?> clz) {
-        // Attempt to retrieve a cached unmarshaller for the class
-        Unmarshaller obj = instance.get(clz);
-        if (obj != null) return obj;
-
-        try {
-            // Create a new JAXB context and unmarshaller for the class
-            JAXBContext jaxbContext = JAXBContext.newInstance(clz);
-            Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-
-            // Cache the created unmarshaller
-            instance.put(clz, unmarshaller);
-            return unmarshaller;
-        } catch (JAXBException e) {
-            // Log error if unmarshaller creation fails
-            log.error("Init Unmarshaller error", e);
-            return null;
-        }
+        Objects.requireNonNull(clz, "Class must not be null");
+        return instance.computeIfAbsent(clz, key -> {
+            try {
+                JAXBContext jaxbContext = JAXBContext.newInstance(key);
+                return jaxbContext.createUnmarshaller();
+            } catch (JAXBException e) {
+                log.error("Failed to create Unmarshaller for class: {}", key.getName(), e);
+                return null;
+            }
+        });
     }
 }

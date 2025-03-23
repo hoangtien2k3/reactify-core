@@ -1,5 +1,5 @@
 /*
- * Copyright 2024-2025 the original author Hoàng Anh Tiến.
+ * Copyright 2024-2025 the original author Hoàng Anh Tiến
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,14 @@
 package com.reactify.factory;
 
 import java.io.StringWriter;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * <p>
@@ -51,10 +53,14 @@ import lombok.extern.slf4j.Slf4j;
  * @since 1.0
  * @version 1.0
  */
-@Slf4j
 public class MarshallerFactory {
 
-    private static final Map<Class<?>, Marshaller> instance = new HashMap<>();
+    private static final Logger log = Logger.getLogger(MarshallerFactory.class.getName());
+
+    /**
+     * Cache to hold {@link MarshallerFactory} instances for specific classes.
+     */
+    private static final Map<Class<?>, Marshaller> instance = new ConcurrentHashMap<>();
 
     /**
      * Converts a given Java object to its XML representation.
@@ -79,31 +85,34 @@ public class MarshallerFactory {
      *            {@link javax.xml.bind.Marshaller} instance
      * @return a {@link java.lang.String} representing the XML format of the object,
      *         or an empty string if an error occurs during conversion
-     * @throws java.lang.IllegalArgumentException
+     * @throws IllegalArgumentException
      *             if {@code obj} or {@code cls} is null
      */
     public static String convertObjectToXML(Object obj, Class<?> cls) {
-        Marshaller marshaller = instance.get(cls);
-        String xmlTxt = "";
+        Objects.requireNonNull(obj, "Object to convert must not be null");
+        Objects.requireNonNull(cls, "Class of the object must not be null");
+
         try {
-            // create an instance of `JAXBContext`
-            if (marshaller == null) {
-                marshaller = JAXBContext.newInstance(cls).createMarshaller();
-                // enable pretty-print XML output
-                marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-                instance.put(cls, marshaller);
-            }
+            Marshaller marshaller = instance.computeIfAbsent(cls, key -> {
+                try {
+                    Marshaller m = JAXBContext.newInstance(key).createMarshaller();
+                    m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+                    return m;
+                } catch (JAXBException ex) {
+                    log.log(Level.SEVERE, "Failed to create marshaller for class: " + key.getName(), ex);
+                    throw new RuntimeException("Failed to create marshaller", ex);
+                }
+            });
 
-            // write XML to `StringWriter`
             StringWriter sw = new StringWriter();
-
-            // convert book object to XML
             marshaller.marshal(obj, sw);
-            xmlTxt = sw.toString();
-
+            return sw.toString();
         } catch (JAXBException ex) {
-            log.error("Convert Object To XML  fail: ", ex);
+            log.log(Level.SEVERE, "Failed to convert object to XML", ex);
+            return "";
+        } catch (RuntimeException ex) {
+            log.log(Level.SEVERE, "Unexpected error during XML conversion", ex);
+            return "";
         }
-        return xmlTxt;
     }
 }

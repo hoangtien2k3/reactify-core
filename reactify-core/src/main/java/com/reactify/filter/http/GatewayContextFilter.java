@@ -1,5 +1,5 @@
 /*
- * Copyright 2024-2025 the original author Hoàng Anh Tiến.
+ * Copyright 2024-2025 the original author Hoàng Anh Tiến
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 import lombok.extern.log4j.Log4j2;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.context.annotation.Profile;
 import org.springframework.core.Ordered;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.core.io.buffer.DataBufferUtils;
@@ -71,7 +70,6 @@ import reactor.core.scheduler.Schedulers;
  */
 @Component
 @Log4j2
-@Profile("!prod")
 public class GatewayContextFilter implements WebFilter, Ordered {
 
     private final HttpLogProperties httpLogProperties;
@@ -277,9 +275,6 @@ public class GatewayContextFilter implements WebFilter, Ordered {
     private Mono<Void> readBody(ServerWebExchange exchange, WebFilterChain chain, GatewayContext gatewayContext) {
         return DataBufferUtils.join(exchange.getRequest().getBody()).flatMap(dataBuffer -> {
             DataBufferUtils.retain(dataBuffer);
-
-            // Flux<DataBuffer> cachedFlux = Flux.defer(() -> Flux.just(dataBuffer.slice(0,
-            // dataBuffer.readableByteCount())));
             Flux<DataBuffer> cachedFlux = Flux.defer(() -> Flux.just(DataBufferUtils.retain(dataBuffer)));
 
             /*
