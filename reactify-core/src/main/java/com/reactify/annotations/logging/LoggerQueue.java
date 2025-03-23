@@ -55,8 +55,7 @@ import reactor.util.context.Context;
 @Slf4j
 public class LoggerQueue {
     private static LoggerQueue mMe = null;
-    private ArrayBlockingQueue<LoggerDTO> myQueue = null;
-    private static final Object myLock = new Object();
+    private final ArrayBlockingQueue<LoggerDTO> myQueue;
 
     @Getter
     private int countFalse = 0;
@@ -183,9 +182,7 @@ public class LoggerQueue {
      */
     public List<LoggerDTO> getRecords() {
         List<LoggerDTO> records = new ArrayList<>();
-        if (myQueue != null) {
-            myQueue.drainTo(records, 100000);
-        }
+        myQueue.drainTo(records, 100000);
         return records;
     }
 

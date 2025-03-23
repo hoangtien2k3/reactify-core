@@ -98,11 +98,11 @@ public class HttpLoggingFilter implements WebFilter, Ordered {
                             final MediaType contentType = super.getHeaders().getContentType();
                             if (Constants.VISIBLE_TYPES.contains(contentType)) {
                                 if (body instanceof Mono) {
-                                    final Mono<DataBuffer> monoBody = (Mono<DataBuffer>) body;
+                                    final Mono<DataBuffer> monoBody = Mono.from(body);
                                     return super.writeWith(monoBody.publishOn(single())
                                             .map(buffer -> logResponseBody(buffer, exchange)));
                                 } else if (body instanceof Flux) {
-                                    final Flux<DataBuffer> fluxBody = (Flux<DataBuffer>) body;
+                                    final Flux<DataBuffer> fluxBody = Flux.from(body);
                                     return super.writeWith(fluxBody.publishOn(single())
                                             .map(buffer -> logResponseBody(buffer, exchange)));
                                 }

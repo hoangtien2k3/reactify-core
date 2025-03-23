@@ -54,7 +54,7 @@ import reactor.util.context.Context;
  * WebFlux application. It utilizes the Sleuth Tracer for distributed tracing
  * and provides detailed logs for request processing times, statuses, and
  * headers while ensuring sensitive data is truncated for security.
- *
+ * <p>
  * This filter is designed to log performance metrics selectively based on the
  * application profile (e.g., excluding certain details in production) and to
  * handle logging for both requests and responses, including any errors that
@@ -113,16 +113,13 @@ public class PerformanceLogFilter implements WebFilter, Ordered {
         String name =
                 exchange.getRequest().getPath().pathWithinApplication().value().substring(1);
         Span newSpan = tracer.nextSpan().name(name);
-        var contextRef = new AtomicReference<Context>();
 
         if (exchange.getRequest().getPath().pathWithinApplication().value().contains("actuator"))
             return chain.filter(exchange);
-        var requestId = exchange.getRequest().getHeaders().getFirst("Request-Id");
         return chain.filter(exchange)
                 .doOnSuccess(o -> logPerf(exchange, newSpan, name, startMillis, "Success", null))
                 .doOnError(o -> logPerf(exchange, newSpan, name, startMillis, "Failed", o))
                 .contextWrite(context -> {
-                    contextRef.set(context);
                     setTraceIdFromContext(newSpan.context().traceIdString());
                     return context;
                 })
@@ -184,11 +181,11 @@ public class PerformanceLogFilter implements WebFilter, Ordered {
             AtomicReference<Context> contextRef, Span newSpan, String name, Long start, String result, Throwable o) {
         newSpan.finish();
         long duration = System.currentTimeMillis() - start;
-        if (duration < 50 || name.equals("health")) return;
+        if (duration < 50 || "health".equals(name)) return;
 
         setTraceIdInMDC(newSpan.context().traceIdString());
         if (contextRef.get() != null) {
-            var context = contextRef.get();
+            Context context = contextRef.get();
             if (context.hasKey(CommonConstant.MSISDN_TOKEN))
                 MDC.put(CommonConstant.MSISDN_TOKEN, contextRef.get().get(CommonConstant.MSISDN_TOKEN));
             else MDC.put(CommonConstant.MSISDN_TOKEN, "-");
@@ -256,7 +253,7 @@ public class PerformanceLogFilter implements WebFilter, Ordered {
             if (!DataUtil.isNullOrEmpty(gatewayContext)) {
                 if (contentType.includes(MediaType.APPLICATION_JSON)) {
                     String requestBody = gatewayContext.getRequestBody();
-                    logs.add(String.format("%s", truncateBody(requestBody)));
+                    logs.add(String.format("%s", TruncateUtils.truncateBody(requestBody, MAX_BYTE)));
                 } else if (contentType.includes(MediaType.APPLICATION_FORM_URLENCODED)) {
                     MultiValueMap<String, String> formData = gatewayContext.getFormData();
                     logs.add(String.format("%s", truncateBody(formData)));
@@ -294,34 +291,9 @@ public class PerformanceLogFilter implements WebFilter, Ordered {
      */
     private String truncateBody(List<String> messageList) {
         StringBuilder response = new StringBuilder();
-        messageList.forEach(item -> {
-            response.append(truncateBody(item, 200)).append(",");
-        });
+        messageList.forEach(
+                item -> response.append(TruncateUtils.truncateBody(item, 200)).append(","));
         return response.toString();
-    }
-
-    /**
-     * Truncates a string to a specified maximum byte length.
-     *
-     * @param s
-     *            the string to truncate
-     * @param maxByte
-     *            the maximum byte length
-     * @return the truncated string
-     */
-    private String truncateBody(String s, int maxByte) {
-        return TruncateUtils.truncateBody(s, maxByte);
-    }
-
-    /**
-     * Truncates a string to a default maximum byte length.
-     *
-     * @param s
-     *            the string to truncate
-     * @return the truncated string
-     */
-    private String truncateBody(String s) {
-        return TruncateUtils.truncateBody(s, MAX_BYTE);
     }
 
     /**
