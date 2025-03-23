@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  Copyright 2024-2025 the original author Hoàng Anh Tiến
+  Copyright 2024-2025 the original author Hoàng Anh Tiến.
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -27,9 +27,9 @@
     <!-- =========================================== -->
     <!-- The maven central for all the library       -->
     <!-- =========================================== -->
-    <groupId>io.github.hoangtien2k3</groupId>
+    <groupId>com.ezbuy.platform</groupId>
     <artifactId>reactify-core</artifactId>
-    <version>1.2.6</version>
+    <version>1.2.5</version>
     <name>reactify-core</name>
     <description>Java library for developing reactive programming(reactor-core) backend systems in microservices</description>
     <url>https://github.com/hoangtien2k3/reactify-core</url>

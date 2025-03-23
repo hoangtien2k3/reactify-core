@@ -1,5 +1,5 @@
 /*
- * Copyright 2024-2025 the original author Hoàng Anh Tiến
+ * Copyright 2024-2025 the original author Hoàng Anh Tiến.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,12 +44,14 @@ import reactor.core.scheduler.Schedulers;
  * static methods for various data-related operations.
  */
 @Slf4j
-@Getter
 @Component
 @ConditionalOnProperty(value = "minio.enabled", havingValue = "true", matchIfMissing = false)
 public class MinioUtils {
 
+    @Getter
     private final MinioProperties minioProperties;
+
+    @Getter
     private final MinioClient minioClient;
 
     /**

@@ -1,5 +1,5 @@
 /*
- * Copyright 2024-2025 the original author Hoàng Anh Tiến
+ * Copyright 2024-2025 the original author Hoàng Anh Tiến.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -183,9 +183,11 @@ public class DataUtil {
     /** Constant <code>PATTERN_REGEX_PATTERN_CHECK</code> */
     public static final Pattern PATTERN_REGEX_PATTERN_CHECK = Pattern.compile(CommonConstant.PATTER_CHECK);
     /** Constant <code>PATTERN_REGEX_NUMBER_PREFIX_CHECK</code> */
-    public static final Pattern PATTERN_REGEX_NUMBER_PREFIX_CHECK = Pattern.compile(CommonConstant.NUMBER_PREFIX);
+    public static final Pattern PATTERN_REGEX_NUMBER_PREFIX_CHECK =
+            Pattern.compile(CommonConstant.NUMBER_PREFIX);
     /** Constant <code>PATTERN_REGEX_ONLY_NUMBER_CHECK</code> */
-    public static final Pattern PATTERN_REGEX_ONLY_NUMBER_CHECK = Pattern.compile(CommonConstant.REGEX_ONLY_NUMBER);
+    public static final Pattern PATTERN_REGEX_ONLY_NUMBER_CHECK =
+            Pattern.compile(CommonConstant.REGEX_ONLY_NUMBER);
     /** Constant <code>FORMAT_DATE_FORMAT</code> */
     public static final SimpleDateFormat FORMAT_DATE_FORMAT = new SimpleDateFormat(CommonConstant.DATE_FORMAT);
     /** Constant <code>FORMAT_DATE_FORMAT_MILI</code> */

@@ -1,5 +1,5 @@
 /*
- * Copyright 2024-2025 the original author Hoàng Anh Tiến
+ * Copyright 2024-2025 the original author Hoàng Anh Tiến.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package com.reactify.util;
 import io.netty.buffer.UnpooledByteBufAllocator;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.Logger;
@@ -40,7 +41,7 @@ public class LogUtils {
     /**
      * List of media types that are considered legal for logging.
      */
-    public static final List<MediaType> legalLogMediaTypes = List.of(
+    public static final List<MediaType> legalLogMediaTypes = Arrays.asList(
             MediaType.TEXT_XML,
             MediaType.APPLICATION_XML,
             MediaType.APPLICATION_JSON,
@@ -60,6 +61,7 @@ public class LogUtils {
      *            the type of DataBuffer
      * @return the original DataBuffer wrapped in a new DataBuffer
      */
+    @SuppressWarnings("unchecked")
     public static <T extends DataBuffer> T loggingRequest(Logger log, T buffer) {
         return logging(log, "request: ", buffer);
     }
@@ -111,7 +113,7 @@ public class LogUtils {
     private static byte[] toByteArray(InputStream inStream) {
         ByteArrayOutputStream swapStream = new ByteArrayOutputStream();
         byte[] buff = new byte[100];
-        int rc;
+        int rc = 0;
         byte[] in_b = new byte[] {};
         try {
             while ((rc = inStream.read(buff, 0, 100)) > 0) {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2024-2025 the original author Hoàng Anh Tiến
+ * Copyright 2024-2025 the original author Hoàng Anh Tiến.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,9 +21,13 @@ import com.reactify.constants.Constants;
 import com.reactify.exception.BusinessException;
 import com.reactify.util.DataUtil;
 import com.reactify.util.DataWsUtil;
+import com.reactify.util.Translator;
+import java.io.StringReader;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
@@ -33,6 +37,10 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.xml.sax.InputSource;
 import reactor.core.publisher.Mono;
 
 /**
@@ -85,7 +93,7 @@ public class BaseSoapClientImpl<T> implements BaseSoapClient<T> {
                 .map(response -> {
                     log.info("Soap Response {}", response);
                     if (DataUtil.isNullOrEmpty(response)) {
-                        return Optional.<T>empty();
+                        return this.getDefaultValue();
                     }
                     log.info("callRaw soap WS resp: {}", response);
                     String formattedSOAPResponse = DataWsUtil.formatXML(response);
@@ -96,21 +104,17 @@ public class BaseSoapClientImpl<T> implements BaseSoapClient<T> {
                             Constants.XmlConst.TAG_OPEN_RETURN,
                             Constants.XmlConst.TAG_CLOSE_RETURN);
                     if (DataUtil.isNullOrEmpty(realData)) {
-                        return Optional.<T>empty();
+                        return this.getDefaultValue();
                     }
                     T result;
                     if (DataUtil.safeEqual(resultClass.getSimpleName(), "String")) {
-                        @SuppressWarnings("unchecked")
-                        T stringResponse = (T) response;
-                        result = stringResponse;
+                        result = (T) realData;
                     } else {
-                        result = DataWsUtil.xmlToObj(
-                                Constants.XmlConst.TAG_OPEN_RETURN + realData + Constants.XmlConst.TAG_CLOSE_RETURN,
-                                resultClass);
+                        result = parseData(realData, resultClass);
                     }
                     if (result == null) {
                         log.error("Exception when parse data");
-                        return Optional.<T>empty();
+                        return this.getDefaultValue();
                     }
                     return Optional.of(result);
                 })
@@ -139,7 +143,7 @@ public class BaseSoapClientImpl<T> implements BaseSoapClient<T> {
                 .map(response -> {
                     log.info("Soap Response {}", response);
                     if (DataUtil.isNullOrEmpty(response)) {
-                        return Optional.<T>empty();
+                        return this.getDefaultValue();
                     }
                     log.info("callRaw soap WS resp: {}", response);
                     String formattedSOAPResponse = DataWsUtil.formatXML(response);
@@ -150,21 +154,17 @@ public class BaseSoapClientImpl<T> implements BaseSoapClient<T> {
                             Constants.XmlConst.TAG_OPEN_RETURN,
                             Constants.XmlConst.TAG_CLOSE_RETURN);
                     if (DataUtil.isNullOrEmpty(realData)) {
-                        return Optional.<T>empty();
+                        return this.getDefaultValue();
                     }
                     T result;
                     if (DataUtil.safeEqual(resultClass.getSimpleName(), "String")) {
-                        @SuppressWarnings("unchecked")
-                        T stringResponse = (T) response;
-                        result = stringResponse;
+                        result = (T) realData;
                     } else {
-                        result = DataWsUtil.xmlToObj(
-                                Constants.XmlConst.TAG_OPEN_RETURN + realData + Constants.XmlConst.TAG_CLOSE_RETURN,
-                                resultClass);
+                        result = parseData(realData, resultClass);
                     }
                     if (result == null) {
                         log.error("Exception when parse data");
-                        return Optional.<T>empty();
+                        return this.getDefaultValue();
                     }
                     return Optional.of(result);
                 })
@@ -190,6 +190,7 @@ public class BaseSoapClientImpl<T> implements BaseSoapClient<T> {
                 .onStatus(HttpStatusCode::isError, BaseSoapClientImpl::handleErrorResponse)
                 .onStatus(Objects::nonNull, clientResponse -> {
                     log.info("Status code {}", clientResponse.statusCode());
+                    log.info("Response1 {}", clientResponse.bodyToMono(String.class));
                     log.info("Full {}", clientResponse);
                     return Mono.empty();
                 })
@@ -200,6 +201,15 @@ public class BaseSoapClientImpl<T> implements BaseSoapClient<T> {
                     return DataUtil.safeToString(response);
                 })
                 .log();
+    }
+
+    /**
+     * Default value provider for empty or failed SOAP responses.
+     *
+     * @return An empty Optional of type T.
+     */
+    private Optional<T> getDefaultValue() {
+        return Optional.empty();
     }
 
     /**
@@ -224,6 +234,18 @@ public class BaseSoapClientImpl<T> implements BaseSoapClient<T> {
     }
 
     /**
+     * {@inheritDoc}
+     *
+     * Parses a String response to the specified class type using XML
+     * deserialization.
+     */
+    @Override
+    public T parseData(String realData, Class<?> clz) {
+        return DataWsUtil.xmlToObj(
+                Constants.XmlConst.TAG_OPEN_RETURN + realData + Constants.XmlConst.TAG_CLOSE_RETURN, clz);
+    }
+
+    /**
      * Constructs headers for a SOAP request, setting default values if no headers
      * are provided.
      *
@@ -240,5 +262,73 @@ public class BaseSoapClientImpl<T> implements BaseSoapClient<T> {
             header.setAll(headerList);
         }
         return header;
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * Executes a SOAP API call specifically to fetch the KHDN profile data. -
+     * Processes headers, sends a POST request, and parses the response. - Handles
+     * any WebClientResponseException by attempting to parse the faultstring for
+     * error messaging.
+     */
+    @Override
+    public Mono<Optional<T>> callApiGetProfileKHDN(
+            WebClient webClient, Map<String, String> headerList, String payload, Class<?> resultClass) {
+        log.info("Soap service payload client: {}", payload);
+        MultiValueMap<String, String> header = getHeaderForCallSoap(headerList);
+        return webClient
+                .post()
+                .headers(httpHeaders -> httpHeaders.addAll(header))
+                .bodyValue(payload)
+                .retrieve()
+                .bodyToMono(String.class)
+                .map(response -> {
+                    log.info("Soap Response {}", response);
+                    if (DataUtil.isNullOrEmpty(response)) {
+                        return this.getDefaultValue();
+                    }
+                    log.info("callRaw soap WS resp: {}", response);
+                    String formattedSOAPResponse = DataWsUtil.formatXML(response);
+                    String realData = DataWsUtil.getDataByTag(
+                            formattedSOAPResponse
+                                    .replaceAll(Constants.XmlConst.AND_LT_SEMICOLON, Constants.XmlConst.LT_CHARACTER)
+                                    .replaceAll(Constants.XmlConst.AND_GT_SEMICOLON, Constants.XmlConst.GT_CHARACTER),
+                            Constants.XmlConst.TAG_OPEN_RETURN,
+                            Constants.XmlConst.TAG_CLOSE_RETURN);
+                    if (DataUtil.isNullOrEmpty(realData)) {
+                        return this.getDefaultValue();
+                    }
+                    T result;
+                    if (DataUtil.safeEqual(resultClass.getSimpleName(), "String")) {
+                        result = (T) realData;
+                    } else {
+                        result = parseData(realData, resultClass);
+                    }
+                    if (result == null) {
+                        log.error("Exception when parse data");
+                        return this.getDefaultValue();
+                    }
+                    return Optional.of(result);
+                })
+                .onErrorResume(WebClientResponseException.class, e -> {
+                    String soapError = e.getResponseBodyAsString();
+                    String faultString = null;
+                    try {
+                        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+                        DocumentBuilder builder = factory.newDocumentBuilder();
+                        InputSource inputSource = new InputSource(new StringReader(soapError));
+                        Document document = builder.parse(inputSource);
+                        Element faultStringElement = (Element)
+                                document.getElementsByTagName("faultstring").item(0);
+                        if (faultStringElement != null) {
+                            faultString = faultStringElement.getTextContent();
+                        }
+                    } catch (Exception ex) {
+                        return Mono.error(new BusinessException(
+                                CommonErrorCode.INTERNAL_SERVER_ERROR, Translator.toLocaleVi("call.soap.order.error")));
+                    }
+                    return Mono.error(new BusinessException(CommonErrorCode.INTERNAL_SERVER_ERROR, faultString));
+                });
     }
 }

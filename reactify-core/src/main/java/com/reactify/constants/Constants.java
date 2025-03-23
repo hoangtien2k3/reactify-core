@@ -1,5 +1,5 @@
 /*
- * Copyright 2024-2025 the original author Hoàng Anh Tiến
+ * Copyright 2024-2025 the original author Hoàng Anh Tiến.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,7 +48,7 @@ public final class Constants {
      * The pattern matches common email formats.
      * </p>
      */
-    public static final String EMAIL_PATTER = "^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$";
+    public static final String EMAIL_PATTERN = "^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$";
     /** Constant <code>DATE_PATTERN="\\d{2}[/]\\d{2}[/]\\d{4}"</code> */
     public static final String DATE_PATTERN = "\\d{2}[/]\\d{2}[/]\\d{4}";
     /** Constant <code>ID_NO_PATTERN="^[0-9\\-]+$"</code> */
@@ -69,7 +69,7 @@ public final class Constants {
     public static final String EMPLOYEE_CODE_MIN = "000001";
 
     /** List of visible media types for API responses. */
-    public static final List<MediaType> VISIBLE_TYPES = List.of(
+    public static final List<MediaType> VISIBLE_TYPES = Arrays.asList(
             MediaType.TEXT_XML,
             MediaType.APPLICATION_XML,
             MediaType.APPLICATION_JSON,
@@ -78,7 +78,7 @@ public final class Constants {
             MediaType.TEXT_XML,
             MediaType.MULTIPART_FORM_DATA);
 
-    private static final List<String> SENSITIVE_HEADERS = List.of("authorization", "proxy-authorization");
+    private static final List<String> SENSITIVE_HEADERS = Arrays.asList("authorization", "proxy-authorization");
 
     /**
      * Retrieves a list of sensitive headers.
