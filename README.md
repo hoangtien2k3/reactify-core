@@ -30,7 +30,7 @@ Gradle is the only supported build configuration, so just add the dependency to 
 
 ```kotlin
 dependencies {
-    implementation("io.github.hoangtien2k3:reactify-core:1.2.5")
+    implementation("io.github.hoangtien2k3:reactify-core:1.2.6")
 }
 ```
 
@@ -38,7 +38,7 @@ dependencies {
 <dependency>
    <groupId>io.github.hoangtien2k3</groupId>
    <artifactId>reactify-core</artifactId>
-   <version>1.2.5</version>
+   <version>1.2.6</version>
 </dependency>
 ```
 
