@@ -43,7 +43,7 @@ dependencies {
 ```
 
 The latest `reactify-core` version
-is: [![GitHub Release](https://img.shields.io/github/v/release/hoangtien2k3/reactify?label=latest)](https://mvnrepository.com/artifact/io.github.hoangtien2k3/reactify-core/1.1.7)
+is: [![GitHub Release](https://img.shields.io/github/v/release/hoangtien2k3/reactify?label=latest)](https://mvnrepository.com/artifact/io.github.hoangtien2k3/reactify-core)
 
 The latest stable lib `reactify-core` version is: latestVersion
 Click [here](https://central.sonatype.com/namespace/io.github.hoangtien2k3) for more information on reactify.
