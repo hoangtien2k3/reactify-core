@@ -29,7 +29,7 @@
 	<!-- =========================================== -->
 	<groupId>io.github.hoangtien2k3</groupId>
 	<artifactId>reactify-utils</artifactId>
-	<version>1.2.3</version>
+	<version>1.2.4</version>
 	<packaging>jar</packaging>
 	<name>reactify-utils</name>
 	<description>Java library util for developing backend with reactive programming</description>
@@ -80,6 +80,7 @@
 		<maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
 		<maven-javadoc-plugin.version>3.8.0</maven-javadoc-plugin.version>
 		<maven-source-plugin.version>3.3.1</maven-source-plugin.version>
+		<maven-jar-plugin.version>3.4.2</maven-jar-plugin.version>
 	</properties>
 
 	<!-- =========================================== -->
@@ -205,6 +206,18 @@
 						</exclude>
 					</excludes>
 					<skip>true</skip>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>${maven-jar-plugin.version}</version>
+				<configuration>
+					<archive>
+						<manifestEntries>
+							<Automatic-Module-Name>com.reactify</Automatic-Module-Name>
+						</manifestEntries>
+					</archive>
 				</configuration>
 			</plugin>
 		</plugins>
