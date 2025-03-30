@@ -56,7 +56,7 @@ Add the dependency to your project build.gradle file or maven pom:
 
 ⬇️ Download Gradle and Maven
 
-```kotlin
+```groovy
 dependencies {
     //Core reactive framework with Spring WebFlux integration 
     implementation("io.github.hoangtien2k3:reactify-core:1.2.9")
@@ -72,7 +72,7 @@ dependencies {
 }
 ```
 
-```maven
+```xml
 <dependencies>
    <!-- Core reactive framework with Spring WebFlux integration -->
    <dependency>
