@@ -23,6 +23,10 @@
         <version>3.3.5</version>
         <relativePath/>
     </parent>
+
+    <!-- =========================================== -->
+    <!-- The maven central for all the library       -->
+    <!-- =========================================== -->
     <groupId>io.github.hoangtien2k3</groupId>
     <artifactId>reactify-parent</artifactId>
     <version>1.2.0</version>
@@ -32,6 +36,9 @@
         Minio Storage, OAuth2 Security, Caching, and Trace Logging Integration</description>
     <url>https://github.com/hoangtien2k3/reactify-core</url>
 
+    <!-- =========================================== -->
+    <!-- The info developers for all the library     -->
+    <!-- =========================================== -->
     <licenses>
         <license>
             <name>Apache License, Version 2.0</name>
@@ -62,6 +69,9 @@
         </repository>
     </distributionManagement>
 
+    <!-- =========================================== -->
+    <!-- The properties for all the library          -->
+    <!-- =========================================== -->
     <properties>
         <java.version>21</java.version>
         <spotless.version>2.43.0</spotless.version>
@@ -74,6 +84,9 @@
         <maven-source-plugin.version>3.3.1</maven-source-plugin.version>
     </properties>
 
+    <!-- =========================================== -->
+    <!-- The modules for all the library             -->
+    <!-- =========================================== -->
     <modules>
         <module>reactify-cache</module>
         <module>reactify-client</module>
@@ -97,7 +110,9 @@
         </dependency>
     </dependencies>
 
-    <!-- The build plugins for projects -->
+    <!-- =========================================== -->
+    <!-- The plugins for all the library             -->
+    <!-- =========================================== -->
     <build>
         <plugins>
             <plugin>
