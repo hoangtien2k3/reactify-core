@@ -69,16 +69,22 @@ public class CacheAspect {
     public Object aroundAdvice(ProceedingJoinPoint joinPoint) throws Throwable {
         Object[] args = joinPoint.getArgs();
         Object key = SimpleKeyGenerator.generateKey(args);
-        String nameCache = ClassUtils.getUserClass(joinPoint.getTarget().getClass()).getSimpleName() + "."
-                + joinPoint.getSignature().getName();
+        String nameCache = ClassUtils.getUserClass(joinPoint.getTarget().getClass())
+                        .getSimpleName() + "." + joinPoint.getSignature().getName();
         Cache<Object, Object> cache = CacheStore.getCache(nameCache);
         log.debug("Checking cache for method: {} with key: {}", nameCache, key);
-        return CacheMono.lookup(k -> Mono.justOrEmpty(!DataUtil.isNullOrEmpty(cache) ? cache.getIfPresent(key) : Mono.empty()).map(Signal::next), key)
+        return CacheMono.lookup(
+                        k -> Mono.justOrEmpty(!DataUtil.isNullOrEmpty(cache) ? cache.getIfPresent(key) : Mono.empty())
+                                .map(Signal::next),
+                        key)
                 .onCacheMissResume(Mono.defer(() -> {
                     try {
                         Object result = joinPoint.proceed(args);
                         if (!(result instanceof Mono<?>)) {
-                            log.warn("Method {} must return a Mono<?> but got: {}", nameCache, result.getClass().getSimpleName());
+                            log.warn(
+                                    "Method {} must return a Mono<?> but got: {}",
+                                    nameCache,
+                                    result.getClass().getSimpleName());
                             return Mono.error(new IllegalStateException("Method must return Mono<?>"));
                         }
                         @SuppressWarnings("unchecked")

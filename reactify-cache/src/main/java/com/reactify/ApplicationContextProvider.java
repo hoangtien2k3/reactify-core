@@ -22,13 +22,15 @@ import org.springframework.stereotype.Component;
 
 /**
  * <p>
- * The {@code ApplicationContextProvider} class serves as a utility for accessing
- * the {@link ApplicationContext} from anywhere within the application.
+ * The {@code ApplicationContextProvider} class serves as a utility for
+ * accessing the {@link ApplicationContext} from anywhere within the
+ * application.
  * </p>
  * <p>
- * This class implements {@link ApplicationContextAware} to store a static reference
- * to the {@link ApplicationContext}, enabling other components to retrieve Spring beans
- * programmatically without requiring dependency injection.
+ * This class implements {@link ApplicationContextAware} to store a static
+ * reference to the {@link ApplicationContext}, enabling other components to
+ * retrieve Spring beans programmatically without requiring dependency
+ * injection.
  * </p>
  * <p>
  * Use the {@link #getBean(Class)} method to obtain a bean instance by its type.
@@ -40,8 +42,8 @@ import org.springframework.stereotype.Component;
 public class ApplicationContextProvider implements ApplicationContextAware {
 
     /**
-     * The application context instance, stored as a static volatile variable
-     * to ensure thread safety when accessing the context across multiple threads.
+     * The application context instance, stored as a static volatile variable to
+     * ensure thread safety when accessing the context across multiple threads.
      * <p>
      * The {@code volatile} keyword guarantees visibility of updates to the variable
      * across threads, and the double-checked locking mechanism ensures that the
@@ -53,15 +55,17 @@ public class ApplicationContextProvider implements ApplicationContextAware {
     /**
      * Retrieves a bean from the {@link ApplicationContext} by its type.
      * <p>
-     * This method allows fetching beans from the Spring container without
-     * using {@code @Autowired} or other dependency injection mechanisms.
+     * This method allows fetching beans from the Spring container without using
+     * {@code @Autowired} or other dependency injection mechanisms.
      * </p>
      *
-     * @param clazz the class type of the desired bean
-     * @param <T>   the generic type of the bean
+     * @param clazz
+     *            the class type of the desired bean
+     * @param <T>
+     *            the generic type of the bean
      * @return an instance of the requested bean
      * @throws org.springframework.beans.factory.NoSuchBeanDefinitionException
-     *         if no bean of the specified type is found
+     *             if no bean of the specified type is found
      */
     public static <T> T getBean(Class<T> clazz) {
         return context.getBean(clazz);

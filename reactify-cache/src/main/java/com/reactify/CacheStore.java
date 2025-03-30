@@ -18,6 +18,10 @@ package com.reactify;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.Scheduler;
+import java.lang.reflect.Method;
+import java.time.Duration;
+import java.util.*;
+import javax.annotation.PostConstruct;
 import org.reflections.Reflections;
 import org.reflections.scanners.Scanners;
 import org.slf4j.Logger;
@@ -31,18 +35,14 @@ import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
-import java.lang.reflect.Method;
-import java.time.Duration;
-import java.util.*;
-
 /**
- * The {@code CacheStore} class is responsible for managing local caches using Caffeine.
- * It automatically initializes caches based on methods annotated with {@link LocalCache},
- * supports retrieving caches by name, and provides functionalities to clear specific or all caches.
+ * The {@code CacheStore} class is responsible for managing local caches using
+ * Caffeine. It automatically initializes caches based on methods annotated with
+ * {@link LocalCache}, supports retrieving caches by name, and provides
+ * functionalities to clear specific or all caches.
  * <p>
- * This class also supports auto-loading caches on application startup and integrates with Spring's
- * application context lifecycle events.
+ * This class also supports auto-loading caches on application startup and
+ * integrates with Spring's application context lifecycle events.
  * </p>
  *
  * @author hoangtien2k3
@@ -58,7 +58,9 @@ public class CacheStore implements ApplicationContextAware {
     /** Stores the caches mapped by their names. */
     private static final HashMap<String, Cache<Object, Object>> caches = new HashMap<>();
 
-    /** Stores methods annotated with {@link LocalCache} that require auto-loading. */
+    /**
+     * Stores methods annotated with {@link LocalCache} that require auto-loading.
+     */
     private static final Set<Method> autoLoadMethods = new HashSet<>();
 
     /** The base package for scanning cache-related methods. */
@@ -127,7 +129,8 @@ public class CacheStore implements ApplicationContextAware {
     /**
      * Clears the specified cache by name.
      *
-     * @param cacheName the name of the cache to clear
+     * @param cacheName
+     *            the name of the cache to clear
      * @return the number of cleared caches (0 or 1)
      */
     public static int clearCachesByName(String cacheName) {
@@ -150,7 +153,7 @@ public class CacheStore implements ApplicationContextAware {
         log.info("Clearing all caches");
         int count = 0;
         for (Map.Entry<String, Cache<Object, Object>> entry : caches.entrySet()) {
-            count ++;
+            count++;
             entry.getValue().invalidateAll();
             log.info("Cleared cache: {}", entry.getKey());
         }
@@ -158,9 +161,11 @@ public class CacheStore implements ApplicationContextAware {
     }
 
     /**
-     * Automatically loads caches for methods annotated with {@link LocalCache} that support auto-loading.
+     * Automatically loads caches for methods annotated with {@link LocalCache} that
+     * support auto-loading.
      *
-     * @param event the application context refresh event
+     * @param event
+     *            the application context refresh event
      */
     @Async
     @EventListener
@@ -177,10 +182,13 @@ public class CacheStore implements ApplicationContextAware {
     }
 
     /**
-     * Sets the application context and determines the base package for scanning cache methods.
+     * Sets the application context and determines the base package for scanning
+     * cache methods.
      *
-     * @param applicationContext the application context
-     * @throws BeansException if an error occurs while setting the context
+     * @param applicationContext
+     *            the application context
+     * @throws BeansException
+     *             if an error occurs while setting the context
      */
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {

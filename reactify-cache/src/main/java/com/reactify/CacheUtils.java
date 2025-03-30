@@ -65,16 +65,19 @@ public class CacheUtils {
             if (result instanceof Mono<?> monoResult) {
                 monoResult.subscribe(
                         success -> log.debug("Successfully executed {}", methodName),
-                        error -> log.error("Error executing {}", methodName, error)
-                );
+                        error -> log.error("Error executing {}", methodName, error));
             } else {
                 log.warn("Method {} does not return a Mono<?>", methodName);
             }
         } catch (IllegalAccessException e) {
             log.error("Access violation when invoking method {}: {}", method.getName(), e.getMessage(), e);
         } catch (Exception e) {
-            log.error("Error when autoload cache {}.{}.{}",
-                    method.getDeclaringClass().getSimpleName(), method.getName(), e.getMessage(), e);
+            log.error(
+                    "Error when autoload cache {}.{}.{}",
+                    method.getDeclaringClass().getSimpleName(),
+                    method.getName(),
+                    e.getMessage(),
+                    e);
         }
     }
 }
