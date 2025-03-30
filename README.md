@@ -26,6 +26,9 @@ Reactor Core, designed to streamline backend development with essential tools fo
 
 ## Table of contents
 
+<details>
+<summary><b>📖 Table of Contents</b></summary>
+
 - [Getting started](#getting-started)
 - [Tutorials](#tutorials)
 - [Configs](#configs)
@@ -43,6 +46,8 @@ Reactor Core, designed to streamline backend development with essential tools fo
 - [Star History](#star-history)
 - [Contributors](#contributors)
 - [License](#license)
+
+</details>
 
 ## Getting Started
 
@@ -343,6 +348,8 @@ if(DataUtil.isNullOrEmpty(studentDemo)){
   referenced: [https://github.com/hoangtien2k3/keycloak-auth-service](https://github.com/hoangtien2k3/keycloak-auth-service)
 
 ## Contributing
+
+We welcome contributions! Please check our [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 If you would like to contribute to the development of this project, please follow our contribution guidelines.
 
