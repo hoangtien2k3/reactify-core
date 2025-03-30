@@ -54,9 +54,8 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import lombok.extern.slf4j.Slf4j;
-import org.json.JSONException;
-import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.util.ObjectUtils;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
@@ -66,8 +65,12 @@ import reactor.core.publisher.Mono;
  * Utility class for data manipulation and processing. This class contains
  * static methods for various data-related operations.
  */
-@Slf4j
 public class DataUtil {
+
+    /**
+     * A static logger instance for logging messages
+     */
+    private static final Logger log = LoggerFactory.getLogger(DataUtil.class);
 
     /** Constant <code>FORMAT_YMD</code> */
     public static final SimpleDateFormat FORMAT_YMD = new SimpleDateFormat(CommonConstant.DATE_FORMAT_YMD);
@@ -743,13 +746,17 @@ public class DataUtil {
      * @return true if the string is a valid JSON format, false otherwise
      */
     public static boolean isValidFormatJson(String json) {
+        if (isNullOrEmpty(json)) {
+            log.info("JSON input is null or empty.");
+            return false;
+        }
         try {
-            new JSONObject(json);
-        } catch (JSONException e) {
+            ObjectMapperFactory.getInstance().readTree(json);
+            return true;
+        } catch (JsonProcessingException e) {
             log.info(e.getMessage());
             return false;
         }
-        return true;
     }
 
     /**

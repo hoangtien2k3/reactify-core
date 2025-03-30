@@ -34,18 +34,29 @@ import org.springframework.http.HttpMethod;
  * and read timeout exceptions.
  * </p>
  *
- * @param isEnable
- *            a boolean indicating whether retries are enabled
- * @param count
- *            the number of retry attempts
- * @param methods
- *            a list of HTTP methods to which retries apply
- * @param exceptions
- *            a list of exception classes that will trigger a retry
  * @author hoangtien2k3
  */
-public record RetryProperties(
-        boolean isEnable, int count, List<HttpMethod> methods, List<Class<? extends Exception>> exceptions) {
+public class RetryProperties {
+
+    /**
+     * a boolean indicating whether retries are enabled
+     */
+    private final boolean isEnable;
+
+    /**
+     * the number of retry attempts
+     */
+    private final int count;
+
+    /**
+     * a list of HTTP methods to which retries apply
+     */
+    private final List<HttpMethod> methods;
+
+    /**
+     * a list of exception classes that will trigger a retry
+     */
+    private final List<Class<? extends Exception>> exceptions;
 
     /**
      * <p>
@@ -58,5 +69,29 @@ public record RetryProperties(
                 2, // Default number of retry attempts
                 List.of(HttpMethod.GET, HttpMethod.PUT, HttpMethod.DELETE), // Default HTTP methods for retries
                 List.of(ConnectTimeoutException.class, ReadTimeoutException.class)); // Default exceptions for retry
+    }
+
+    public RetryProperties(
+            boolean isEnable, int count, List<HttpMethod> methods, List<Class<? extends Exception>> exceptions) {
+        this.isEnable = isEnable;
+        this.count = count;
+        this.methods = methods;
+        this.exceptions = exceptions;
+    }
+
+    public boolean isEnable() {
+        return isEnable;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public List<HttpMethod> getMethods() {
+        return methods;
+    }
+
+    public List<Class<? extends Exception>> getExceptions() {
+        return exceptions;
     }
 }

@@ -17,9 +17,7 @@ package com.reactify.exception;
 
 import com.reactify.util.Translator;
 import java.util.Arrays;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import java.util.Objects;
 
 /**
  * <p>
@@ -64,15 +62,13 @@ import lombok.NoArgsConstructor;
  * @since 1.0
  * @author hoangtien2k3
  */
-@EqualsAndHashCode(callSuper = true)
-@Data
-@NoArgsConstructor
 public class BusinessException extends RuntimeException {
+
     /** Error code associated with the exception */
-    private String errorCode;
+    private final String errorCode;
 
     /** Localized message describing the error */
-    private String message;
+    private final String message;
 
     /** Optional parameters for dynamic message formatting */
     private Object[] paramsMsg;
@@ -113,5 +109,33 @@ public class BusinessException extends RuntimeException {
         this.errorCode = errorCode;
         this.paramsMsg = Arrays.stream(paramsMsg).map(Translator::toLocaleVi).toArray(String[]::new);
         this.message = Translator.toLocaleVi(message, this.paramsMsg);
+    }
+
+    public String getErrorCode() {
+        return errorCode;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public Object[] getParamsMsg() {
+        return paramsMsg;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof BusinessException that)) return false;
+        return Objects.equals(getErrorCode(), that.getErrorCode())
+                && Objects.equals(getMessage(), that.getMessage())
+                && Arrays.equals(getParamsMsg(), that.getParamsMsg());
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(getErrorCode(), getMessage());
+        result = 31 * result + Arrays.hashCode(getParamsMsg());
+        return result;
     }
 }

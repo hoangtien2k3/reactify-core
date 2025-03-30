@@ -32,7 +32,8 @@ import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.Objects;
 import java.util.Optional;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
@@ -65,10 +66,16 @@ import reactor.netty.transport.ProxyProvider;
  *            the type of the response body expected from the API call.
  * @author hoangtien2k3
  */
-@Slf4j
 @Service
 public class BaseRestClientImpl<T> implements BaseRestClient<T> {
 
+    /**
+     * A static logger instance for logging messages
+     */
+    /**
+     * A static logger instance for logging messages
+     */
+    private static final Logger log = LoggerFactory.getLogger(BaseRestClientImpl.class);
     /**
      * {@inheritDoc}
      *

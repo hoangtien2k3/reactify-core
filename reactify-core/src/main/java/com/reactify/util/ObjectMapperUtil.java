@@ -25,7 +25,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 /**
@@ -36,9 +37,13 @@ import org.springframework.stereotype.Component;
  * @since 20/07/2024
  * @author hoangtien2k3
  */
-@Slf4j
 @Component
 public class ObjectMapperUtil {
+
+    /**
+     * A static logger instance for logging messages
+     */
+    private static final Logger log = LoggerFactory.getLogger(ObjectMapperUtil.class);
 
     private static final ObjectMapper objectMapper = new ObjectMapper();
     private static final DateFormat dateFormatYMdHms = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");

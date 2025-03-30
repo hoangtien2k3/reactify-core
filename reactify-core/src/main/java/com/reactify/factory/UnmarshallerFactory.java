@@ -21,7 +21,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * <p>
@@ -58,8 +59,12 @@ import lombok.extern.slf4j.Slf4j;
  * @version 1.0
  * @author hoangtien2k3
  */
-@Slf4j
 public class UnmarshallerFactory {
+
+    /**
+     * A static logger instance for logging messages
+     */
+    private static final Logger log = LoggerFactory.getLogger(UnmarshallerFactory.class);
 
     /**
      * Cache to hold {@link Unmarshaller} instances for specific classes.

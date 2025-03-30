@@ -16,31 +16,33 @@
 package com.reactify;
 
 import java.lang.reflect.Method;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
 /**
+ * Utility class for cache management.
  * <p>
- * The CacheUtils class provides utility methods for working with caching
- * functionality in the application. It contains methods to invoke cached
- * methods dynamically at runtime, allowing for efficient cache management and
- * retrieval.
+ * This class provides methods to dynamically invoke cached methods at runtime,
+ * supporting autoloading and execution in a reactive manner using Project
+ * Reactor.
  * </p>
  *
  * <p>
- * This class is particularly useful for autoloading cache entries based on the
- * methods annotated with {@link LocalCache} and managing their execution in a
- * reactive manner using Project Reactor.
+ * It is particularly useful for managing cache entries annotated with
+ * {@link LocalCache}.
  * </p>
  *
  * @author hoangtien2k3
  */
-@Slf4j
 @Component
-@RequiredArgsConstructor
 public class CacheUtils {
+
+    /**
+     * A static logger instance for logging messages
+     */
+    private static final Logger log = LoggerFactory.getLogger(CacheUtils.class);
 
     /**
      * <p>
@@ -54,11 +56,34 @@ public class CacheUtils {
      *            a {@link Method} object representing the method to be invoked
      */
     public static void invokeMethod(Method method) {
+        if (method == null) {
+            log.warn("Method reference is null. Skipping invocation.");
+            return;
+        }
+
         try {
             Class<?> declaringClass = method.getDeclaringClass();
-            Object t = ApplicationContextProvider.getApplicationContext().getBean(declaringClass);
-            Mono<Object> rs = (Mono<Object>) method.invoke(t);
-            rs.subscribe();
+            Object beanInstance = ApplicationContextProvider.getBean(declaringClass);
+            Object result = method.invoke(beanInstance);
+
+            if (result instanceof Mono<?>) {
+                ((Mono<?>) result)
+                        .subscribe(
+                                success -> log.debug(
+                                        "Successfully executed {}.{}",
+                                        declaringClass.getSimpleName(),
+                                        method.getName()),
+                                error -> log.error(
+                                        "Error executing {}.{}",
+                                        declaringClass.getSimpleName(),
+                                        method.getName(),
+                                        error));
+            } else {
+                log.warn(
+                        "Method {}.{} does not return a Mono<?>. Ensure the cache method is reactive.",
+                        declaringClass.getSimpleName(),
+                        method.getName());
+            }
         } catch (Exception exception) {
             log.error(
                     "Error when autoload cache {}.{}.{}",

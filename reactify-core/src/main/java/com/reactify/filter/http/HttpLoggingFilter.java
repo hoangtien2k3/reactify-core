@@ -27,9 +27,10 @@ import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
-import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.reactivestreams.Publisher;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.Ordered;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.HttpHeaders;
@@ -56,8 +57,12 @@ import reactor.core.publisher.Mono;
  * @author hoangtien2k3
  */
 @Component
-@Slf4j
 public class HttpLoggingFilter implements WebFilter, Ordered {
+
+    /**
+     * A static logger instance for logging messages
+     */
+    private static final Logger log = LoggerFactory.getLogger(HttpLoggingFilter.class);
 
     private final HttpLogProperties httpLogProperties;
 
@@ -94,7 +99,7 @@ public class HttpLoggingFilter implements WebFilter, Ordered {
                     @NotNull
                     @Override
                     public Mono<Void> writeWith(@NotNull Publisher<? extends DataBuffer> body) {
-                        if (httpLogProperties.getResponse().enable()) {
+                        if (httpLogProperties.getResponse().isEnable()) {
                             final MediaType contentType = super.getHeaders().getContentType();
                             if (Constants.VISIBLE_TYPES.contains(contentType)) {
                                 if (body instanceof Mono) {
@@ -135,8 +140,8 @@ public class HttpLoggingFilter implements WebFilter, Ordered {
                 exchange.getRequest().getPath().toString())) {
             return;
         }
-        boolean enableRequest = httpLogProperties.getRequest().enable();
-        boolean enableResponse = httpLogProperties.getResponse().enable();
+        boolean enableRequest = httpLogProperties.getRequest().isEnable();
+        boolean enableResponse = httpLogProperties.getResponse().isEnable();
         if (!enableRequest && !enableResponse) {
             return;
         }

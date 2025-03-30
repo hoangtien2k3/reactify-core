@@ -23,10 +23,12 @@ import com.reactify.model.logging.LoggerDTO;
 import com.reactify.util.DataUtil;
 import com.reactify.util.RequestUtils;
 import com.reactify.util.TruncateUtils;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
-import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Configuration;
@@ -71,8 +73,12 @@ import reactor.core.publisher.Mono;
  * @author hoangtien2k3
  */
 @Configuration
-@Slf4j
 public class LoggerSchedule {
+
+    /**
+     * A static logger instance for logging messages
+     */
+    private static final Logger log = LoggerFactory.getLogger(LoggerSchedule.class);
 
     private static final Logger logPerf = LoggerFactory.getLogger("perfLogger");
 
@@ -123,12 +129,12 @@ public class LoggerSchedule {
         if (record == null) {
             return;
         }
-        String traceId = !DataUtil.isNullOrEmpty(record.newSpan().context().traceIdString())
-                ? record.newSpan().context().traceIdString()
+        String traceId = !DataUtil.isNullOrEmpty(record.getNewSpan().context().traceIdString())
+                ? record.getNewSpan().context().traceIdString()
                 : "";
         String ipAddress = null;
         String requestId = null;
-        ServerWebExchange exchange = Optional.ofNullable(record.contextRef().get())
+        ServerWebExchange exchange = Optional.ofNullable(record.getContextRef().get())
                 .filter(ctx -> ctx.hasKey(ServerWebExchange.class))
                 .map(ctx -> ctx.get(ServerWebExchange.class))
                 .orElse(null);
@@ -142,8 +148,8 @@ public class LoggerSchedule {
 
         String inputs = null;
         try {
-            if (record.args() != null) {
-                inputs = ObjectMapperFactory.getInstance().writeValueAsString(getAgrs(record.args()));
+            if (record.getArgs() != null) {
+                inputs = ObjectMapperFactory.getInstance().writeValueAsString(getAgrs(record.getArgs()));
             }
         } catch (Exception ex) {
             log.error("Error while handle record queue: {}", ex.getMessage());
@@ -151,13 +157,13 @@ public class LoggerSchedule {
 
         String resStr = null;
         try {
-            if (record.response() instanceof Optional<?> output) {
+            if (record.getResponse() instanceof Optional<?> output) {
                 if (output.isPresent()) {
                     resStr = ObjectMapperFactory.getInstance().writeValueAsString(output.get());
                 }
             } else {
-                if (record.response() != null) {
-                    resStr = ObjectMapperFactory.getInstance().writeValueAsString(record.response());
+                if (record.getResponse() != null) {
+                    resStr = ObjectMapperFactory.getInstance().writeValueAsString(record.getResponse());
                 }
             }
         } catch (Exception ex) {
@@ -174,17 +180,17 @@ public class LoggerSchedule {
         logInfo(new LogField(
                 traceId,
                 requestId,
-                record.service(),
-                record.endTime() - record.startTime(),
-                record.logType(),
-                record.actionType(),
-                record.startTime(),
-                record.endTime(),
+                record.getService(),
+                record.getEndTime() - record.getStartTime(),
+                record.getLogType(),
+                record.getActionType(),
+                record.getStartTime(),
+                record.getEndTime(),
                 ipAddress,
-                record.title(),
+                record.getTitle(),
                 inputs,
                 resStr,
-                record.result()));
+                record.getResult()));
     }
 
     /**

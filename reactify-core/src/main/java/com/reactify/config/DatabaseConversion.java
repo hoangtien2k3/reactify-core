@@ -20,8 +20,9 @@ import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.time.*;
 import java.util.*;
-import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.convert.ReadingConverter;
 import org.springframework.data.convert.WritingConverter;
@@ -58,9 +59,13 @@ import reactor.core.publisher.Mono;
  *
  * @author hoangtien2k3
  */
-@Slf4j
 @Component
 public class DatabaseConversion {
+
+    /**
+     * A static logger instance for logging messages
+     */
+    private static final Logger log = LoggerFactory.getLogger(DatabaseConversion.class);
 
     /**
      * <p>

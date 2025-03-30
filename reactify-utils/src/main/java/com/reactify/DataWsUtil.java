@@ -33,7 +33,8 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 
@@ -41,13 +42,12 @@ import org.xml.sax.InputSource;
  * Utility class for data manipulation and processing. This class contains
  * static methods for various data-related operations.
  */
-@Slf4j
 public class DataWsUtil {
 
     /**
-     * Constructs a new instance of {@code DataWsUtil}.
+     * A static logger instance for logging messages
      */
-    public DataWsUtil() {}
+    private static final Logger log = LoggerFactory.getLogger(DataWsUtil.class);
 
     /**
      * <p>

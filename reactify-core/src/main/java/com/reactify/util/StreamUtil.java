@@ -17,7 +17,8 @@ package com.reactify.util;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * <p>
@@ -26,8 +27,12 @@ import lombok.extern.slf4j.Slf4j;
  *
  * @author hoangtien2k3
  */
-@Slf4j
 public class StreamUtil {
+
+    /**
+     * A static logger instance for logging messages
+     */
+    private static final Logger log = LoggerFactory.getLogger(StreamUtil.class);
 
     /**
      * <p>

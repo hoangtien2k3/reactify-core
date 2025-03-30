@@ -33,6 +33,7 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 @DependsOn("webClientFactory")
 public class BaseCurrencyClientImpl implements BaseCurrencyClient {
+
     @Qualifier("baseCurrencyClient")
     private final WebClient baseCurrencyClient;
 

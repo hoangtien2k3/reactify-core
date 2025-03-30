@@ -53,7 +53,6 @@ import org.springframework.web.reactive.function.client.ExchangeStrategies;
  *
  * @see BodyInserter.Context
  * @see ExchangeStrategies
- * @since 1.0
  * @version 1.0
  * @author hoangtien2k3
  */

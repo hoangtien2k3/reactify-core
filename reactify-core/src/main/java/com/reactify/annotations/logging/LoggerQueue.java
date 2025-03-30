@@ -21,8 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.atomic.AtomicReference;
-import lombok.Getter;
-import lombok.extern.slf4j.Slf4j;
 import reactor.util.context.Context;
 
 /**
@@ -52,16 +50,21 @@ import reactor.util.context.Context;
  *
  * @author hoangtien2k3
  */
-@Slf4j
 public class LoggerQueue {
+
     private static LoggerQueue mMe = null;
     private final ArrayBlockingQueue<LoggerDTO> myQueue;
 
-    @Getter
     private int countFalse = 0;
-
-    @Getter
     private int countSuccess = 0;
+
+    public int getCountFalse() {
+        return countFalse;
+    }
+
+    public int getCountSuccess() {
+        return countSuccess;
+    }
 
     /**
      * <p>

@@ -18,7 +18,8 @@ package com.reactify.util;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.nio.charset.StandardCharsets;
 import java.util.Set;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.util.MultiValueMap;
 
 /**
@@ -28,8 +29,12 @@ import org.springframework.util.MultiValueMap;
  *
  * @author hoangtien2k3
  */
-@Slf4j
 public class TruncateUtils {
+
+    /**
+     * A static logger instance for logging messages
+     */
+    private static final Logger log = LoggerFactory.getLogger(TruncateUtils.class);
 
     /**
      * <p>

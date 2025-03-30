@@ -17,13 +17,13 @@ package com.reactify.client.properties;
 
 import com.reactify.filter.properties.*;
 import java.util.List;
-import lombok.Data;
+import java.util.Objects;
 import org.springframework.web.reactive.function.client.ExchangeFilterFunction;
 
 /**
  * Configuration properties for a WebClient instance, encapsulating connection,
  * authorization, and monitoring settings.
- *
+ * <p>
  * This class is designed to hold various configuration parameters for a
  * WebClient, including endpoint details, authorization credentials, connection
  * pooling, request timeouts, retries, logging options, monitoring, and proxy
@@ -31,8 +31,8 @@ import org.springframework.web.reactive.function.client.ExchangeFilterFunction;
  *
  * @author hoangtien2k3
  */
-@Data
 public class WebClientProperties {
+
     /**
      * The name identifier for the WebClient configuration, used for reference
      * purposes.
@@ -108,4 +108,145 @@ public class WebClientProperties {
      * Constructs a new instance of {@code WebClientProperties}.
      */
     public WebClientProperties() {}
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getAuthorization() {
+        return authorization;
+    }
+
+    public void setAuthorization(String authorization) {
+        this.authorization = authorization;
+    }
+
+    public PoolProperties getPool() {
+        return pool;
+    }
+
+    public void setPool(PoolProperties pool) {
+        this.pool = pool;
+    }
+
+    public TimeoutProperties getTimeout() {
+        return timeout;
+    }
+
+    public void setTimeout(TimeoutProperties timeout) {
+        this.timeout = timeout;
+    }
+
+    public RetryProperties getRetry() {
+        return retry;
+    }
+
+    public void setRetry(RetryProperties retry) {
+        this.retry = retry;
+    }
+
+    public ClientLogProperties getLog() {
+        return log;
+    }
+
+    public void setLog(ClientLogProperties log) {
+        this.log = log;
+    }
+
+    public MonitoringProperties getMonitoring() {
+        return monitoring;
+    }
+
+    public void setMonitoring(MonitoringProperties monitoring) {
+        this.monitoring = monitoring;
+    }
+
+    public ProxyProperties getProxy() {
+        return proxy;
+    }
+
+    public void setProxy(ProxyProperties proxy) {
+        this.proxy = proxy;
+    }
+
+    public List<ExchangeFilterFunction> getCustomFilters() {
+        return customFilters;
+    }
+
+    public void setCustomFilters(List<ExchangeFilterFunction> customFilters) {
+        this.customFilters = customFilters;
+    }
+
+    public boolean isInternalOauth() {
+        return internalOauth;
+    }
+
+    public void setInternalOauth(boolean internalOauth) {
+        this.internalOauth = internalOauth;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof WebClientProperties that)) return false;
+        return isInternalOauth() == that.isInternalOauth()
+                && Objects.equals(getName(), that.getName())
+                && Objects.equals(getAddress(), that.getAddress())
+                && Objects.equals(getUsername(), that.getUsername())
+                && Objects.equals(getPassword(), that.getPassword())
+                && Objects.equals(getAuthorization(), that.getAuthorization())
+                && Objects.equals(getPool(), that.getPool())
+                && Objects.equals(getTimeout(), that.getTimeout())
+                && Objects.equals(getRetry(), that.getRetry())
+                && Objects.equals(getLog(), that.getLog())
+                && Objects.equals(getMonitoring(), that.getMonitoring())
+                && Objects.equals(getProxy(), that.getProxy())
+                && Objects.equals(getCustomFilters(), that.getCustomFilters());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(
+                getName(),
+                getAddress(),
+                getUsername(),
+                getPassword(),
+                getAuthorization(),
+                getPool(),
+                getTimeout(),
+                getRetry(),
+                getLog(),
+                getMonitoring(),
+                getProxy(),
+                getCustomFilters(),
+                isInternalOauth());
+    }
 }

@@ -21,14 +21,19 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Utility class for data manipulation and processing. This class contains
  * static methods for various data-related operations.
  */
-@Slf4j
 public class SortingUtils {
+
+    /**
+     * A static logger instance for logging messages
+     */
+    private static final Logger log = LoggerFactory.getLogger(SortingUtils.class);
 
     /**
      * Parses the sorting configuration string and converts it to a database query

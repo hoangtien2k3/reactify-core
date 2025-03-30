@@ -17,7 +17,6 @@ package com.reactify.common;
 
 import java.security.*;
 import java.util.Base64;
-import lombok.Getter;
 
 /**
  * <p>
@@ -36,11 +35,16 @@ import lombok.Getter;
  */
 public class RSAKeyPairGenerator {
 
-    @Getter
     private final PrivateKey privateKey;
-
-    @Getter
     private final PublicKey publicKey;
+
+    public PrivateKey getPrivateKey() {
+        return privateKey;
+    }
+
+    public PublicKey getPublicKey() {
+        return publicKey;
+    }
 
     /**
      * <p>

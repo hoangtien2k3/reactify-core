@@ -18,8 +18,6 @@ package com.reactify.filter.properties;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
-import lombok.Data;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
@@ -47,8 +45,6 @@ import org.springframework.util.CollectionUtils;
  *
  * @author hoangtien2k3
  */
-@Slf4j
-@Data
 @Component
 @ConfigurationProperties(value = "spring.plugin.config")
 public class GatewayPluginProperties implements InitializingBean {
@@ -91,5 +87,47 @@ public class GatewayPluginProperties implements InitializingBean {
             // Convert all headers in hideHeaderList to lowercase
             hideHeaderList = hideHeaderList.stream().map(String::toLowerCase).collect(Collectors.toList());
         }
+    }
+
+    public GatewayPluginProperties() {}
+
+    public Boolean getReadRequestData() {
+        return readRequestData;
+    }
+
+    public void setReadRequestData(Boolean readRequestData) {
+        this.readRequestData = readRequestData;
+    }
+
+    public Boolean getReadResponseData() {
+        return readResponseData;
+    }
+
+    public void setReadResponseData(Boolean readResponseData) {
+        this.readResponseData = readResponseData;
+    }
+
+    public boolean isLogRequest() {
+        return logRequest;
+    }
+
+    public void setLogRequest(boolean logRequest) {
+        this.logRequest = logRequest;
+    }
+
+    public boolean isLogResponse() {
+        return logResponse;
+    }
+
+    public void setLogResponse(boolean logResponse) {
+        this.logResponse = logResponse;
+    }
+
+    public List<String> getHideHeaderList() {
+        return hideHeaderList;
+    }
+
+    public void setHideHeaderList(List<String> hideHeaderList) {
+        this.hideHeaderList = hideHeaderList;
     }
 }

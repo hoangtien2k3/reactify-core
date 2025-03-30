@@ -28,13 +28,20 @@ package com.reactify.filter.properties;
  * connections and allows 2000 pending requests to acquire a connection.
  * </p>
  *
- * @param maxSize
- *            the maximum number of connections in the pool
- * @param maxPendingAcquire
- *            the maximum number of pending requests to acquire a connection
  * @author hoangtien2k3
  */
-public record PoolProperties(Integer maxSize, Integer maxPendingAcquire) {
+public class PoolProperties {
+
+    /**
+     * the maximum number of connections in the pool
+     */
+    private final Integer maxSize;
+
+    /**
+     * the maximum number of pending requests to acquire a connection
+     */
+    private final Integer maxPendingAcquire;
+
     /**
      * <p>
      * Constructor for PoolProperties.
@@ -42,5 +49,18 @@ public record PoolProperties(Integer maxSize, Integer maxPendingAcquire) {
      */
     public PoolProperties() {
         this(2000, 2000);
+    }
+
+    public PoolProperties(Integer maxSize, Integer maxPendingAcquire) {
+        this.maxSize = maxSize;
+        this.maxPendingAcquire = maxPendingAcquire;
+    }
+
+    public Integer getMaxSize() {
+        return maxSize;
+    }
+
+    public Integer getMaxPendingAcquire() {
+        return maxPendingAcquire;
     }
 }

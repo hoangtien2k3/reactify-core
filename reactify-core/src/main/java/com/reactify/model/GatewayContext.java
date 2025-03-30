@@ -15,9 +15,6 @@
  */
 package com.reactify.model;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
 import org.springframework.http.HttpHeaders;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -40,9 +37,6 @@ import org.springframework.util.MultiValueMap;
  *
  * @author hoangtien2k3
  */
-@Getter
-@Setter
-@ToString
 public class GatewayContext {
 
     /** Constant <code>CACHE_GATEWAY_CONTEXT="cacheGatewayContext"</code> */
@@ -71,4 +65,76 @@ public class GatewayContext {
 
     /** Gateway Start time of request */
     protected Long startTime;
+
+    public Boolean getReadRequestData() {
+        return readRequestData;
+    }
+
+    public void setReadRequestData(Boolean readRequestData) {
+        this.readRequestData = readRequestData;
+    }
+
+    public Boolean getReadResponseData() {
+        return readResponseData;
+    }
+
+    public void setReadResponseData(Boolean readResponseData) {
+        this.readResponseData = readResponseData;
+    }
+
+    public String getRequestBody() {
+        return requestBody;
+    }
+
+    public void setRequestBody(String requestBody) {
+        this.requestBody = requestBody;
+    }
+
+    public Object getResponseBody() {
+        return responseBody;
+    }
+
+    public void setResponseBody(Object responseBody) {
+        this.responseBody = responseBody;
+    }
+
+    public HttpHeaders getRequestHeaders() {
+        return requestHeaders;
+    }
+
+    public void setRequestHeaders(HttpHeaders requestHeaders) {
+        this.requestHeaders = requestHeaders;
+    }
+
+    public MultiValueMap<String, String> getFormData() {
+        return formData;
+    }
+
+    public void setFormData(MultiValueMap<String, String> formData) {
+        this.formData = formData;
+    }
+
+    public MultiValueMap<String, String> getAllRequestData() {
+        return allRequestData;
+    }
+
+    public void setAllRequestData(MultiValueMap<String, String> allRequestData) {
+        this.allRequestData = allRequestData;
+    }
+
+    public Long getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Long startTime) {
+        this.startTime = startTime;
+    }
+
+    @Override
+    public String toString() {
+        return "GatewayContext{" + "readRequestData=" + readRequestData + ", readResponseData=" + readResponseData
+                + ", requestBody='" + requestBody + '\'' + ", responseBody=" + responseBody + ", requestHeaders="
+                + requestHeaders + ", formData=" + formData + ", allRequestData=" + allRequestData + ", startTime="
+                + startTime + '}';
+    }
 }

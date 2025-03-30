@@ -15,8 +15,6 @@
  */
 package com.reactify.exception;
 
-import lombok.Getter;
-import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
@@ -51,8 +49,6 @@ import org.springframework.web.reactive.function.client.WebClientResponseExcepti
  * @since 1.0
  * @author hoangtien2k3
  */
-@Getter
-@Setter
 public class CustomWebClientResponseException extends WebClientResponseException {
 
     /** The body of the error response as a string. */
@@ -89,5 +85,14 @@ public class CustomWebClientResponseException extends WebClientResponseException
         return String.format(
                 "CustomWebClientResponseException: HTTP %d %s - %s",
                 statusCode.value(), statusCode.getReasonPhrase(), errorBody);
+    }
+
+    public String getErrorBody() {
+        return errorBody;
+    }
+
+    @Override
+    public HttpStatus getStatusCode() {
+        return statusCode;
     }
 }

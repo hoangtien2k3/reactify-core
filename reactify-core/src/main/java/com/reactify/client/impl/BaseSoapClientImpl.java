@@ -24,7 +24,8 @@ import com.reactify.util.DataWsUtil;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
@@ -42,12 +43,6 @@ import reactor.core.publisher.Mono;
  * error handling, and header setup for SOAP requests.
  *
  * <p>
- * This implementation supports different types of API calls: - Generic API call
- * to retrieve a result of a specified class type. - A raw API call that returns
- * the raw XML response. - A specific API call for fetching the KHDN profile.
- * </p>
- *
- * <p>
  * Dependencies: - Uses Spring WebFlux's WebClient for making asynchronous HTTP
  * calls. - Utilizes custom utility classes (e.g., DataUtil, DataWsUtil) for
  * data processing. - Implements error handling through custom
@@ -58,9 +53,13 @@ import reactor.core.publisher.Mono;
  *            The type of the result object expected from the API response.
  * @author hoangtien2k3
  */
-@Slf4j
 @Service
 public class BaseSoapClientImpl<T> implements BaseSoapClient<T> {
+
+    /**
+     * A static logger instance for logging messages
+     */
+    private static final Logger log = LoggerFactory.getLogger(BaseSoapClientImpl.class);
 
     /**
      * {@inheritDoc}
@@ -73,61 +72,7 @@ public class BaseSoapClientImpl<T> implements BaseSoapClient<T> {
     @Override
     public Mono<Optional<T>> call(
             WebClient webClient, Map<String, String> headerList, String payload, Class<?> resultClass) {
-        log.info("Soap service payload client: {}", payload);
-        MultiValueMap<String, String> header = getHeaderForCallSoap(headerList);
-        return webClient
-                .post()
-                .headers(httpHeaders -> httpHeaders.addAll(header))
-                .bodyValue(payload)
-                .retrieve()
-                .onStatus(HttpStatusCode::isError, BaseSoapClientImpl::handleErrorResponse)
-                .bodyToMono(String.class)
-                .map(response -> {
-                    log.info("Soap Response {}", response);
-                    if (DataUtil.isNullOrEmpty(response)) {
-                        return Optional.<T>empty();
-                    }
-                    log.info("callRaw soap WS resp: {}", response);
-                    String formattedSOAPResponse = DataWsUtil.formatXML(response);
-                    String realData = DataWsUtil.getDataByTag(
-                            formattedSOAPResponse
-                                    .replaceAll(Constants.XmlConst.AND_LT_SEMICOLON, Constants.XmlConst.LT_CHARACTER)
-                                    .replaceAll(Constants.XmlConst.AND_GT_SEMICOLON, Constants.XmlConst.GT_CHARACTER),
-                            Constants.XmlConst.TAG_OPEN_RETURN,
-                            Constants.XmlConst.TAG_CLOSE_RETURN);
-                    if (DataUtil.isNullOrEmpty(realData)) {
-                        return Optional.<T>empty();
-                    }
-                    T result;
-                    if (DataUtil.safeEqual(resultClass.getSimpleName(), "String")) {
-                        @SuppressWarnings("unchecked")
-                        T stringResponse = (T) response;
-                        result = stringResponse;
-                    } else {
-                        result = DataWsUtil.xmlToObj(
-                                Constants.XmlConst.TAG_OPEN_RETURN + realData + Constants.XmlConst.TAG_CLOSE_RETURN,
-                                resultClass);
-                    }
-                    if (result == null) {
-                        log.error("Exception when parse data");
-                        return Optional.<T>empty();
-                    }
-                    return Optional.of(result);
-                })
-                .doOnError(err -> log.error("Call error when use method framework call", err));
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * Alternative implementation of the `call` method with a similar API call
-     * structure. Provides the same functionality as `call` but can be used
-     * independently as needed.
-     */
-    @Override
-    public Mono<Optional<T>> callV2(
-            WebClient webClient, Map<String, String> headerList, String payload, Class<?> resultClass) {
-        log.info("Soap service payload client: {}", payload);
+        log.info("Soap service payload client call: {}", payload);
         MultiValueMap<String, String> header = getHeaderForCallSoap(headerList);
         return webClient
                 .post()

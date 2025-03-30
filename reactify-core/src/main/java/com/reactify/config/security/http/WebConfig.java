@@ -19,7 +19,8 @@ import com.reactify.config.WhiteListProperties;
 import com.reactify.model.WhiteList;
 import com.reactify.util.DataUtil;
 import java.util.List;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -58,12 +59,16 @@ import reactor.core.publisher.Mono;
  *
  * @author hoangtien2k3
  */
-@Slf4j
 @Configuration
 @EnableWebFluxSecurity
 @EnableReactiveMethodSecurity
 @EnableConfigurationProperties(WhiteListProperties.class)
 public class WebConfig {
+
+    /**
+     * A static logger instance for logging messages
+     */
+    private static final Logger log = LoggerFactory.getLogger(WebConfig.class);
 
     private final WhiteListProperties whiteListProperties;
 
@@ -102,9 +107,9 @@ public class WebConfig {
         List<WhiteList> whiteListList = whiteListProperties.getWhiteList();
         if (!DataUtil.isNullOrEmpty(whiteListList)) {
             for (WhiteList whiteList : whiteListList) {
-                String uri = whiteList.uri();
+                String uri = whiteList.getUri();
                 log.info("whitelist: {}", uri);
-                List<String> methods = whiteList.methods();
+                List<String> methods = whiteList.getMethods();
                 if (!DataUtil.isNullOrEmpty(methods)) {
                     for (String method : methods) {
                         HttpMethod convertedMethod = HttpMethod.valueOf(method);

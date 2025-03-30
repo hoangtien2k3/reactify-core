@@ -15,8 +15,6 @@
  */
 package com.reactify.model;
 
-import lombok.Getter;
-
 /**
  * <p>
  * The StepResult class represents the result of executing a step within a saga
@@ -32,7 +30,6 @@ import lombok.Getter;
  *
  * @author hoangtien2k3
  */
-@Getter
 public class StepResult {
     private final boolean success; // Indicates whether the step was successful
     private final String message; // Optional message providing details about the step execution
@@ -78,5 +75,13 @@ public class StepResult {
      */
     public static StepResult failure(String message) {
         return new StepResult(false, message);
+    }
+
+    public boolean isSuccess() {
+        return success;
+    }
+
+    public String getMessage() {
+        return message;
     }
 }

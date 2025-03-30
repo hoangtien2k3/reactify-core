@@ -18,14 +18,16 @@ package com.reactify.filter.http;
 import static reactor.core.scheduler.Schedulers.single;
 
 import com.reactify.model.GatewayContext;
+import com.reactify.util.CacheUtils;
 import com.reactify.util.DataUtil;
 import com.reactify.util.LogUtils;
 import io.netty.buffer.UnpooledByteBufAllocator;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
-import lombok.extern.log4j.Log4j2;
 import org.jetbrains.annotations.NotNull;
 import org.reactivestreams.Publisher;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.Ordered;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.core.io.buffer.DataBufferUtils;
@@ -66,9 +68,13 @@ import reactor.core.publisher.Mono;
  *
  * @author hoangtien2k3
  */
-@Log4j2
 @Component
 public class ResponseLogFilter implements WebFilter, Ordered {
+
+    /**
+     * A static logger instance for logging messages
+     */
+    private static final Logger log = LoggerFactory.getLogger(CacheUtils.class);
 
     private final ExchangeStrategies exchangeStrategies = ExchangeStrategies.builder()
             .codecs(cl -> cl.defaultCodecs().maxInMemorySize(50 * 1024 * 1024))

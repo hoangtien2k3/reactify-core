@@ -22,17 +22,15 @@ import com.github.benmanes.caffeine.cache.LoadingCache;
 import java.time.Duration;
 import java.util.function.Function;
 import java.util.function.Supplier;
-import lombok.NonNull;
-import lombok.extern.log4j.Log4j2;
 import org.checkerframework.checker.index.qual.NonNegative;
 import org.jetbrains.annotations.NotNull;
 import reactor.core.publisher.Mono;
+import reactor.util.annotation.NonNull;
 
 /**
  * Utility class for data manipulation and processing. This class contains
  * static methods for various data-related operations.
  */
-@Log4j2
 public class CacheUtils {
 
     private static final String FIXED_KEY = "FIXED_KEY";

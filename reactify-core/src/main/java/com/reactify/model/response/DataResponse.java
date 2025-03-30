@@ -21,10 +21,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.reactify.constants.MessageConstant;
 import com.reactify.util.Translator;
 import java.io.Serializable;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import java.util.Objects;
 import org.springframework.http.HttpStatus;
 
 /**
@@ -36,58 +33,38 @@ import org.springframework.http.HttpStatus;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(Include.NON_NULL)
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
 public class DataResponse<T> implements Serializable {
-    /**
-     * Error code representing the status of the response.
-     */
     private String errorCode;
-
-    /**
-     * Message providing additional information about the response.
-     */
     private String message;
-
-    /**
-     * The actual data to be included in the response.
-     */
     private T data;
 
-    /**
-     * Constructs a DataResponse with a message and data.
-     *
-     * @param message
-     *            the message to be included in the response
-     * @param data
-     *            the data to be included in the response
-     */
-    public DataResponse(String message, T data) {
-        this.message = Translator.toLocaleVi(message);
-        this.data = data;
+    public static class Builder<T> {
+        private String errorCode;
+        private String message;
+        private T data;
+
+        public Builder<T> errorCode(String errorCode) {
+            this.errorCode = errorCode;
+            return this;
+        }
+
+        public Builder<T> message(String message) {
+            this.message = message;
+            return this;
+        }
+
+        public Builder<T> data(T data) {
+            this.data = data;
+            return this;
+        }
+
+        public DataResponse<T> build() {
+            DataResponse<T> response = new DataResponse<>(this.message, this.data);
+            response.setErrorCode(this.errorCode);
+            return response;
+        }
     }
 
-    /**
-     * Constructs a DataResponse with a message.
-     *
-     * @param message
-     *            the message to be included in the response
-     */
-    public DataResponse(String message) {
-        this.message = Translator.toLocaleVi(message);
-    }
-
-    /**
-     * Creates a successful DataResponse with the provided data.
-     *
-     * @param data
-     *            the data to be included in the response
-     * @param <T>
-     *            the type of the response data
-     * @return a DataResponse indicating success
-     */
     public static <T> DataResponse<T> success(T data) {
         return DataResponse.<T>builder()
                 .errorCode(MessageConstant.ERROR_CODE_SUCCESS)
@@ -96,20 +73,68 @@ public class DataResponse<T> implements Serializable {
                 .build();
     }
 
-    /**
-     * Creates a failed DataResponse with the provided data.
-     *
-     * @param data
-     *            the data to be included in the response
-     * @param <T>
-     *            the type of the response data
-     * @return a DataResponse indicating failure
-     */
     public static <T> DataResponse<T> failed(T data) {
         return DataResponse.<T>builder()
                 .errorCode(String.valueOf(HttpStatus.BAD_REQUEST.value()))
                 .message(MessageConstant.FAIL)
                 .data(data)
                 .build();
+    }
+
+    public DataResponse(String errorCode, String message, T data) {
+        this.errorCode = errorCode;
+        this.message = Translator.toLocaleVi(message);
+        this.data = data;
+    }
+
+    public DataResponse(String message, T data) {
+        this.message = Translator.toLocaleVi(message);
+        this.data = data;
+    }
+
+    public DataResponse(String message) {
+        this.message = Translator.toLocaleVi(message);
+    }
+
+    public static <T> Builder<T> builder() {
+        return new Builder<>();
+    }
+
+    public String getErrorCode() {
+        return errorCode;
+    }
+
+    public void setErrorCode(String errorCode) {
+        this.errorCode = errorCode;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public T getData() {
+        return data;
+    }
+
+    public void setData(T data) {
+        this.data = data;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof DataResponse<?> that)) return false;
+        return Objects.equals(getErrorCode(), that.getErrorCode())
+                && Objects.equals(getMessage(), that.getMessage())
+                && Objects.equals(getData(), that.getData());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getErrorCode(), getMessage(), getData());
     }
 }

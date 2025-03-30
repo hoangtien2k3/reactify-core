@@ -15,7 +15,6 @@
  */
 package com.reactify.annotations.logging;
 
-import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -53,10 +52,13 @@ import reactor.core.publisher.Mono;
  */
 @Aspect
 @Configuration
-@RequiredArgsConstructor
 public class LoggerAspect {
 
     private final LoggerAspectUtils loggerAspectUtils;
+
+    public LoggerAspect(LoggerAspectUtils loggerAspectUtils) {
+        this.loggerAspectUtils = loggerAspectUtils;
+    }
 
     /**
      * <p>

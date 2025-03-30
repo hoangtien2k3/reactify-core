@@ -15,11 +15,8 @@
  */
 package com.reactify.exception;
 
-import com.sun.java.accessibility.util.Translator;
 import java.util.Arrays;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import java.util.Objects;
 
 /**
  * <p>
@@ -57,22 +54,19 @@ import lombok.NoArgsConstructor;
  * </ul>
  *
  * @see RuntimeException
- * @see Translator
  * @see Arrays
  * @see String
  * @version 1.0
  * @since 1.0
  * @author hoangtien2k3
  */
-@EqualsAndHashCode(callSuper = true)
-@Data
-@NoArgsConstructor
 public class BusinessException extends RuntimeException {
+
     /** Error code associated with the exception */
-    private String errorCode;
+    private final String errorCode;
 
     /** Localized message describing the error */
-    private String message;
+    private final String message;
 
     /** Optional parameters for dynamic message formatting */
     private Object[] paramsMsg;
@@ -111,7 +105,35 @@ public class BusinessException extends RuntimeException {
      */
     public BusinessException(String errorCode, String message, String... paramsMsg) {
         this.errorCode = errorCode;
-        this.paramsMsg = paramsMsg;
+        this.paramsMsg = Arrays.stream(paramsMsg).toArray(String[]::new);
         this.message = message;
+    }
+
+    public String getErrorCode() {
+        return errorCode;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public Object[] getParamsMsg() {
+        return paramsMsg;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof BusinessException that)) return false;
+        return Objects.equals(getErrorCode(), that.getErrorCode())
+                && Objects.equals(getMessage(), that.getMessage())
+                && Arrays.equals(getParamsMsg(), that.getParamsMsg());
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(getErrorCode(), getMessage());
+        result = 31 * result + Arrays.hashCode(getParamsMsg());
+        return result;
     }
 }

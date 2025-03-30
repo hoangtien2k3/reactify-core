@@ -16,7 +16,7 @@
 package com.reactify.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Data;
+import java.util.Objects;
 
 /**
  * <p>
@@ -33,7 +33,6 @@ import lombok.Data;
  *
  * @author hoangtien2k3
  */
-@Data
 public class UserDTO {
     @JsonProperty("sub")
     private String id;
@@ -45,4 +44,37 @@ public class UserDTO {
      * Constructs a new instance of {@code UserDTO}.
      */
     public UserDTO() {}
+
+    public UserDTO(String id, String username) {
+        this.id = id;
+        this.username = username;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof UserDTO userDTO)) return false;
+        return Objects.equals(getId(), userDTO.getId()) && Objects.equals(getUsername(), userDTO.getUsername());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getUsername());
+    }
 }

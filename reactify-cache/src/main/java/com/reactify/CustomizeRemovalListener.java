@@ -18,22 +18,39 @@ package com.reactify;
 import com.github.benmanes.caffeine.cache.RemovalCause;
 import com.github.benmanes.caffeine.cache.RemovalListener;
 import java.lang.reflect.Method;
-import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
+ * A custom removal listener for handling cache eviction events.
  * <p>
- * CustomizeRemovalListener class.
+ * This listener logs when a cache entry is evicted and optionally invokes a
+ * predefined method upon eviction.
  * </p>
  *
  * @author hoangtien2k3
  */
-@Slf4j
-@AllArgsConstructor
 public class CustomizeRemovalListener implements RemovalListener<Object, Object> {
-    private Method method;
+
+    /**
+     * A static logger instance for logging messages
+     */
+    private static final Logger log = LoggerFactory.getLogger(CustomizeRemovalListener.class);
+
+    /** The method to be invoked upon eviction */
+    private final Method method;
+
+    /**
+     * Constructs a removal listener with a specific method to invoke upon eviction.
+     *
+     * @param method
+     *            The method to be invoked when an entry is evicted
+     */
+    public CustomizeRemovalListener(Method method) {
+        this.method = method;
+    }
 
     /** {@inheritDoc} */
     @Override
@@ -44,7 +61,11 @@ public class CustomizeRemovalListener implements RemovalListener<Object, Object>
                     method.getDeclaringClass().getSimpleName(),
                     method.getName(),
                     removalCause);
-            CacheUtils.invokeMethod(method);
+            try {
+                CacheUtils.invokeMethod(method);
+            } catch (Exception e) {
+                log.error("Error invoking method {} on cache eviction", method.getName(), e);
+            }
         }
     }
 }

@@ -15,10 +15,6 @@
  */
 package com.reactify.exception;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-
 /**
  * <p>
  * Exception indicating that a specific operation is non-retryable.
@@ -47,9 +43,6 @@ import lombok.NoArgsConstructor;
  * @since 1.0
  * @author hoangtien2k3
  */
-@EqualsAndHashCode(callSuper = true)
-@Data
-@NoArgsConstructor
 public class UnRetryableException extends BusinessException {
 
     /**

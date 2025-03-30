@@ -16,7 +16,8 @@
 package com.reactify;
 
 import java.time.Duration;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
@@ -24,17 +25,12 @@ import reactor.core.scheduler.Schedulers;
  * Utility class for data manipulation and processing. This class contains
  * static methods for various data-related operations.
  */
-@Slf4j
 public class AppUtils {
 
     /**
-     * Constructs a new instance of {@code AppUtils}.
-     * <p>
-     * This default constructor is provided for compatibility purposes and does not
-     * perform any initialization.
-     * </p>
+     * A static logger instance for logging messages
      */
-    public AppUtils() {}
+    private static final Logger log = LoggerFactory.getLogger(AppUtils.class);
 
     /**
      * Runs a Mono stream on a bounded elastic scheduler with a timeout of 2

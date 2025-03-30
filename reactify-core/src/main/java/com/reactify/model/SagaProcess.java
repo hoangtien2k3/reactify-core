@@ -18,9 +18,9 @@ package com.reactify.model;
 import com.reactify.constants.CommonErrorCode;
 import com.reactify.exception.BusinessException;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
@@ -42,8 +42,12 @@ import reactor.core.scheduler.Schedulers;
  *
  * @author hoangtien2k3
  */
-@Slf4j
 public abstract class SagaProcess {
+
+    /**
+     * A static logger instance for logging messages
+     */
+    private static final Logger log = LoggerFactory.getLogger(SagaProcess.class);
 
     /**
      * <p>
@@ -61,9 +65,6 @@ public abstract class SagaProcess {
      *         objects
      */
     public abstract List<SagaStep> getSteps();
-
-    /** List of executed steps for rollback purposes. */
-    protected final List<SagaStep> executedStep = new LinkedList<>();
 
     /**
      * <p>

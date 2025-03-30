@@ -23,39 +23,6 @@ package com.reactify.constants;
  * This class defines the following error codes:
  * </p>
  *
- * <ul>
- * <li>{@link #BAD_REQUEST} - Indicates that the request was invalid or
- * malformed.</li>
- * <li>{@link #NOT_FOUND} - Indicates that the requested resource was not
- * found.</li>
- * <li>{@link #INVALID_PARAMS} - Indicates that the parameters provided in the
- * request are invalid.</li>
- * <li>{@link #EXIST_DATA} - Indicates that the data already exists in the
- * system.</li>
- * <li>{@link #NOT_EXIST_DATA} - Indicates that the data does not exist in the
- * system.</li>
- * <li>{@link #INTERNAL_SERVER_ERROR} - Indicates that an unexpected internal
- * server error has occurred.</li>
- * <li>{@link #UN_AUTHORIZATION} - Indicates that the user is not authorized to
- * perform the requested action.</li>
- * <li>{@link #NO_PERMISSION} - Indicates that the user does not have permission
- * to access the requested resource.</li>
- * <li>{@link #ACCESS_DENIED} - Indicates that access to the requested resource
- * is denied.</li>
- * <li>{@link #PARSE_TOKEN_ERROR} - Indicates an error occurred while parsing
- * the authentication token.</li>
- * <li>{@link #SQL_ERROR} - Indicates that an SQL error occurred while
- * processing a database operation.</li> group information could not be
- * found.</li>
- * <li>{@link #SUCCESS} - Indicates a successful operation.</li>
- * <li>{@link #UN_DESERIALIZE} - Indicates an error occurred during
- * deserialization.</li>
- * <li>{@link #HASHING_PASSWORD_FAULT} - Indicates an error occurred while
- * hashing a password.</li>
- * <li>{@link #CALL_SOAP_ERROR} - Indicates an error occurred when calling a
- * SOAP service.</li>
- * </ul>
- *
  * <p>
  * Usage example:
  * </p>
@@ -73,39 +40,56 @@ package com.reactify.constants;
  */
 public class CommonErrorCode {
 
-    /**
-     * Constructs a new instance of {@code CommonErrorCode}.
-     */
-    public CommonErrorCode() {}
-
-    /** Constant <code>BAD_REQUEST="bad_request"</code> */
+    /** Indicates that the request was invalid or malformed. */
     public static final String BAD_REQUEST = "bad_request";
-    /** Constant <code>NOT_FOUND="not_found"</code> */
+
+    /** Indicates that the requested resource was not found. */
     public static final String NOT_FOUND = "not_found";
-    /** Constant <code>INVALID_PARAMS="invalid_params"</code> */
+
+    /** Indicates that the parameters provided in the request are invalid. */
     public static final String INVALID_PARAMS = "invalid_params";
-    /** Constant <code>EXIST_DATA="exist_data"</code> */
+
+    /** Indicates that the data already exists in the system. */
     public static final String EXIST_DATA = "exist_data";
-    /** Constant <code>NOT_EXIST_DATA="not_exist_data"</code> */
+
+    /** Indicates that the data does not exist in the system. */
     public static final String NOT_EXIST_DATA = "not_exist_data";
-    /** Constant <code>INTERNAL_SERVER_ERROR="internal_error"</code> */
+
+    /** Indicates that an unexpected internal server error has occurred. */
     public static final String INTERNAL_SERVER_ERROR = "internal_error";
-    /** Constant <code>UN_AUTHORIZATION="un_auth"</code> */
+
+    /**
+     * Indicates that the user is not authorized to perform the requested action.
+     */
     public static final String UN_AUTHORIZATION = "un_auth";
-    /** Constant <code>NO_PERMISSION="no_permission"</code> */
+
+    /**
+     * Indicates that the user does not have permission to access the requested
+     * resource.
+     */
     public static final String NO_PERMISSION = "no_permission";
-    /** Constant <code>ACCESS_DENIED="access_denied"</code> */
+
+    /** Indicates that access to the requested resource is denied. */
     public static final String ACCESS_DENIED = "access_denied";
-    /** Constant <code>PARSE_TOKEN_ERROR="parse_token_failed"</code> */
+
+    /** Indicates an error occurred while parsing the authentication token. */
     public static final String PARSE_TOKEN_ERROR = "parse_token_failed";
-    /** Constant <code>SQL_ERROR="sql"</code> */
+
+    /**
+     * Indicates that an SQL error occurred while processing a database operation.
+     * group information could not be found.
+     */
     public static final String SQL_ERROR = "sql";
-    /** Constant <code>SUCCESS="success"</code> */
+
+    /** Indicates a successful operation. */
     public static final String SUCCESS = "success";
-    /** Constant <code>UN_DESERIALIZE="un_deserialize"</code> */
+
+    /** Indicates an error occurred during deserialization. */
     public static final String UN_DESERIALIZE = "un_deserialize";
-    /** Constant <code>HASHING_PASSWORD_FAULT="hashing_password_fault"</code> */
+
+    /** Indicates an error occurred while hashing a password. */
     public static final String HASHING_PASSWORD_FAULT = "hashing_password_fault";
-    /** Constant <code>CALL_SOAP_ERROR="Exception when call soap: "</code> */
+
+    /** Indicates an error occurred when calling a SOAP service. */
     public static final String CALL_SOAP_ERROR = "Exception when call soap: ";
 }

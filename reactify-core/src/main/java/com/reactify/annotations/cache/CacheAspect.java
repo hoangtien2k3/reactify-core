@@ -18,7 +18,6 @@ package com.reactify.annotations.cache;
 import com.github.benmanes.caffeine.cache.Cache;
 import java.util.Objects;
 import java.util.Optional;
-import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -56,7 +55,6 @@ import reactor.core.publisher.Signal;
  */
 @Aspect
 @Configuration
-@Slf4j
 public class CacheAspect {
 
     /**

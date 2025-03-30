@@ -43,13 +43,18 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import org.json.JSONException;
-import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.util.ObjectUtils;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 
 public class DataUtil {
+
+    /**
+     * A static logger instance for logging messages
+     */
+    private static final Logger log = LoggerFactory.getLogger(DataUtil.class);
 
     /**
      * Checks if an object is null or its string representation is empty.
@@ -399,7 +404,9 @@ public class DataUtil {
             return null;
         }
         try {
-            return (T) ObjectMapperFactory.getInstance().readValue(safeToString(content), clz);
+            @SuppressWarnings("unchecked")
+            T result = (T) ObjectMapperFactory.getInstance().readValue(safeToString(content), clz);
+            return result;
         } catch (JsonProcessingException ignored) {
         }
         try {
@@ -530,12 +537,17 @@ public class DataUtil {
      * @return true if the string is a valid JSON format, false otherwise
      */
     public static boolean isValidFormatJson(String json) {
-        try {
-            new JSONObject(json);
-        } catch (JSONException e) {
+        if (isNullOrEmpty(json)) {
+            log.info("JSON input is null or empty.");
             return false;
         }
-        return true;
+        try {
+            ObjectMapperFactory.getInstance().readTree(json);
+            return true;
+        } catch (JsonProcessingException e) {
+            log.info(e.getMessage());
+            return false;
+        }
     }
 
     /**

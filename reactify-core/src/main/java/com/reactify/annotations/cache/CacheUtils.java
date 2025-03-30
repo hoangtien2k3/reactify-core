@@ -17,7 +17,8 @@ package com.reactify.annotations.cache;
 
 import com.reactify.config.ApplicationContextProvider;
 import java.lang.reflect.Method;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
@@ -38,9 +39,13 @@ import reactor.core.publisher.Mono;
  *
  * @author hoangtien2k3
  */
-@Slf4j
 @Component
 public class CacheUtils {
+
+    /**
+     * A static logger instance for logging messages
+     */
+    private static final Logger log = LoggerFactory.getLogger(CacheUtils.class);
 
     /**
      * <p>
@@ -59,6 +64,7 @@ public class CacheUtils {
         try {
             Class<?> declaringClass = method.getDeclaringClass();
             Object t = ApplicationContextProvider.getApplicationContext().getBean(declaringClass);
+            @SuppressWarnings("unchecked")
             Mono<Object> rs = (Mono<Object>) method.invoke(t);
             rs.subscribe();
         } catch (Exception exception) {

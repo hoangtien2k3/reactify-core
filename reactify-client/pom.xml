@@ -23,13 +23,21 @@
 		<version>3.3.5</version>
 		<relativePath/>
 	</parent>
+
+	<!-- =========================================== -->
+	<!-- The maven central for all the library       -->
+	<!-- =========================================== -->
 	<groupId>io.github.hoangtien2k3</groupId>
 	<artifactId>reactify-client</artifactId>
-	<version>1.2.2</version>
+	<version>1.2.3</version>
 	<name>reactify-client</name>
 	<packaging>jar</packaging>
 	<description>Java lib base all api rest and soap using web client</description>
 	<url>https://github.com/hoangtien2k3/reactify-core</url>
+
+	<!-- =========================================== -->
+	<!-- The info developers for all the library     -->
+	<!-- =========================================== -->
 	<licenses>
 		<license>
 			<name>Apache License, Version 2.0</name>
@@ -59,11 +67,136 @@
 			<url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
 		</repository>
 	</distributionManagement>
+
+	<!-- =========================================== -->
+	<!-- The properties for all the library          -->
+	<!-- =========================================== -->
+	<properties>
+		<java.version>21</java.version>
+		<maven-compiler-plugin.version>3.13.0</maven-compiler-plugin.version>
+		<central-publishing-maven-plugin.version>0.6.0</central-publishing-maven-plugin.version>
+		<nexus-staging-maven-plugin.version>1.7.0</nexus-staging-maven-plugin.version>
+		<maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
+		<maven-javadoc-plugin.version>3.8.0</maven-javadoc-plugin.version>
+		<maven-source-plugin.version>3.3.1</maven-source-plugin.version>
+	</properties>
+
+	<!-- =========================================== -->
+	<!-- The dependencies for all the library        -->
+	<!-- =========================================== -->
 	<dependencies>
 		<dependency>
 			<groupId>io.github.hoangtien2k3</groupId>
 			<artifactId>reactify-utils</artifactId>
-			<version>1.2.0</version>
+			<version>1.2.3</version>
 		</dependency>
 	</dependencies>
+
+	<!-- =========================================== -->
+	<!-- The plugins for all the library             -->
+	<!-- =========================================== -->
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>${maven-compiler-plugin.version}</version>
+				<configuration>
+					<source>${java.version}</source>
+					<target>${java.version}</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.sonatype.central</groupId>
+				<artifactId>central-publishing-maven-plugin</artifactId>
+				<version>${central-publishing-maven-plugin.version}</version>
+				<extensions>true</extensions>
+				<configuration>
+					<publishingServerId>central</publishingServerId>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>${maven-source-plugin.version}</version>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<goals>
+							<goal>jar-no-fork</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>${maven-javadoc-plugin.version}</version>
+				<configuration>
+					<javadocExecutable>${java.home}/bin/javadoc</javadocExecutable>
+					<failOnError>false</failOnError>
+				</configuration>
+				<executions>
+					<execution>
+						<id>generate-javadocs</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>javadoc</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>attach-javadocs</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-gpg-plugin</artifactId>
+				<version>${maven-gpg-plugin.version}</version>
+				<executions>
+					<execution>
+						<id>sign-artifacts</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>sign</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<gpgArguments>
+						<arg>--batch</arg>
+						<arg>--pinentry-mode</arg>
+						<arg>loopback</arg>
+					</gpgArguments>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.sonatype.plugins</groupId>
+				<artifactId>nexus-staging-maven-plugin</artifactId>
+				<version>${nexus-staging-maven-plugin.version}</version>
+				<extensions>true</extensions>
+				<configuration>
+					<serverId>ossrh</serverId>
+					<nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
+					<autoReleaseAfterClose>true</autoReleaseAfterClose>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<excludes>
+						<exclude>
+							<groupId>org.projectlombok</groupId>
+							<artifactId>lombok</artifactId>
+						</exclude>
+					</excludes>
+					<skip>true</skip>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 </project>

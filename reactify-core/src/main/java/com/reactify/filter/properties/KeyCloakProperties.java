@@ -28,10 +28,30 @@ package com.reactify.filter.properties;
  * credentials in a Spring application.
  * </p>
  *
- * @param clientId
- *            the client ID used for authenticating with the Keycloak server
- * @param clientSecret
- *            the client secret used for authenticating with the Keycloak server
  * @author hoangtien2k3
  */
-public record KeyCloakProperties(String clientId, String clientSecret) {}
+public class KeyCloakProperties {
+
+    /**
+     * the client ID used for authenticating with the Keycloak server
+     */
+    private final String clientId;
+
+    /**
+     * the client secret used for authenticating with the Keycloak server
+     */
+    private final String clientSecret;
+
+    public KeyCloakProperties(String clientId, String clientSecret) {
+        this.clientId = clientId;
+        this.clientSecret = clientSecret;
+    }
+
+    public String getClientId() {
+        return clientId;
+    }
+
+    public String getClientSecret() {
+        return clientSecret;
+    }
+}

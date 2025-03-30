@@ -25,9 +25,10 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 import javax.annotation.PostConstruct;
-import lombok.extern.slf4j.Slf4j;
 import org.reflections.Reflections;
 import org.reflections.scanners.Scanners;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
@@ -74,9 +75,13 @@ import org.springframework.stereotype.Component;
  *
  * @author hoangtien2k3
  */
-@Slf4j
 @Component
 public class CacheStore implements ApplicationContextAware {
+
+    /**
+     * A static logger instance for logging messages
+     */
+    private static final Logger log = LoggerFactory.getLogger(CacheStore.class);
 
     private static final HashMap<String, Cache<Object, Object>> caches = new HashMap<>();
     private static final Set<Method> autoLoadMethods = new HashSet<>();

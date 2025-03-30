@@ -16,13 +16,13 @@
 package com.reactify;
 
 import com.github.benmanes.caffeine.cache.Cache;
-import java.util.Objects;
 import java.util.Optional;
-import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.cache.interceptor.SimpleKeyGenerator;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.util.ClassUtils;
@@ -32,46 +32,80 @@ import reactor.core.publisher.Signal;
 
 /**
  * <p>
- * CacheAspect class.
+ * Aspect for handling caching via @LocalCache annotation.
+ * </p>
+ *
+ * <p>
+ * This aspect intercepts methods annotated with {@link LocalCache} and provides
+ * caching functionality using Caffeine.
  * </p>
  *
  * @author hoangtien2k3
  */
 @Aspect
 @Configuration
-@Slf4j
 public class CacheAspect {
+
+    /**
+     * A static logger instance for logging messages
+     */
+    private static final Logger log = LoggerFactory.getLogger(CacheAspect.class);
 
     @Pointcut("@annotation(com.reactify.LocalCache)")
     private void processAnnotation() {}
 
     /**
      * <p>
-     * aroundAdvice.
+     * Handles caching logic for methods annotated with {@link LocalCache}.
      * </p>
      *
      * @param joinPoint
-     *            a {@link ProceedingJoinPoint} object
-     * @return a {@link Object} object
+     *            the intercepted method call
+     * @return cached or computed result
      * @throws Throwable
-     *             if any.
+     *             if an exception occurs during method execution
      */
     @Around("processAnnotation()")
     public Object aroundAdvice(ProceedingJoinPoint joinPoint) throws Throwable {
         Object[] args = joinPoint.getArgs();
         Object key = SimpleKeyGenerator.generateKey(args);
-        String name = ClassUtils.getUserClass(joinPoint.getTarget().getClass()).getSimpleName() + "."
+        String nameCache = ClassUtils.getUserClass(joinPoint.getTarget().getClass()).getSimpleName() + "."
                 + joinPoint.getSignature().getName();
-        Cache<Object, Object> cache = CacheStore.getCache(name);
-        return CacheMono.lookup(k -> Mono.justOrEmpty(cache.getIfPresent(key)).map(Signal::next), key)
-                .onCacheMissResume((Mono<Object>) joinPoint.proceed(args))
-                .andWriteWith((k, sig) -> Mono.fromRunnable(() -> {
-                    if (sig != null && sig.get() != null) {
-                        if (!(sig.get() instanceof Optional
-                                && ((Optional<?>) Objects.requireNonNull(sig.get())).isEmpty())) {
-                            cache.put(k, sig.get());
+        Cache<Object, Object> cache = CacheStore.getCache(nameCache);
+        log.debug("Checking cache for method: {} with key: {}", nameCache, key);
+        return CacheMono.lookup(k -> Mono.justOrEmpty(!DataUtil.isNullOrEmpty(cache) ? cache.getIfPresent(key) : Mono.empty()).map(Signal::next), key)
+                .onCacheMissResume(Mono.defer(() -> {
+                    try {
+                        Object result = joinPoint.proceed(args);
+                        if (!(result instanceof Mono<?>)) {
+                            log.error(
+                                    "Method {}.{} must return a Mono<?> but got: {}",
+                                    joinPoint.getTarget().getClass().getSimpleName(),
+                                    joinPoint.getSignature().getName(),
+                                    result.getClass().getSimpleName());
+                            return Mono.error(new IllegalStateException("Method must return Mono<?>"));
                         }
+                        @SuppressWarnings("unchecked")
+                        var resultCast = (Mono<Object>) result;
+                        return resultCast;
+                    } catch (Throwable ex) {
+                        log.error(
+                                "Error executing method: {}.{} - {}",
+                                joinPoint.getTarget().getClass().getSimpleName(),
+                                joinPoint.getSignature().getName(),
+                                ex.getMessage(),
+                                ex);
+                        return Mono.error(ex);
                     }
+                }))
+                .andWriteWith((k, sig) -> Mono.fromRunnable(() -> {
+                    Optional.ofNullable(sig)
+                            .map(Signal::get)
+                            .filter(value -> !(value instanceof Optional && ((Optional<?>) value).isEmpty()))
+                            .ifPresent(value -> {
+                                cache.put(k, value);
+                                log.debug("Cached value for key: {} in method: {}", k, nameCache);
+                            });
                 }));
     }
 }

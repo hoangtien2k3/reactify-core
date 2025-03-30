@@ -15,8 +15,6 @@
  */
 package com.reactify.impl;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
-
 import com.reactify.BaseRestClient;
 import com.reactify.DataUtil;
 import com.reactify.ObjectMapperUtil;
@@ -32,7 +30,8 @@ import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.Objects;
 import java.util.Optional;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
@@ -63,18 +62,13 @@ import reactor.netty.transport.ProxyProvider;
  *            the type of the response body expected from the API call.
  * @author hoangtien2k3
  */
-@Slf4j
 @Service
 public class BaseRestClientImpl<T> implements BaseRestClient<T> {
 
     /**
-     * Constructs a new instance of {@code BaseRestClientImpl}.
-     * <p>
-     * This default constructor is provided for compatibility purposes and does not
-     * perform any initialization.
-     * </p>
+     * A static logger instance for logging messages
      */
-    public BaseRestClientImpl() {}
+    private static final Logger log = LoggerFactory.getLogger(BaseRestClientImpl.class);
 
     /**
      * {@inheritDoc}
@@ -101,17 +95,19 @@ public class BaseRestClientImpl<T> implements BaseRestClient<T> {
                 .map(response -> {
                     log.info("Rest response {}", response);
                     if (DataUtil.isNullOrEmpty(response)) {
-                        return this.getDefaultValue();
+                        return Optional.<T>empty();
                     }
                     if (DataUtil.safeEqual(resultClass.getSimpleName(), "String")) {
-                        return Optional.of((T) response);
+                        @SuppressWarnings("unchecked")
+                        T result = (T) response;
+                        return Optional.of(result);
                     }
                     T result = DataUtil.parseStringToObject(response, resultClass);
                     return Optional.ofNullable(result);
                 })
                 .onErrorResume(WebClientResponseException.class, e -> {
                     log.error("Exception call get rest api: ", e);
-                    String responseError = e.getResponseBodyAsString(UTF_8);
+                    String responseError = e.getResponseBodyAsString(StandardCharsets.UTF_8);
                     T result = DataUtil.parseStringToObject(responseError, resultClass);
                     return Mono.just(Optional.ofNullable(result));
                 });
@@ -203,7 +199,7 @@ public class BaseRestClientImpl<T> implements BaseRestClient<T> {
                 .map(response -> processReturn(response, resultClass))
                 .onErrorResume(WebClientResponseException.class, e -> {
                     log.error("call post rest api: ", e);
-                    String responseError = e.getResponseBodyAsString(UTF_8);
+                    String responseError = e.getResponseBodyAsString(StandardCharsets.UTF_8);
                     T result = DataUtil.parseStringToObject(responseError, resultClass);
                     return Mono.just(Optional.ofNullable(result));
                 });
@@ -217,7 +213,7 @@ public class BaseRestClientImpl<T> implements BaseRestClient<T> {
     @Override
     public Optional<T> processReturn(String response, Class<?> resultClass) {
         if (DataUtil.isNullOrEmpty(response)) {
-            return this.getDefaultValue();
+            return Optional.empty();
         }
         T result = DataUtil.parseStringToObject(response, resultClass);
         return Optional.ofNullable(result);
@@ -247,7 +243,7 @@ public class BaseRestClientImpl<T> implements BaseRestClient<T> {
                 .map(response -> processReturn(response, resultClass))
                 .onErrorResume(WebClientResponseException.class, e -> {
                     log.error("call delete rest api: ", e);
-                    String responseError = e.getResponseBodyAsString(UTF_8);
+                    String responseError = e.getResponseBodyAsString(StandardCharsets.UTF_8);
                     T result = DataUtil.parseStringToObject(responseError, resultClass);
                     return Mono.just(Optional.ofNullable(result));
                 });
@@ -293,7 +289,7 @@ public class BaseRestClientImpl<T> implements BaseRestClient<T> {
                 .map(response -> response)
                 .onErrorResume(WebClientResponseException.class, e -> {
                     log.error("call post rest api: ", e);
-                    String responseError = e.getResponseBodyAsString(UTF_8);
+                    String responseError = e.getResponseBodyAsString(StandardCharsets.UTF_8);
                     return Mono.just(responseError);
                 });
     }
@@ -327,7 +323,7 @@ public class BaseRestClientImpl<T> implements BaseRestClient<T> {
                 .map(response -> processReturn(response, resultClass))
                 .onErrorResume(WebClientResponseException.class, e -> {
                     log.error("call post rest api: ", e);
-                    String responseError = e.getResponseBodyAsString(UTF_8);
+                    String responseError = e.getResponseBodyAsString(StandardCharsets.UTF_8);
                     T result = DataUtil.parseStringToObject(responseError, resultClass);
                     return Mono.just(Optional.ofNullable(result));
                 });
@@ -420,7 +416,7 @@ public class BaseRestClientImpl<T> implements BaseRestClient<T> {
                 .map(response -> processReturn(response, resultClass))
                 .onErrorResume(WebClientResponseException.class, e -> {
                     log.error("call post rest api: ", e);
-                    String responseError = e.getResponseBodyAsString(UTF_8);
+                    String responseError = e.getResponseBodyAsString(StandardCharsets.UTF_8);
                     T result = DataUtil.parseStringToObject(responseError, resultClass);
                     return Mono.just(Optional.ofNullable(result));
                 });
@@ -467,15 +463,6 @@ public class BaseRestClientImpl<T> implements BaseRestClient<T> {
                     log.error("call rest api ", e);
                     return Mono.just("");
                 });
-    }
-
-    /**
-     * Provides a default empty Optional value.
-     *
-     * @return an Optional containing no value.
-     */
-    private Optional<T> getDefaultValue() {
-        return Optional.empty();
     }
 
     /**

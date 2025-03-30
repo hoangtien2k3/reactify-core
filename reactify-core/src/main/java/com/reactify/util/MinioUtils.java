@@ -30,8 +30,8 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import javax.activation.MimetypesFileTypeMap;
-import lombok.Getter;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
@@ -43,16 +43,26 @@ import reactor.core.scheduler.Schedulers;
  * Utility class for data manipulation and processing. This class contains
  * static methods for various data-related operations.
  */
-@Slf4j
 @Component
 @ConditionalOnProperty(value = "minio.enabled", havingValue = "true", matchIfMissing = false)
 public class MinioUtils {
 
-    @Getter
+    /**
+     * A static logger instance for logging messages
+     */
+    private static final Logger log = LoggerFactory.getLogger(MinioUtils.class);
+
     private final MinioProperties minioProperties;
 
-    @Getter
     private final MinioClient minioClient;
+
+    public MinioProperties getMinioProperties() {
+        return minioProperties;
+    }
+
+    public MinioClient getMinioClient() {
+        return minioClient;
+    }
 
     /**
      * Constructs a new instance of {@code MinioUtils}.

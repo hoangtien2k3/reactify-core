@@ -20,8 +20,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.core.io.buffer.DataBufferUtils;
 import org.springframework.core.io.buffer.NettyDataBufferFactory;
@@ -35,8 +35,12 @@ import org.springframework.http.MediaType;
  * @since 20/07/2024
  * @author hoangtien2k3
  */
-@Slf4j
 public class LogUtils {
+
+    /**
+     * A static logger instance for logging messages
+     */
+    private static final org.slf4j.Logger log = LoggerFactory.getLogger(LogUtils.class);
 
     /**
      * List of media types that are considered legal for logging.

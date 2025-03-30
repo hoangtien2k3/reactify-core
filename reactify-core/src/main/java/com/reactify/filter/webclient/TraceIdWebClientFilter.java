@@ -38,13 +38,20 @@ import reactor.core.publisher.Mono;
  * correlate requests across different services.
  * </p>
  *
- * @param tracer
- *            the {@link Tracer} instance used to retrieve the current trace ID
- *            for adding to request headers
  * @author hoangtien2k3
  */
 @Component
-public record TraceIdWebClientFilter(Tracer tracer) implements ExchangeFilterFunction {
+public class TraceIdWebClientFilter implements ExchangeFilterFunction {
+
+    /**
+     * the {@link Tracer} instance used to retrieve the current trace ID for adding
+     * to request headers
+     */
+    private final Tracer tracer;
+
+    public TraceIdWebClientFilter(Tracer tracer) {
+        this.tracer = tracer;
+    }
 
     /**
      * {@inheritDoc}

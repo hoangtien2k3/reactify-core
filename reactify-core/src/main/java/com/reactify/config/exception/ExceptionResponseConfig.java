@@ -26,7 +26,8 @@ import java.nio.file.AccessDeniedException;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.core.io.buffer.DataBufferLimitException;
 import org.springframework.http.HttpStatus;
@@ -45,9 +46,14 @@ import reactor.core.publisher.Mono;
  *
  * @author hoangtien2k3
  */
-@Slf4j
 @RestControllerAdvice
 public class ExceptionResponseConfig {
+
+    /**
+     * A static logger instance for logging messages
+     */
+    private static final Logger log = LoggerFactory.getLogger(ExceptionResponseConfig.class);
+
     private final Tracer tracer;
 
     /**

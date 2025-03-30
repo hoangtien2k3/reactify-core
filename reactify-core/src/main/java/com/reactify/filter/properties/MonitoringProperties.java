@@ -38,7 +38,18 @@ import io.micrometer.core.instrument.logging.LoggingMeterRegistry;
  *            metrics
  * @author hoangtien2k3
  */
-public record MonitoringProperties(boolean isEnable, MeterRegistry meterRegistry) {
+public class MonitoringProperties {
+
+    /**
+     * a flag indicating whether monitoring is enabled
+     */
+    private final boolean isEnable;
+
+    /**
+     * the MeterRegistry instance used for collecting and reporting metrics
+     */
+    private final MeterRegistry meterRegistry;
+
     /**
      * <p>
      * Constructor for MonitoringProperties.
@@ -46,5 +57,18 @@ public record MonitoringProperties(boolean isEnable, MeterRegistry meterRegistry
      */
     public MonitoringProperties() {
         this(true, new LoggingMeterRegistry());
+    }
+
+    public MonitoringProperties(boolean isEnable, MeterRegistry meterRegistry) {
+        this.isEnable = isEnable;
+        this.meterRegistry = meterRegistry;
+    }
+
+    public boolean isEnable() {
+        return isEnable;
+    }
+
+    public MeterRegistry getMeterRegistry() {
+        return meterRegistry;
     }
 }

@@ -16,12 +16,16 @@
 package com.reactify.test.controller;
 
 import com.reactify.DataUtil;
+import com.reactify.LocalCache;
+import com.reactify.request.LocalCacheRequest;
 import com.reactify.test.client.BaseCurrencyClient;
 import com.reactify.test.model.GeoPluginResponse;
 import com.reactify.test.model.Student;
 import com.reactify.test.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
@@ -36,9 +40,10 @@ public class StudentController {
     @Autowired
     private BaseCurrencyClient baseCurrencyClient;
 
-    // API lấy danh sách học sinh
+    // API get list Student demo using LocalCache
+    @LocalCache
     @GetMapping("/students")
-    public List<Student> getStudents() {
+    public Mono<List<Student>> getStudents() {
         var lstStudent = studentService.getAllStudents();
         if (DataUtil.isNullOrEmpty(lstStudent)) {
             return null;
@@ -47,8 +52,24 @@ public class StudentController {
     }
 
     // baseCurrency -> base_currency = VN
+    @LocalCache
     @GetMapping("/base-currency")
     public Mono<GeoPluginResponse> getBaseCurrency(String baseCurrency) {
         return baseCurrencyClient.getBaseCurrency(baseCurrency);
+    }
+
+    @PostMapping("/clear-by-name")
+    public Mono<Integer> clearCacheByName(@RequestBody LocalCacheRequest request) {
+        return studentService.clearCacheByName(request);
+    }
+
+    @PostMapping("/clear-all")
+    public Mono<Integer> clearAllCache() {
+        return studentService.clearAllCaches();
+    }
+
+    @GetMapping("/get-list-cache")
+    public Mono<List<String>> getLocalCache() {
+        return studentService.getLstCache();
     }
 }

@@ -18,8 +18,9 @@ package com.reactify.filter.webclient;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Timer;
 import java.util.concurrent.TimeUnit;
-import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.reactive.function.client.ClientRequest;
 import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.ExchangeFilterFunction;
@@ -41,19 +42,30 @@ import reactor.core.publisher.Mono;
  * applications.
  * </p>
  *
- * @param meterRegistry
- *            the MeterRegistry used to record metrics for the monitored
- *            WebClient requests
  * @author hoangtien2k3
  */
-@Slf4j
-public record WebClientMonitoringFilter(MeterRegistry meterRegistry) implements ExchangeFilterFunction {
+public class WebClientMonitoringFilter implements ExchangeFilterFunction {
+
+    /**
+     * A static logger instance for logging messages
+     */
+    private static final Logger log = LoggerFactory.getLogger(WebClientMonitoringFilter.class);
+
+    /**
+     * the MeterRegistry used to record metrics for the monitored WebClient requests
+     */
+    private final MeterRegistry meterRegistry;
+
     /**
      * Constant
      * <code>METRICS_WEBCLIENT_START_TIME="WebClientMonitoringFilter.class.getName"{trunked}</code>
      */
     private static final String METRICS_WEBCLIENT_START_TIME =
             WebClientMonitoringFilter.class.getName() + ".START_TIME";
+
+    public WebClientMonitoringFilter(MeterRegistry meterRegistry) {
+        this.meterRegistry = meterRegistry;
+    }
 
     /**
      * {@inheritDoc}

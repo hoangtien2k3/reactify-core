@@ -15,9 +15,6 @@
  */
 package com.reactify.model.response;
 
-import lombok.Getter;
-import lombok.Setter;
-
 /**
  * Represents an error response with trace information, extending DataResponse.
  *
@@ -25,8 +22,6 @@ import lombok.Setter;
  *            the type of the response data
  * @author hoangtien2k3
  */
-@Getter
-@Setter
 public class TraceErrorResponse<T> extends DataResponse<T> {
 
     /**
@@ -49,6 +44,14 @@ public class TraceErrorResponse<T> extends DataResponse<T> {
      */
     public TraceErrorResponse(String errorCode, String message, T data, String requestId) {
         super(errorCode, message, data);
+        this.requestId = requestId;
+    }
+
+    public String getRequestId() {
+        return requestId;
+    }
+
+    public void setRequestId(String requestId) {
         this.requestId = requestId;
     }
 }

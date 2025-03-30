@@ -22,8 +22,9 @@ import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
-import lombok.extern.log4j.Log4j2;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.Ordered;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.core.io.buffer.DataBufferUtils;
@@ -69,8 +70,12 @@ import reactor.core.scheduler.Schedulers;
  * @author hoangtien2k3
  */
 @Component
-@Log4j2
 public class GatewayContextFilter implements WebFilter, Ordered {
+
+    /**
+     * A static logger instance for logging messages
+     */
+    private static final Logger log = LoggerFactory.getLogger(GatewayContextFilter.class);
 
     private final HttpLogProperties httpLogProperties;
     private final CodecConfigurer codecConfigurer;
@@ -121,15 +126,15 @@ public class GatewayContextFilter implements WebFilter, Ordered {
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, @NotNull WebFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();
-        boolean enableRequest = httpLogProperties.getRequest().enable();
-        boolean enableResponse = httpLogProperties.getResponse().enable();
+        boolean enableRequest = httpLogProperties.getRequest().isEnable();
+        boolean enableResponse = httpLogProperties.getResponse().isEnable();
         if (Constants.EXCLUDE_LOGGING_ENDPOINTS.contains(request.getPath().toString())
                 || (!enableRequest && !enableResponse)) {
             return chain.filter(exchange);
         }
         GatewayContext gatewayContext = new GatewayContext();
-        gatewayContext.setReadRequestData(httpLogProperties.getRequest().enable());
-        gatewayContext.setReadResponseData(httpLogProperties.getResponse().enable());
+        gatewayContext.setReadRequestData(httpLogProperties.getRequest().isEnable());
+        gatewayContext.setReadResponseData(httpLogProperties.getResponse().isEnable());
         HttpHeaders headers = request.getHeaders();
         gatewayContext.setRequestHeaders(headers);
         gatewayContext.setStartTime(System.currentTimeMillis());

@@ -15,48 +15,144 @@
  */
 package com.reactify.model.logging;
 
+import java.util.Objects;
+
 /**
  * Record representing log fields for tracking service requests and responses.
  *
- * @param traceId
- *            a unique identifier for tracing the request across services.
- * @param requestId
- *            a unique identifier for the request within the service.
- * @param service
- *            the name of the service handling the request.
- * @param duration
- *            the time taken to process the request in milliseconds.
- * @param logType
- *            the type of log (e.g., INFO, ERROR).
- * @param actionType
- *            the type of action performed (e.g., CREATE, UPDATE, DELETE).
- * @param startTime
- *            the timestamp when the request started processing.
- * @param endTime
- *            the timestamp when the request finished processing.
- * @param clientAddress
- *            the address of the client making the request.
- * @param title
- *            a brief title or description of the log entry.
- * @param inputs
- *            the inputs or parameters received in the request.
- * @param response
- *            the response returned by the service.
- * @param result
- *            the outcome of the request processing (e.g., SUCCESS, FAILURE).
  * @author hoangtien2k3
  */
-public record LogField(
-        String traceId,
-        String requestId,
-        String service,
-        Long duration,
-        String logType,
-        String actionType,
-        Long startTime,
-        Long endTime,
-        String clientAddress,
-        String title,
-        String inputs,
-        String response,
-        String result) {}
+public class LogField {
+    private final String traceId;
+    private final String requestId;
+    private final String service;
+    private final Long duration;
+    private final String logType;
+    private final String actionType;
+    private final Long startTime;
+    private final Long endTime;
+    private final String clientAddress;
+    private final String title;
+    private final String inputs;
+    private final String response;
+    private final String result;
+
+    public LogField(
+            String traceId,
+            String requestId,
+            String service,
+            Long duration,
+            String logType,
+            String actionType,
+            Long startTime,
+            Long endTime,
+            String clientAddress,
+            String title,
+            String inputs,
+            String response,
+            String result) {
+        this.traceId = traceId;
+        this.requestId = requestId;
+        this.service = service;
+        this.duration = duration;
+        this.logType = logType;
+        this.actionType = actionType;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.clientAddress = clientAddress;
+        this.title = title;
+        this.inputs = inputs;
+        this.response = response;
+        this.result = result;
+    }
+
+    public String getTraceId() {
+        return traceId;
+    }
+
+    public String getRequestId() {
+        return requestId;
+    }
+
+    public String getService() {
+        return service;
+    }
+
+    public Long getDuration() {
+        return duration;
+    }
+
+    public String getLogType() {
+        return logType;
+    }
+
+    public String getActionType() {
+        return actionType;
+    }
+
+    public Long getStartTime() {
+        return startTime;
+    }
+
+    public Long getEndTime() {
+        return endTime;
+    }
+
+    public String getClientAddress() {
+        return clientAddress;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getInputs() {
+        return inputs;
+    }
+
+    public String getResponse() {
+        return response;
+    }
+
+    public String getResult() {
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        LogField logField = (LogField) o;
+        return Objects.equals(traceId, logField.traceId)
+                && Objects.equals(requestId, logField.requestId)
+                && Objects.equals(service, logField.service)
+                && Objects.equals(duration, logField.duration)
+                && Objects.equals(logType, logField.logType)
+                && Objects.equals(actionType, logField.actionType)
+                && Objects.equals(startTime, logField.startTime)
+                && Objects.equals(endTime, logField.endTime)
+                && Objects.equals(clientAddress, logField.clientAddress)
+                && Objects.equals(title, logField.title)
+                && Objects.equals(inputs, logField.inputs)
+                && Objects.equals(response, logField.response)
+                && Objects.equals(result, logField.result);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(
+                traceId,
+                requestId,
+                service,
+                duration,
+                logType,
+                actionType,
+                startTime,
+                endTime,
+                clientAddress,
+                title,
+                inputs,
+                response,
+                result);
+    }
+}

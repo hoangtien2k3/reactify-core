@@ -26,47 +26,74 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import java.io.IOException;
 
 public class ObjectMapperFactory {
-    private static ObjectMapper objectMapper;
+
+    /**
+     * Singleton instance for a custom-configured {@link ObjectMapper}.
+     */
+    private static volatile ObjectMapper objectMapper;
+
+    /**
+     * Singleton instance for a secondary {@link ObjectMapper} with alternative
+     * settings.
+     */
     private static final ObjectMapper objectMapperV2 = new ObjectMapper();
+
+    /**
+     * Singleton instance for a default configuration of {@link ObjectMapper}.
+     */
     private static final ObjectMapper defaultGetInstance = new ObjectMapper();
 
     /**
-     * Provides a singleton {@link com.fasterxml.jackson.databind.ObjectMapper}
-     * instance with custom configurations.
      * <p>
-     * Configures the instance to ignore unknown properties, accept single values as
-     * arrays, unwrap single value arrays, and register custom deserializers.
+     * Provides a custom-configured
+     * {@link com.fasterxml.jackson.databind.ObjectMapper} instance.
      * </p>
      *
-     * @return A singleton instance of
-     *         {@link com.fasterxml.jackson.databind.ObjectMapper} with custom
-     *         settings.
+     * <p>
+     * Configurations include disabling failure on unknown properties, accepting
+     * single values as arrays, and registering a custom deserializer for boolean
+     * values represented as numeric strings.
+     * </p>
+     *
+     * @return a {@link com.fasterxml.jackson.databind.ObjectMapper} instance with
+     *         custom configurations
      */
     public static ObjectMapper getInstance() {
         if (objectMapper == null) {
-            objectMapper = new ObjectMapper();
-            objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-            objectMapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
-            objectMapper.configure(DeserializationFeature.UNWRAP_SINGLE_VALUE_ARRAYS, true);
-            SimpleModule module = new SimpleModule();
-            module.addDeserializer(boolean.class, new NumericBooleanDeserializer());
-            module.addDeserializer(Boolean.class, new NumericBooleanDeserializer());
-            objectMapper.registerModule(new JavaTimeModule());
-            objectMapper.registerModule(module);
+            synchronized (ObjectMapperFactory.class) {
+                if (objectMapper == null) {
+                    objectMapper = new ObjectMapper();
+                    objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+                    objectMapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
+                    objectMapper.configure(DeserializationFeature.UNWRAP_SINGLE_VALUE_ARRAYS, true);
+
+                    // Register custom deserializer for boolean values represented as numbers
+                    SimpleModule module = new SimpleModule();
+                    module.addDeserializer(boolean.class, new NumericBooleanDeserializer());
+                    module.addDeserializer(Boolean.class, new NumericBooleanDeserializer());
+
+                    // Register modules for Java time handling
+                    objectMapper.registerModule(new JavaTimeModule());
+                    objectMapper.registerModule(module);
+                }
+            }
         }
         return objectMapper;
     }
 
     /**
-     * Provides a second {@link com.fasterxml.jackson.databind.ObjectMapper}
-     * instance with alternative configurations.
      * <p>
-     * Configures the instance to ignore unknown properties and accept single values
-     * as arrays.
+     * Provides an alternative {@link com.fasterxml.jackson.databind.ObjectMapper}
+     * instance with a simplified configuration.
      * </p>
      *
-     * @return A new instance of {@link com.fasterxml.jackson.databind.ObjectMapper}
-     *         with alternative settings.
+     * <p>
+     * This instance is configured to ignore unknown properties and accept single
+     * values as arrays, but without additional modules or custom deserializers.
+     * </p>
+     *
+     * @return a {@link com.fasterxml.jackson.databind.ObjectMapper} instance with
+     *         simplified configurations
      */
     public static ObjectMapper getInstance2() {
         objectMapperV2.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -75,15 +102,20 @@ public class ObjectMapperFactory {
     }
 
     /**
-     * Provides a default {@link com.fasterxml.jackson.databind.ObjectMapper}
-     * instance with standard configurations.
      * <p>
-     * Configures the instance to ignore unknown properties, accept single values as
-     * arrays, include non-null values only, and register all available modules.
+     * Provides a default {@link com.fasterxml.jackson.databind.ObjectMapper}
+     * instance with standard configuration settings.
      * </p>
      *
-     * @return A new instance of {@link com.fasterxml.jackson.databind.ObjectMapper}
-     *         with standard settings.
+     * <p>
+     * Configurations include ignoring unknown properties, accepting single values
+     * as arrays, and excluding null values from serialization. This instance also
+     * attempts to find and register any additional modules available on the
+     * classpath.
+     * </p>
+     *
+     * @return a {@link com.fasterxml.jackson.databind.ObjectMapper} instance with
+     *         default settings
      */
     public static ObjectMapper defaultGetInstance() {
         defaultGetInstance.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -94,18 +126,21 @@ public class ObjectMapperFactory {
     }
 
     /**
-     * Custom deserializer for handling numeric and boolean values.
+     * Custom deserializer for boolean values represented as numeric strings.
+     * <p>
+     * This deserializer interprets "1" as {@code true}, "0" as {@code false}, and
+     * also handles standard "true" and "false" strings.
+     * </p>
      */
     private static class NumericBooleanDeserializer extends JsonDeserializer<Boolean> {
         @Override
         public Boolean deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
-            if ("1".equals(p.getText()) || "true".equals(p.getText())) {
-                return Boolean.TRUE;
-            }
-            if ("0".equals(p.getText()) || "false".equals(p.getText())) {
-                return Boolean.FALSE;
-            }
-            return null;
+            String text = p.getText().trim();
+            return switch (text) {
+                case "1", "true" -> Boolean.TRUE;
+                case "0", "false" -> Boolean.FALSE;
+                default -> null;
+            };
         }
     }
 }

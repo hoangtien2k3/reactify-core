@@ -30,8 +30,8 @@ import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
 import java.time.Duration;
 import java.util.Base64;
 import java.util.List;
-import lombok.Data;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
@@ -71,13 +71,21 @@ import reactor.netty.transport.ProxyProvider;
  *
  * @author hoangtien2k3
  */
-@Slf4j
-@Data
 public class WebClientFactory implements InitializingBean {
+
+    /**
+     * A static logger instance for logging messages related to WebClientFactory.
+     */
+    private static final Logger log = LoggerFactory.getLogger(WebClientFactory.class);
 
     @Autowired
     private ApplicationContext applicationContext;
-    private List<WebClientProperties> webClients;
+
+    /**
+     * A list of {@code WebClientProperties} containing configuration file
+     * application.properties or application.yml
+     */
+    private final List<WebClientProperties> webClients;
 
     /**
      * Creates an instance of {@code WebClientFactory} with the specified
@@ -141,16 +149,16 @@ public class WebClientFactory implements InitializingBean {
             return null;
         }
         ConnectionProvider connectionProvider = ConnectionProvider.builder(webClientProperties.getName() + "Pool")
-                .maxConnections(webClientProperties.getPool().maxSize())
-                .pendingAcquireMaxCount(webClientProperties.getPool().maxPendingAcquire())
+                .maxConnections(webClientProperties.getPool().getMaxSize())
+                .pendingAcquireMaxCount(webClientProperties.getPool().getMaxPendingAcquire())
                 .build();
 
         HttpClient httpClient = HttpClient.create(connectionProvider)
                 .option(
                         ChannelOption.CONNECT_TIMEOUT_MILLIS,
-                        webClientProperties.getTimeout().connection())
+                        webClientProperties.getTimeout().getConnection())
                 .responseTimeout(
-                        Duration.ofMillis(webClientProperties.getTimeout().read()))
+                        Duration.ofMillis(webClientProperties.getTimeout().getRead()))
                 .option(ChannelOption.SO_KEEPALIVE, true)
                 .option(EpollChannelOption.TCP_KEEPIDLE, 300)
                 .option(EpollChannelOption.TCP_KEEPINTVL, 60)
@@ -174,14 +182,14 @@ public class WebClientFactory implements InitializingBean {
                                                     + webClientProperties.getPassword())
                                             .getBytes(UTF_8)));
         }
-        if (webClientProperties.getLog().enable()) {
+        if (webClientProperties.getLog().isEnable()) {
             exchangeStrategies.filter(
-                    new WebClientLoggingFilter(webClientProperties.getLog().obfuscateHeaders()));
+                    new WebClientLoggingFilter(webClientProperties.getLog().getObfuscateHeaders()));
         }
         if (webClientProperties.getRetry().isEnable()) {
             exchangeStrategies.filter(new WebClientRetryHandler(webClientProperties.getRetry()));
         }
-        if (webClientProperties.getProxy().enable()) {
+        if (webClientProperties.getProxy().isEnable()) {
             httpClient = configProxy(httpClient, webClientProperties.getProxy());
         }
 
@@ -211,10 +219,10 @@ public class WebClientFactory implements InitializingBean {
      * @return a {@link HttpClient} object configured with proxy settings
      */
     private HttpClient configProxy(HttpClient httpClient, ProxyProperties proxyConfig) {
-        var httpHost = proxyConfig.httpHost();
-        var httpPort = proxyConfig.httpPort();
-        var httpsHost = proxyConfig.httpsHost();
-        var httpsPort = proxyConfig.httpsPort();
+        var httpHost = proxyConfig.getHttpHost();
+        var httpPort = proxyConfig.getHttpPort();
+        var httpsHost = proxyConfig.getHttpsHost();
+        var httpsPort = proxyConfig.getHttpsPort();
         if (!DataUtil.isNullOrEmpty(httpHost) && !DataUtil.isNullOrEmpty(httpPort)) {
             httpClient = httpClient.proxy(
                     proxy -> proxy.type(ProxyProvider.Proxy.HTTP).host(httpHost).port(httpPort));

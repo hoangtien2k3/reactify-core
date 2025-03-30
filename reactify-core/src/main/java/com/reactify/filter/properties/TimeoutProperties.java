@@ -27,18 +27,37 @@ package com.reactify.filter.properties;
  * (3 minutes) and the connection timeout to 500 milliseconds (0.5 seconds).
  * </p>
  *
- * @param read
- *            the read timeout value in milliseconds
- * @param connection
- *            the connection timeout value in milliseconds
  * @author hoangtien2k3
  */
-public record TimeoutProperties(int read, int connection) {
+public class TimeoutProperties {
+
+    /**
+     * the read timeout value in milliseconds
+     */
+    private final int read;
+
+    /**
+     * the connection timeout value in milliseconds
+     */
+    private final int connection;
 
     /**
      * Default constructor that initializes timeout values.
      */
     public TimeoutProperties() {
         this(180000, 500); // Default read timeout: 3 minutes, connection timeout: 0.5 seconds
+    }
+
+    public TimeoutProperties(int read, int connection) {
+        this.read = read;
+        this.connection = connection;
+    }
+
+    public int getRead() {
+        return read;
+    }
+
+    public int getConnection() {
+        return connection;
     }
 }

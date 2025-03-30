@@ -16,12 +16,14 @@
 package com.reactify;
 
 import java.io.StringWriter;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * <p>
@@ -48,18 +50,18 @@ import lombok.extern.slf4j.Slf4j;
  * </pre>
  *
  * @author hoangtien2k3
- * @since 1.0
- * @version 1.0
  */
-@Slf4j
 public class MarshallerFactory {
 
-    private static final Map<Class<?>, Marshaller> instance = new HashMap<>();
+    /**
+     * A static logger instance for logging messages
+     */
+    private static final java.util.logging.Logger log = Logger.getLogger(MarshallerFactory.class.getName());
 
     /**
-     * Constructs a new instance of {@code MarshallerFactory}.
+     * Cache to hold {@link MarshallerFactory} instances for specific classes.
      */
-    public MarshallerFactory() {}
+    private static final Map<Class<?>, Marshaller> instance = new ConcurrentHashMap<>();
 
     /**
      * Converts a given Java object to its XML representation.
@@ -79,36 +81,39 @@ public class MarshallerFactory {
      * @param obj
      *            the object to be converted to XML
      * @param cls
-     *            the {@link Class} of the object being converted, used for creating
-     *            and retrieving the appropriate {@link javax.xml.bind.Marshaller}
-     *            instance
-     * @return a {@link String} representing the XML format of the object, or an
-     *         empty string if an error occurs during conversion
+     *            the {@link java.lang.Class} of the object being converted, used
+     *            for creating and retrieving the appropriate
+     *            {@link javax.xml.bind.Marshaller} instance
+     * @return a {@link java.lang.String} representing the XML format of the object,
+     *         or an empty string if an error occurs during conversion
      * @throws IllegalArgumentException
      *             if {@code obj} or {@code cls} is null
      */
     public static String convertObjectToXML(Object obj, Class<?> cls) {
-        Marshaller marshaller = instance.get(cls);
-        String xmlTxt = "";
+        Objects.requireNonNull(obj, "Object to convert must not be null");
+        Objects.requireNonNull(cls, "Class of the object must not be null");
+
         try {
-            // create an instance of `JAXBContext`
-            if (marshaller == null) {
-                marshaller = JAXBContext.newInstance(cls).createMarshaller();
-                // enable pretty-print XML output
-                marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-                instance.put(cls, marshaller);
-            }
+            Marshaller marshaller = instance.computeIfAbsent(cls, key -> {
+                try {
+                    Marshaller m = JAXBContext.newInstance(key).createMarshaller();
+                    m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+                    return m;
+                } catch (JAXBException ex) {
+                    log.log(Level.SEVERE, "Failed to create marshaller for class: " + key.getName(), ex);
+                    throw new RuntimeException("Failed to create marshaller", ex);
+                }
+            });
 
-            // write XML to `StringWriter`
             StringWriter sw = new StringWriter();
-
-            // convert book object to XML
             marshaller.marshal(obj, sw);
-            xmlTxt = sw.toString();
-
+            return sw.toString();
         } catch (JAXBException ex) {
-            log.error("Convert Object To XML  fail: ", ex);
+            log.log(Level.SEVERE, "Failed to convert object to XML", ex);
+            return "";
+        } catch (RuntimeException ex) {
+            log.log(Level.SEVERE, "Unexpected error during XML conversion", ex);
+            return "";
         }
-        return xmlTxt;
     }
 }

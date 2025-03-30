@@ -16,7 +16,8 @@
 package com.reactify.config;
 
 import io.minio.MinioClient;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -36,9 +37,13 @@ import org.springframework.context.annotation.Configuration;
  *
  * @author hoangtien2k3
  */
-@Slf4j
 @Configuration
 public class MinioConfiguration {
+
+    /**
+     * A static logger instance for logging messages
+     */
+    private static final Logger log = LoggerFactory.getLogger(MinioConfiguration.class);
 
     private final MinioProperties minioProperties;
 

@@ -36,13 +36,19 @@ import java.util.List;
  * from the Constants class to be obfuscated during logging.
  * </p>
  *
- * @param enable
- *            Indicates whether client logging is enabled or disabled.
- * @param obfuscateHeaders
- *            A list of headers that should be obfuscated in the logs.
  * @author hoangtien2k3
  */
-public record ClientLogProperties(boolean enable, List<String> obfuscateHeaders) {
+public class ClientLogProperties {
+
+    /**
+     * Indicates whether client logging is enabled or disabled.
+     */
+    private final boolean enable;
+
+    /**
+     * A list of headers that should be obfuscated in the logs.
+     */
+    private final List<String> obfuscateHeaders;
 
     /**
      * Default constructor that initializes the ClientLogProperties with default
@@ -51,5 +57,18 @@ public record ClientLogProperties(boolean enable, List<String> obfuscateHeaders)
      */
     public ClientLogProperties() {
         this(true, Constants.getSensitiveHeaders());
+    }
+
+    public ClientLogProperties(boolean enable, List<String> obfuscateHeaders) {
+        this.enable = enable;
+        this.obfuscateHeaders = obfuscateHeaders;
+    }
+
+    public boolean isEnable() {
+        return enable;
+    }
+
+    public List<String> getObfuscateHeaders() {
+        return obfuscateHeaders;
     }
 }

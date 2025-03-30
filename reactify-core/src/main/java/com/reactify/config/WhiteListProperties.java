@@ -17,7 +17,7 @@ package com.reactify.config;
 
 import com.reactify.model.WhiteList;
 import java.util.List;
-import lombok.Data;
+import java.util.Objects;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
@@ -35,7 +35,6 @@ import org.springframework.stereotype.Component;
  * Java compiler, for creating instances.
  * </p>
  */
-@Data
 @Component
 @ConfigurationProperties(prefix = "application")
 public class WhiteListProperties {
@@ -48,4 +47,30 @@ public class WhiteListProperties {
      * @return a {@link List} of {@link WhiteList} objects.
      */
     private List<WhiteList> whiteList;
+
+    public WhiteListProperties() {}
+
+    public WhiteListProperties(List<WhiteList> whiteList) {
+        this.whiteList = whiteList;
+    }
+
+    public List<WhiteList> getWhiteList() {
+        return whiteList;
+    }
+
+    public void setWhiteList(List<WhiteList> whiteList) {
+        this.whiteList = whiteList;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof WhiteListProperties that)) return false;
+        return Objects.equals(getWhiteList(), that.getWhiteList());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getWhiteList());
+    }
 }

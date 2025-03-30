@@ -16,8 +16,9 @@
 package com.reactify.filter.webclient;
 
 import java.util.List;
-import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.reactive.function.client.ClientRequest;
 import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.ExchangeFilterFunction;
@@ -40,12 +41,24 @@ import reactor.core.publisher.Mono;
  * obfuscation.
  * </p>
  *
- * @param obfuscateHeader
- *            A list of header names that should be obfuscated in the logs.
  * @author hoangtien2k3
  */
-@Slf4j
-public record WebClientLoggingFilter(List<String> obfuscateHeader) implements ExchangeFilterFunction {
+public class WebClientLoggingFilter implements ExchangeFilterFunction {
+
+    /**
+     * A static logger instance for logging messages
+     */
+    private static final Logger log = LoggerFactory.getLogger(WebClientLoggingFilter.class);
+
+    /**
+     * A list of header names that should be obfuscated in the logs.
+     */
+    private final List<String> obfuscateHeader;
+
+    public WebClientLoggingFilter(List<String> obfuscateHeader) {
+        this.obfuscateHeader = obfuscateHeader;
+    }
+
     /** Constant <code>OBFUSCATE_HEADER="xxxxx"</code> */
     private static final String OBFUSCATE_HEADER = "xxxxx";
 

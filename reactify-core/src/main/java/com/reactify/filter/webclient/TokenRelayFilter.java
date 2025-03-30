@@ -15,9 +15,10 @@
  */
 package com.reactify.filter.webclient;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.context.ReactiveSecurityContextHolder;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
@@ -51,9 +52,14 @@ import reactor.core.publisher.Mono;
  * @see JwtAuthenticationToken
  * @author hoangtien2k3
  */
-@Slf4j
-@RequiredArgsConstructor
 public class TokenRelayFilter implements ExchangeFilterFunction {
+
+    /**
+     * A static logger instance for logging messages
+     */
+    private static final Logger log = LoggerFactory.getLogger(TokenRelayFilter.class);
+
+    public TokenRelayFilter() {}
 
     /**
      * <p>
@@ -78,22 +84,19 @@ public class TokenRelayFilter implements ExchangeFilterFunction {
                 .map(SecurityContext::getAuthentication)
                 .flatMap(authentication -> {
                     // Fetch token from authentication mechanism
-                    String token = (authentication == null)
-                            ? null
-                            : ((JwtAuthenticationToken) authentication)
-                                    .getToken()
-                                    .getTokenValue();
-
+                    String token = Optional.ofNullable(authentication)
+                            .filter(auth -> auth instanceof JwtAuthenticationToken)
+                            .map(auth ->
+                                    ((JwtAuthenticationToken) auth).getToken().getTokenValue())
+                            .orElse(null);
                     if (token == null) {
                         log.debug("No token found in the security context. Proceeding with the original request.");
                         return next.exchange(request);
                     }
-
                     // Add token to the request header
                     ClientRequest newRequest = ClientRequest.from(request)
                             .headers(headers -> headers.setBearerAuth(token))
                             .build();
-
                     // Proceed with the modified request
                     return next.exchange(newRequest);
                 })

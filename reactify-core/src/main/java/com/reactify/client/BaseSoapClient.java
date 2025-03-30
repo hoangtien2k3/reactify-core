@@ -35,6 +35,7 @@ import reactor.core.publisher.Mono;
  * @author hoangtien2k3
  */
 public interface BaseSoapClient<T> {
+
     /**
      * Makes a SOAP call with the specified WebClient instance, HTTP headers, and
      * payload, returning an optional result wrapped in a reactive Mono.
@@ -65,22 +66,4 @@ public interface BaseSoapClient<T> {
      * @return a Mono containing the raw response as a string.
      */
     Mono<String> callRaw(WebClient webClient, Map<String, String> headerList, String payload);
-
-    /**
-     * Makes a SOAP call using version 2 of the API configuration, with the provided
-     * WebClient instance, HTTP headers, and payload. Returns an optional result
-     * wrapped in a reactive Mono.
-     *
-     * @param webClient
-     *            the WebClient instance used to make the SOAP call.
-     * @param headerList
-     *            a map of HTTP headers to include in the request.
-     * @param payload
-     *            the SOAP request payload as a string.
-     * @param resultClass
-     *            the class of the expected response object type.
-     * @return a Mono containing an Optional result of type {@code T}, or an empty
-     *         Optional if no data was returned.
-     */
-    Mono<Optional<T>> callV2(WebClient webClient, Map<String, String> headerList, String payload, Class<?> resultClass);
 }

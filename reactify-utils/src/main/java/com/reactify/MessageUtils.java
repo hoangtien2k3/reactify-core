@@ -18,15 +18,20 @@ package com.reactify;
 import java.text.MessageFormat;
 import java.util.Locale;
 import java.util.ResourceBundle;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.i18n.LocaleContextHolder;
 
 /**
  * Utility class for data manipulation and processing. This class contains
  * static methods for various data-related operations.
  */
-@Slf4j
 public class MessageUtils {
+
+    /**
+     * A static logger instance for logging messages
+     */
+    private static final Logger log = LoggerFactory.getLogger(AppUtils.class);
 
     private static final String BASE_NAME = "messages";
 

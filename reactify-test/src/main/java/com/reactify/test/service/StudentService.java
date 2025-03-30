@@ -15,22 +15,83 @@
  */
 package com.reactify.test.service;
 
-import com.reactify.LocalCache;
+import com.reactify.CacheStore;
+import com.reactify.DataUtil;
+import com.reactify.exception.BusinessException;
+import com.reactify.request.LocalCacheRequest;
 import com.reactify.test.model.Student;
 import org.springframework.stereotype.Service;
-import java.util.Arrays;
+import reactor.core.publisher.Mono;
+
 import java.util.List;
 
 @Service
 public class StudentService {
-    @LocalCache
-    public List<Student> getAllStudents() {
-        // Fack dữ liệu học sinh
-        return Arrays.asList(
+    public Mono<List<Student>> getAllStudents() {
+        // fake list student test
+        List<Student> listStudent = List.of(
                 new Student(1L, "Nguyen Van A", 16, "10A1"),
                 new Student(2L, "Tran Thi B", 17, "11B2"),
                 new Student(3L, "Le Minh C", 15, "9C3"),
-                new Student(4L, "Pham Thi D", 18, "12D4")
+                new Student(4L, "Pha Thi D", 18, "12D4")
         );
+        return Mono.just(listStudent);
+    }
+
+    private static final String reflectionPath = "com.reactify";
+
+    public Mono<Integer> clearCacheByName(LocalCacheRequest request) {
+        String type =  request.getType();
+        String nameCache = request.getNameCache();
+
+        if (DataUtil.isNullOrEmpty(type)) {
+            return Mono.error(new BusinessException("CCBN00001", "local.cache.type"));
+        }
+
+        if (!List.of("SERVICE_LEVEL", "METHOD_LEVEL", "ALL_LEVEL").contains(type)) {
+            return Mono.error(new BusinessException("CCBN00002", "local.cache.not.allow"));
+        }
+
+        if ("ALL_LEVEL".equals(type)) {
+            return Mono.defer(() -> {
+                try {
+                    int count  = CacheStore.clearAllCaches();
+                    return Mono.just(count);
+                } catch (Exception ex) {
+                    return Mono.error(new BusinessException("CCBN00003", "removeCache.fault"));
+                }
+            });
+        }
+
+        if (nameCache == null || nameCache.isEmpty()) {
+            return Mono.error(new BusinessException("CCBN00004", "local.cache.nameCache"));
+        }
+
+        return Mono.defer(() -> {
+            try {
+                if ("SERVICE_LEVEL".equals(type)) {
+                    int count = CacheStore.clearCachesInServiceName(reflectionPath + "." + nameCache);
+                    return Mono.just(count);
+                }
+
+                if ("METHOD_LEVEL".equals(type)) {
+                    int count = CacheStore.clearCachesByName(nameCache);
+                    return Mono.just(count);
+                }
+
+                return Mono.error(new BusinessException("CCBN00005", "removeCache.fault"));
+            } catch (Exception ex) {
+
+                return Mono.error(new BusinessException("CCBN00006", "removeCache.fault"));
+            }
+        });
+    }
+
+    public Mono<List<String>> getLstCache() {
+        return Mono.just(CacheStore.getCaches());
+    }
+
+    public Mono<Integer> clearAllCaches() {
+        return Mono.just(CacheStore.clearAllCaches());
     }
 }

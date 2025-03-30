@@ -27,19 +27,35 @@ package com.reactify.filter.properties;
  * sets all host and port values to null.
  * </p>
  *
- * @param enable
- *            a boolean indicating whether the proxy is enabled
- * @param httpHost
- *            the host for HTTP connections
- * @param httpPort
- *            the port for HTTP connections
- * @param httpsHost
- *            the host for HTTPS connections
- * @param httpsPort
- *            the port for HTTPS connections
  * @author hoangtien2k3
  */
-public record ProxyProperties(boolean enable, String httpHost, Integer httpPort, String httpsHost, Integer httpsPort) {
+public class ProxyProperties {
+
+    /**
+     * a boolean indicating whether the proxy is enabled
+     */
+    private final boolean enable;
+
+    /**
+     * the host for HTTP connections
+     */
+    private final String httpHost;
+
+    /**
+     * the port for HTTP connections
+     */
+    private final Integer httpPort;
+
+    /**
+     * the host for HTTPS connections
+     */
+    private final String httpsHost;
+
+    /**
+     * the port for HTTPS connections
+     */
+    private final Integer httpsPort;
+
     /**
      * <p>
      * Constructor for ProxyProperties.
@@ -47,5 +63,33 @@ public record ProxyProperties(boolean enable, String httpHost, Integer httpPort,
      */
     public ProxyProperties() {
         this(false, null, null, null, null);
+    }
+
+    public ProxyProperties(boolean enable, String httpHost, Integer httpPort, String httpsHost, Integer httpsPort) {
+        this.enable = enable;
+        this.httpHost = httpHost;
+        this.httpPort = httpPort;
+        this.httpsHost = httpsHost;
+        this.httpsPort = httpsPort;
+    }
+
+    public boolean isEnable() {
+        return enable;
+    }
+
+    public String getHttpHost() {
+        return httpHost;
+    }
+
+    public Integer getHttpPort() {
+        return httpPort;
+    }
+
+    public String getHttpsHost() {
+        return httpsHost;
+    }
+
+    public Integer getHttpsPort() {
+        return httpsPort;
     }
 }

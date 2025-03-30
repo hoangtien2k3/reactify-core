@@ -16,8 +16,9 @@
 package com.reactify.filter.webclient;
 
 import com.reactify.filter.properties.RetryProperties;
-import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.NestedExceptionUtils;
 import org.springframework.web.reactive.function.client.ClientRequest;
 import org.springframework.web.reactive.function.client.ClientResponse;
@@ -41,13 +42,24 @@ import reactor.util.retry.Retry;
  * the case of transient failures.
  * </p>
  *
- * @param properties
- *            the {@link RetryProperties} defining retry behavior, including
- *            retry count, applicable HTTP methods, and exceptions to retry
  * @author hoangtien2k3
  */
-@Slf4j
-public record WebClientRetryHandler(RetryProperties properties) implements ExchangeFilterFunction {
+public class WebClientRetryHandler implements ExchangeFilterFunction {
+
+    /**
+     * A static logger instance for logging messages
+     */
+    private static final Logger log = LoggerFactory.getLogger(WebClientRetryHandler.class);
+
+    /**
+     * the {@link RetryProperties} defining retry behavior, including retry count,
+     * applicable HTTP methods, and exceptions to retry
+     */
+    private final RetryProperties properties;
+
+    public WebClientRetryHandler(RetryProperties properties) {
+        this.properties = properties;
+    }
 
     /**
      * {@inheritDoc}
@@ -61,9 +73,9 @@ public record WebClientRetryHandler(RetryProperties properties) implements Excha
     @NotNull
     @Override
     public Mono<ClientResponse> filter(@NotNull ClientRequest request, ExchangeFunction next) {
-        Retry retry = Retry.max(properties.count())
-                .filter(e -> properties.methods().contains(request.method())
-                        && properties.exceptions().stream()
+        Retry retry = Retry.max(properties.getCount())
+                .filter(e -> properties.getMethods().contains(request.method())
+                        && properties.getExceptions().stream()
                                 .anyMatch(clazz ->
                                         clazz.isInstance(e) || clazz.isInstance(NestedExceptionUtils.getRootCause(e))))
                 .doBeforeRetry(retrySignal -> {

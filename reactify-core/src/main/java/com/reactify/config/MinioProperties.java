@@ -15,7 +15,7 @@
  */
 package com.reactify.config;
 
-import lombok.Data;
+import java.util.Objects;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
@@ -33,10 +33,10 @@ import org.springframework.stereotype.Component;
  *
  * @author hoangtien2k3
  */
-@Data
 @Component
 @ConfigurationProperties(prefix = "minio")
 public class MinioProperties {
+
     /**
      * <p>
      * The base URL of the Minio server.
@@ -76,4 +76,62 @@ public class MinioProperties {
      *
      */
     private String bucket;
+
+    public MinioProperties() {}
+
+    public String getBaseUrl() {
+        return baseUrl;
+    }
+
+    public void setBaseUrl(String baseUrl) {
+        this.baseUrl = baseUrl;
+    }
+
+    public String getPublicUrl() {
+        return publicUrl;
+    }
+
+    public void setPublicUrl(String publicUrl) {
+        this.publicUrl = publicUrl;
+    }
+
+    public String getAccessKey() {
+        return accessKey;
+    }
+
+    public void setAccessKey(String accessKey) {
+        this.accessKey = accessKey;
+    }
+
+    public String getSecretKey() {
+        return secretKey;
+    }
+
+    public void setSecretKey(String secretKey) {
+        this.secretKey = secretKey;
+    }
+
+    public String getBucket() {
+        return bucket;
+    }
+
+    public void setBucket(String bucket) {
+        this.bucket = bucket;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof MinioProperties that)) return false;
+        return Objects.equals(getBaseUrl(), that.getBaseUrl())
+                && Objects.equals(getPublicUrl(), that.getPublicUrl())
+                && Objects.equals(getAccessKey(), that.getAccessKey())
+                && Objects.equals(getSecretKey(), that.getSecretKey())
+                && Objects.equals(getBucket(), that.getBucket());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getBaseUrl(), getPublicUrl(), getAccessKey(), getSecretKey(), getBucket());
+    }
 }

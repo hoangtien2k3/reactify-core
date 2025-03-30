@@ -17,8 +17,7 @@ package com.reactify.filter.properties;
 
 import com.reactify.model.logging.HttpLogRequest;
 import com.reactify.model.logging.HttpLogResponse;
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import java.util.Objects;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
@@ -39,9 +38,7 @@ import org.springframework.stereotype.Component;
  *
  * @author hoangtien2k3
  */
-@Data
 @Component
-@RequiredArgsConstructor
 @ConfigurationProperties(prefix = "application.http-logging", ignoreInvalidFields = true)
 public class HttpLogProperties {
 
@@ -54,4 +51,39 @@ public class HttpLogProperties {
      * Properties related to HTTP response logging.
      */
     private HttpLogResponse response = new HttpLogResponse();
+
+    public HttpLogRequest getRequest() {
+        return request;
+    }
+
+    public void setRequest(HttpLogRequest request) {
+        this.request = request;
+    }
+
+    public HttpLogResponse getResponse() {
+        return response;
+    }
+
+    public void setResponse(HttpLogResponse response) {
+        this.response = response;
+    }
+
+    public HttpLogProperties() {}
+
+    public HttpLogProperties(HttpLogRequest request, HttpLogResponse response) {
+        this.request = request;
+        this.response = response;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof HttpLogProperties that)) return false;
+        return Objects.equals(getRequest(), that.getRequest()) && Objects.equals(getResponse(), that.getResponse());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getRequest(), getResponse());
+    }
 }

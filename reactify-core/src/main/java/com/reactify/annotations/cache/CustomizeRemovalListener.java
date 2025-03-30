@@ -18,9 +18,10 @@ package com.reactify.annotations.cache;
 import com.github.benmanes.caffeine.cache.RemovalCause;
 import com.github.benmanes.caffeine.cache.RemovalListener;
 import java.lang.reflect.Method;
-import lombok.extern.slf4j.Slf4j;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * <p>
@@ -38,8 +39,12 @@ import org.checkerframework.checker.nullness.qual.Nullable;
  *
  * @author hoangtien2k3
  */
-@Slf4j
 public class CustomizeRemovalListener implements RemovalListener<Object, Object> {
+
+    /**
+     * A static logger instance for logging messages
+     */
+    private static final Logger log = LoggerFactory.getLogger(CustomizeRemovalListener.class);
 
     private final Method method;
 

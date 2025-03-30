@@ -16,7 +16,6 @@
 package com.reactify.filter.http;
 
 import java.util.function.Supplier;
-import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 import org.reactivestreams.Publisher;
 import org.springframework.core.io.buffer.DataBuffer;
@@ -68,9 +67,12 @@ public class CachedBodyOutputMessage implements ReactiveHttpOutputMessage {
      * The body of the HTTP response, stored as a {@link Flux<DataBuffer>}.
      * Initially, it is set to an error state until the body is defined.
      */
-    @Getter
     private Flux<DataBuffer> body =
             Flux.error(new IllegalStateException("The body is not set. Did handling complete with success?"));
+
+    public Flux<DataBuffer> getBody() {
+        return body;
+    }
 
     /**
      * <p>
