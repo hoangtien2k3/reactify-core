@@ -37,8 +37,12 @@ import java.time.Duration;
 import java.util.*;
 
 /**
+ * The {@code CacheStore} class is responsible for managing local caches using Caffeine.
+ * It automatically initializes caches based on methods annotated with {@link LocalCache},
+ * supports retrieving caches by name, and provides functionalities to clear specific or all caches.
  * <p>
- * CacheStore class.
+ * This class also supports auto-loading caches on application startup and integrates with Spring's
+ * application context lifecycle events.
  * </p>
  *
  * @author hoangtien2k3
@@ -51,8 +55,13 @@ public class CacheStore implements ApplicationContextAware {
      */
     private static final Logger log = LoggerFactory.getLogger(CacheStore.class);
 
+    /** Stores the caches mapped by their names. */
     private static final HashMap<String, Cache<Object, Object>> caches = new HashMap<>();
+
+    /** Stores methods annotated with {@link LocalCache} that require auto-loading. */
     private static final Set<Method> autoLoadMethods = new HashSet<>();
+
+    /** The base package for scanning cache-related methods. */
     private static String reflectionPath;
 
     @PostConstruct
@@ -61,6 +70,7 @@ public class CacheStore implements ApplicationContextAware {
         Reflections reflections = new Reflections(reflectionPath, Scanners.MethodsAnnotated);
         Set<Method> methods =
                 reflections.get(Scanners.MethodsAnnotated.with(LocalCache.class).as(Method.class));
+        log.info("Found {} methods annotated with @LocalCache", methods.size());
         for (Method method : methods) {
             String className = method.getDeclaringClass().getSimpleName();
             LocalCache localCache = method.getAnnotation(LocalCache.class);
@@ -115,30 +125,19 @@ public class CacheStore implements ApplicationContextAware {
     }
 
     /**
-     * Clear localCache by serviceName
+     * Clears the specified cache by name.
      *
-     * @param serviceName
-     *            String
-     * @return count of cleared caches
-     */
-    public static int clearCachesInServiceName(String serviceName) {
-        return (int) caches.entrySet().stream()
-                .filter(entry -> entry.getKey().contains(serviceName))
-                .peek(entry -> entry.getValue().invalidateAll())
-                .count();
-    }
-
-    /**
-     * clear localCache by cacheName
-     *
-     * @param cacheName
-     *            String
-     * @return count of cleared caches
+     * @param cacheName the name of the cache to clear
+     * @return the number of cleared caches (0 or 1)
      */
     public static int clearCachesByName(String cacheName) {
+        log.info("Clearing cache: {}", cacheName);
         return (int) caches.entrySet().stream()
                 .filter(entry -> entry.getKey().equals(cacheName))
-                .peek(entry -> entry.getValue().invalidateAll())
+                .peek(entry -> {
+                    entry.getValue().invalidateAll();
+                    log.info("Cache {} cleared", entry.getKey());
+                })
                 .count();
     }
 
@@ -148,36 +147,41 @@ public class CacheStore implements ApplicationContextAware {
      * @return count of cleared caches
      */
     public static int clearAllCaches() {
-        log.info("Before clearing, cache size: {}", caches.size());
+        log.info("Clearing all caches");
         int count = 0;
         for (Map.Entry<String, Cache<Object, Object>> entry : caches.entrySet()) {
             count ++;
             entry.getValue().invalidateAll();
+            log.info("Cleared cache: {}", entry.getKey());
         }
-        log.info("After clearing, cleared {} caches", count);
         return count;
     }
 
     /**
-     * <p>
-     * autoLoad.
-     * </p>
+     * Automatically loads caches for methods annotated with {@link LocalCache} that support auto-loading.
      *
-     * @param event
-     *            a {@link ContextRefreshedEvent} object
+     * @param event the application context refresh event
      */
     @Async
     @EventListener
     public void autoLoad(ContextRefreshedEvent event) {
+        log.info("Received ContextRefreshedEvent: {}", event.getApplicationContext());
         if (!autoLoadMethods.isEmpty()) {
-            log.info("=====> Start auto load {} cache <=====", autoLoadMethods.size());
+            log.info("=====> Start auto-loading {} caches <=====", autoLoadMethods.size());
             for (Method method : autoLoadMethods) {
                 CacheUtils.invokeMethod(method);
+                log.info("Auto-loaded cache for method: {}", method.getName());
             }
-            log.info("=====> Finish auto load cache <=====");
+            log.info("=====> Finished auto-loading caches <=====");
         }
     }
 
+    /**
+     * Sets the application context and determines the base package for scanning cache methods.
+     *
+     * @param applicationContext the application context
+     * @throws BeansException if an error occurs while setting the context
+     */
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         Class<?> mainApplicationClass = applicationContext
@@ -187,5 +191,6 @@ public class CacheStore implements ApplicationContextAware {
                 .next()
                 .getClass();
         reflectionPath = mainApplicationClass.getPackageName();
+        log.info("Set reflection path for cache scanning: {}", reflectionPath);
     }
 }

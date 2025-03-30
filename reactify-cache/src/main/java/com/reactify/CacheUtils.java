@@ -56,41 +56,25 @@ public class CacheUtils {
      *            a {@link Method} object representing the method to be invoked
      */
     public static void invokeMethod(Method method) {
-        if (method == null) {
-            log.warn("Method reference is null. Skipping invocation.");
-            return;
-        }
-
         try {
             Class<?> declaringClass = method.getDeclaringClass();
             Object beanInstance = ApplicationContextProvider.getBean(declaringClass);
             Object result = method.invoke(beanInstance);
+            String methodName = declaringClass.getSimpleName() + "." + method.getName();
 
-            if (result instanceof Mono<?>) {
-                ((Mono<?>) result)
-                        .subscribe(
-                                success -> log.debug(
-                                        "Successfully executed {}.{}",
-                                        declaringClass.getSimpleName(),
-                                        method.getName()),
-                                error -> log.error(
-                                        "Error executing {}.{}",
-                                        declaringClass.getSimpleName(),
-                                        method.getName(),
-                                        error));
+            if (result instanceof Mono<?> monoResult) {
+                monoResult.subscribe(
+                        success -> log.debug("Successfully executed {}", methodName),
+                        error -> log.error("Error executing {}", methodName, error)
+                );
             } else {
-                log.warn(
-                        "Method {}.{} does not return a Mono<?>. Ensure the cache method is reactive.",
-                        declaringClass.getSimpleName(),
-                        method.getName());
+                log.warn("Method {} does not return a Mono<?>", methodName);
             }
-        } catch (Exception exception) {
-            log.error(
-                    "Error when autoload cache {}.{}.{}",
-                    method.getDeclaringClass().getSimpleName(),
-                    method.getName(),
-                    exception.getMessage(),
-                    exception);
+        } catch (IllegalAccessException e) {
+            log.error("Access violation when invoking method {}: {}", method.getName(), e.getMessage(), e);
+        } catch (Exception e) {
+            log.error("Error when autoload cache {}.{}.{}",
+                    method.getDeclaringClass().getSimpleName(), method.getName(), e.getMessage(), e);
         }
     }
 }

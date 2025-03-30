@@ -78,23 +78,14 @@ public class CacheAspect {
                     try {
                         Object result = joinPoint.proceed(args);
                         if (!(result instanceof Mono<?>)) {
-                            log.error(
-                                    "Method {}.{} must return a Mono<?> but got: {}",
-                                    joinPoint.getTarget().getClass().getSimpleName(),
-                                    joinPoint.getSignature().getName(),
-                                    result.getClass().getSimpleName());
+                            log.warn("Method {} must return a Mono<?> but got: {}", nameCache, result.getClass().getSimpleName());
                             return Mono.error(new IllegalStateException("Method must return Mono<?>"));
                         }
                         @SuppressWarnings("unchecked")
                         var resultCast = (Mono<Object>) result;
                         return resultCast;
                     } catch (Throwable ex) {
-                        log.error(
-                                "Error executing method: {}.{} - {}",
-                                joinPoint.getTarget().getClass().getSimpleName(),
-                                joinPoint.getSignature().getName(),
-                                ex.getMessage(),
-                                ex);
+                        log.error("Execution error in {} - {}", nameCache, ex.getMessage(), ex);
                         return Mono.error(ex);
                     }
                 }))

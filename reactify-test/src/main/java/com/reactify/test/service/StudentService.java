@@ -69,11 +69,6 @@ public class StudentService {
 
         return Mono.defer(() -> {
             try {
-                if ("SERVICE_LEVEL".equals(type)) {
-                    int count = CacheStore.clearCachesInServiceName(reflectionPath + "." + nameCache);
-                    return Mono.just(count);
-                }
-
                 if ("METHOD_LEVEL".equals(type)) {
                     int count = CacheStore.clearCachesByName(nameCache);
                     return Mono.just(count);
