@@ -73,7 +73,7 @@
 	<!-- =========================================== -->
 	<properties>
 		<java.version>21</java.version>
-		<maven-compiler-plugin.version>3.13.0</maven-compiler-plugin.version>
+		<maven-compiler-plugin.version>3.14.0</maven-compiler-plugin.version>
 		<central-publishing-maven-plugin.version>0.6.0</central-publishing-maven-plugin.version>
 		<nexus-staging-maven-plugin.version>1.7.0</nexus-staging-maven-plugin.version>
 		<maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
