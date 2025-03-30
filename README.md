@@ -27,6 +27,9 @@ Reactor Core, designed to streamline backend development with essential tools fo
 
 ## Table of contents
 
+<details>
+<summary><b>📖 Table of Contents</b></summary>
+
 - [Getting started](#getting-started)
 - [Tutorials](#tutorials)
 - [Configs](#configs)
@@ -44,6 +47,8 @@ Reactor Core, designed to streamline backend development with essential tools fo
 - [Star History](#star-history)
 - [Contributors](#contributors)
 - [License](#license)
+
+</details>
 
 ## Getting Started
 
@@ -107,27 +112,11 @@ dependencies {
 
 ### Reactify core configs
 
-1. Add the dependency in `build.gradle` or `maven` pom
-
-```yaml
-dependencies {
-  implementation("io.github.hoangtien2k3:reactify-core:1.2.8")
-}
-```
-
-```maven
-<dependency>
-   <groupId>io.github.hoangtien2k3</groupId>
-   <artifactId>reactify-core</artifactId>
-   <version>1.2.8</version>
-</dependency>
-```
-
-2. Config your project file `application.yml` or `application.properties`
+Config your project file `application.yml` or `application.properties`
 
 - Required security configuration `Oauth2 with Keycloak`:
-    - Install keycloak and postgresql on docker [docker-compose](docker-compose.yml)
-    - Next configure in the `application.yml` resource file
+- Install keycloak and postgresql on docker [docker-compose](docker-compose.yml)
+- Next configure in the `application.yml` resource file
 
 ```yml
 spring:
@@ -161,41 +150,27 @@ keycloak:
 
 ### Reactify cache configs
 
-1. Add the dependency in `build.gradle` or `maven` pom
+Use library with @LocalCache annotation
 
-```yaml
-dependencies {
-  implementation("io.github.hoangtien2k3:reactify-cache:1.2.3")
+```java
+@LocalCache(
+    durationInMinute = 30, //cache duration in minutes
+    maxRecord = 10000,     //maximum cache size
+    autoCache = true       //true to enable automatic caching, false otherwise
+)
+@GetMapping("/students")
+public Mono<List<Student>> getStudents() {
+    var lstStudent = studentService.getAllStudents();
+    if (DataUtil.isNullOrEmpty(lstStudent)) {
+        return null;
+    }
+    return lstStudent;
 }
-```
-
-```maven
-<dependency>
-   <groupId>io.github.hoangtien2k3</groupId>
-   <artifactId>reactify-cache</artifactId>
-   <version>1.2.3</version>
-</dependency>
 ```
 
 ### Reactify client configs
 
-1. Add the dependency in `build.gradle` or `maven` pom
-
-```yaml
-dependencies {
-  implementation("io.github.hoangtien2k3:reactify-client:1.2.3")
-}
-```
-
-```maven
-<dependency>
-   <groupId>io.github.hoangtien2k3</groupId>
-   <artifactId>reactify-client</artifactId>
-   <version>1.2.3</version>
-</dependency>
-```
-
-2. Configuration in `application.yml` file
+Configuration in `application.yml` or `application.properties` file
 
 ```yml
 # web client config
@@ -212,28 +187,14 @@ client:
       write: 1000
 ```
 
-3. Using Rest/Soap API calls
+Using Rest/Soap API calls
 
-    - See configuration demo in
+- See configuration demo in
       client [reactify-test](https://github.com/hoangtien2k3/reactify-core/tree/main/reactify-test/src/main/java/com/reactify/test/client)
 
 ### Reactify utils configs
 
-1. Add the dependency in `build.gradle` or `maven` pom
-
-```yaml
-dependencies {
-  implementation("io.github.hoangtien2k3:reactify-utils:1.2.3")
-}
-```
-
-```maven
-<dependency>
-   <groupId>io.github.hoangtien2k3</groupId>
-   <artifactId>reactify-utils</artifactId>
-   <version>1.2.3</version>
-</dependency>
-```
+Just add `maven pom` or `build.gradle` and use the utilities available in reactify-utils
 
 ## Features
 
