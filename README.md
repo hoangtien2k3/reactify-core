@@ -27,8 +27,6 @@ Reactor Core, designed to streamline backend development with essential tools fo
 
 ## Table of contents
 
-<summary><b>📖 Table of Contents</b></summary>
-
 - [Getting started](#getting-started)
 - [Tutorials](#tutorials)
 - [Configs](#configs)
