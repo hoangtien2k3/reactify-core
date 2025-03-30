@@ -6,31 +6,112 @@
 <a href="https://github.com/hoangtien2k3/keycloak-auth-service">✨Live Demo</a>
 </h3>
 
-##
+## Reactify - Powerful Reactive Java Library for Spring WebFlux
 
-Reactify-core `Java lib` with spring boot framework, Supports using keycloak, filter, trace log, cached, minio
-server, exception handler, validate and call API with webclient
-
-This README provides quickstart instructions on running [`reactify-core`]() on bare metal project spring boot.
-
-[![SonarCloud](https://sonarcloud.io/images/project_badges/sonarcloud-white.svg)](https://sonarcloud.io/summary/new_code?id=hoangtien2k3_reactify)
-
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=hoangtien2k3_reactify&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=hoangtien2k3_reactify)
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=hoangtien2k3_reactify&metric=ncloc)](https://sonarcloud.io/summary/overall?id=hoangtien2k3_reactify)
 [![GitHub Release](https://img.shields.io/github/v/release/hoangtien2k3/reactify?label=latest%20release)](https://mvnrepository.com/artifact/io.github.hoangtien2k3/reactify-core)
 [![License](https://img.shields.io/badge/license-Apache--2.0-green.svg)](https://www.apache.org/licenses/LICENSE-2.0.html)
 [![OpenSSF Best Practices](https://www.bestpractices.dev/projects/9383/badge)](https://www.bestpractices.dev/projects/9383)
 [![Build status](https://github.com/ponfee/commons-core/workflows/build-with-maven/badge.svg)](https://github.com/hoangtien2k3/reactify/actions)
 
+🚀 Supercharge your reactive microservices with Reactify – a high-performance Java library built on Spring WebFlux and
+Reactor Core, designed to streamline backend development with essential tools for modern reactive systems.
+
+🔥 Features
+
+- ✔ Seamless Keycloak Integration – Secure your apps effortlessly with built-in Keycloak support.
+- ✔ Smart Caching – Boost performance with reactive caching mechanisms.
+- ✔ Utility Helpers – Handy utilities to reduce boilerplate and speed up development.
+- ✔ Reactive API Client – Effortless HTTP calls with non-blocking, reactive HTTP clients.
+- ✔ Optimized for Microservices – Lightweight, fast, and built for scalable architectures.
+
+## Table of contents
+
+- [Getting started](#getting-started)
+- [Tutorials](#tutorials)
+- [Configs](#configs)
+    - [reactify-core configs](#reactify-core-configs)
+    - [reactify-cache configs](#reactify-cache-configs)
+    - [reactify-client configs](#reactify-client-configs)
+    - [reactify-utils configs](#reactify-utils-configs)
+- [Features](#features)
+    - [Local cache](#local-cache)
+    - [Call api](#call-api)
+    - [Data utils](#data-utils)
+    - [More](#more)
+- [Project demo](#project-demo)
+- [Contributing](#contributing)
+- [Star History](#star-history)
+- [Contributors](#contributors)
+- [License](#license)
+
 ## Getting Started
 
-Gradle is the only supported build configuration, so just add the dependency to your project build.gradle file:
+Add the dependency to your project build.gradle file or maven pom:
 
 ⬇️ Download Gradle and Maven
 
 ```kotlin
 dependencies {
-    implementation("io.github.hoangtien2k3:reactify-core:1.2.7")
+    //Core reactive framework with Spring WebFlux integration 
+    implementation("io.github.hoangtien2k3:reactify-core:1.2.8")
+
+    //In-memory reactive caching for high-speed data access
+    implementation("io.github.hoangtien2k3:reactify-cache:1.2.3")
+
+    //Reactive REST/SOAP client with fault-tolerant design
+    implementation("io.github.hoangtien2k3:reactify-client:1.2.3")
+
+    //Essential utilities for reactive development
+    implementation("io.github.hoangtien2k3:reactify-utils:1.2.3")
+}
+```
+
+```maven
+<dependencies>
+   <!-- Core reactive framework with Spring WebFlux integration -->
+   <dependency>
+      <groupId>io.github.hoangtien2k3</groupId>
+      <artifactId>reactify-core</artifactId>
+      <version>1.2.8</version>
+   </dependency>
+   
+   <!-- In-memory reactive caching for high-speed data access -->
+   <dependency>
+      <groupId>io.github.hoangtien2k3</groupId>
+      <artifactId>reactify-cache</artifactId>
+      <version>1.2.3</version>
+   </dependency>
+   
+   <!-- Reactive REST/SOAP client with fault-tolerant design -->
+   <dependency>
+      <groupId>io.github.hoangtien2k3</groupId>
+      <artifactId>reactify-client</artifactId>
+      <version>1.2.3</version>
+   </dependency>
+   
+   <!-- Essential utilities for reactive development -->
+   <dependency>
+      <groupId>io.github.hoangtien2k3</groupId>
+      <artifactId>reactify-utils</artifactId>
+      <version>1.2.3</version>
+   </dependency>
+</dependencies>
+```
+
+## Tutorials
+
+- Document: [https://reactify-sand.vercel.app](https://reactify-sand.vercel.app)
+
+## Configs
+
+### Reactify core configs
+
+1. Add the dependency in `build.gradle` or `maven` pom
+
+```yaml
+dependencies {
+  implementation("io.github.hoangtien2k3:reactify-core:1.2.8")
 }
 ```
 
@@ -38,33 +119,17 @@ dependencies {
 <dependency>
    <groupId>io.github.hoangtien2k3</groupId>
    <artifactId>reactify-core</artifactId>
-   <version>1.2.7</version>
+   <version>1.2.8</version>
 </dependency>
 ```
 
-The latest `reactify-core` version
-is: [![GitHub Release](https://img.shields.io/github/v/release/hoangtien2k3/reactify?label=latest)](https://mvnrepository.com/artifact/io.github.hoangtien2k3/reactify-core)
-
-The latest stable lib `reactify-core` version is: latestVersion
-Click [here](https://central.sonatype.com/namespace/io.github.hoangtien2k3) for more information on reactify.
-
-1. Correct and complete setup to start the program `application.yml` or `application.properties`
-   with [CONFIG](src/main/resources/application.yml)
-
-2. The [reference documentation]() includes detailed [installation instructions]() as well as a
-   comprehensive [getting started]() guide.
-
-Here is a quick teaser of a complete Spring Boot application in Java:
-
-## Start Using Lib `reactify-core`
-
-#### 1. Use annotation [`@ComponentScan`]() to scan all libraries
+2. Use annotation [`@ComponentScan`]() to scan all libraries
 
 ```java
 
 @ComponentScan(basePackages = {
-        "com.reactify.*",           // add default: com.reactify.*
-        "com.example.myproject"     // varies depending on your project
+        "com.reactify",           //Add required default: com.reactify
+        "com.example.myproject"   //Change according to your project path
 })
 @SpringBootApplication
 public class ExampleApplication {
@@ -74,60 +139,15 @@ public class ExampleApplication {
 }
 ```
 
-#### 2. Config your project file `application.yml` or `application.properties`
+3. Config your project file `application.yml` or `application.properties`
 
-**Required oauth2 configuration**:
-```yml
-spring:
-   # Config OAuth2 Keycloak
-   security:
-      oauth2:
-         client:
-            provider:
-               oidc:
-                  token-uri: ${keycloak.serverUrl}/realms/${keycloak.realm}/protocol/openid-connect/token
-            registration:
-               oidc:
-                  client-id: ${keycloak.clientId}
-                  client-secret: ${keycloak.clientSecret}
-                  authorization-grant-type: ${keycloak.grantType} #password || #client_credentials
-         resourceserver:
-            jwt:
-               jwk-set-uri: ${keycloak.serverUrl}/realms/${keycloak.realm}/protocol/openid-connect/certs
-         keycloak:
-            client-id: ${keycloak.clientId}
-            
-#keycloak client config
-keycloak:
-   clientId: ezbuy-client
-   clientSecret: mI92QDfvi20tZgFtjpRAPWu8TR6eMHmw
-   realm: ezbuy-server
-   serverUrl: http://localhost:8080
-   grantType: password
-   host: localhost
-```
-
-**Configure further if required**:
+- Required security configuration `Oauth2 with Keycloak`:
+    - Install keycloak and postgresql on docker [docker-compose](docker-compose.yml)
+    - Next configure in the `application.yml` resource file
 
 ```yml
-# spring config
 spring:
-  main:
-    web-application-type: reactive
-    allow-bean-definition-overriding: true
-  messages:
-    basename: i18n/messages
-
-  #connect db R2DBC PostgreSQL || MySQL || MariaDB ...
-  r2dbc:
-    url: r2dbc:postgresql://localhost:5434/auth
-    username: admin
-    password: admin
-    pool:
-      max-size: 10
-      initial-size: 5
-
-  # Config connect Keycloak
+  # Config OAuth2 Keycloak
   security:
     oauth2:
       client:
@@ -145,52 +165,6 @@ spring:
       keycloak:
         client-id: ${keycloak.clientId}
 
-# Web client config
-client:
-  #keycloak
-  keycloak:
-    address: http://localhost:8080/realms/ezbuy-server/protocol/openid-connect
-    name: keycloak
-    auth:
-      client-id: ezbuy-client
-      client-secret: mI92QDfvi20tZgFtjpRAPWu8TR6eMHmw
-  #notification
-  notification:
-    internal-oauth: true
-    address: http://localhost:7777/v1/transmission
-    name: notiServiceClient
-    pool:
-      max-size: 100
-      max-pending-acquire: 100
-    timeout:
-      read: 60000
-      write: 1000
-
-# Unauthenticated endpoints config
-application:
-  http-logging:
-    request:
-      enable: true
-      header: true
-      param: true
-      body: true
-    response:
-      enable: true
-      body: true
-  whiteList:
-    - uri: /v1/auth/generate-otp
-      methods:
-        - POST
-    - uri: /**
-      methods:
-        - OPTIONS
-    - uri: /v1/auth/get-all
-      methods:
-        - GET
-  data:
-    sync-data:
-      limit: 500
-
 #keycloak client config
 keycloak:
   clientId: ezbuy-client
@@ -199,31 +173,175 @@ keycloak:
   serverUrl: http://localhost:8080
   grantType: password
   host: localhost
-
-# minio server config
-minio:
-  bucket: ezbuy-bucket
-  enabled: true
-  baseUrl: http://localhost:9000
-  publicUrl: http://localhost:9000/ezbuy-bucket
-  accessKey: 4DoaZ0KdzpXdDlVK104t
-  secretKey: nuRiQUIJNVygMOHhmtR4LT1etAa7F8PQOsRGP5oj
-  private:
-    bucket: ezbuy-private
 ```
 
-#### 3. After completing the configuration, start running the project.
+### Reactify cache configs
+
+1. Add the dependency in `build.gradle` or `maven` pom
 
 ```yaml
-  # Using Maven
-  mvn spring-boot:run
-
-  # Using Gradle
-  gradle bootRun
+dependencies {
+  implementation("io.github.hoangtien2k3:reactify-cache:1.2.3")
+}
 ```
 
-#### 4. Refer to the following project, used
-`reactify-core` library for webflux microservice project: [keycloak-auth-service](https://github.com/hoangtien2k3/keycloak-auth-service)
+```maven
+<dependency>
+   <groupId>io.github.hoangtien2k3</groupId>
+   <artifactId>reactify-cache</artifactId>
+   <version>1.2.3</version>
+</dependency>
+```
+
+2. Use annotation [`@ComponentScan`]() to scan all libraries
+
+```java
+
+@ComponentScan(basePackages = {
+        "com.reactify",           //Add required default: com.reactify
+        "com.example.myproject"   //Change according to your project path
+})
+@SpringBootApplication
+public class ExampleApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(Example.class, args);
+    }
+}
+```
+
+### Reactify client configs
+
+1. Add the dependency in `build.gradle` or `maven` pom
+
+```yaml
+dependencies {
+  implementation("io.github.hoangtien2k3:reactify-client:1.2.3")
+}
+```
+
+```maven
+<dependency>
+   <groupId>io.github.hoangtien2k3</groupId>
+   <artifactId>reactify-client</artifactId>
+   <version>1.2.3</version>
+</dependency>
+```
+
+2. Use annotation [`@ComponentScan`]() to scan all libraries
+
+```java
+
+@ComponentScan(basePackages = {
+        "com.reactify",           //Add required default: com.reactify
+        "com.example.myproject"   //Change according to your project path
+})
+@SpringBootApplication
+public class ExampleApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(Example.class, args);
+    }
+}
+```
+
+3. Configuration in `application.yml` file
+
+```yml
+# web client config
+client:
+  #demo notification config
+  notification:
+    address: http://localhost:7878
+    name: notiServiceClient
+    pool:
+      max-size: 100
+      max-pending-acquire: 100
+    timeout:
+      read: 60000
+      write: 1000
+```
+
+4. Using Rest/Soap API calls
+
+    - See configuration demo in
+      client [reactify-test](https://github.com/hoangtien2k3/reactify-core/tree/main/reactify-test/src/main/java/com/reactify/test/client)
+
+### Reactify utils configs
+
+1. Add the dependency in `build.gradle` or `maven` pom
+
+```yaml
+dependencies {
+  implementation("io.github.hoangtien2k3:reactify-utils:1.2.3")
+}
+```
+
+```maven
+<dependency>
+   <groupId>io.github.hoangtien2k3</groupId>
+   <artifactId>reactify-utils</artifactId>
+   <version>1.2.3</version>
+</dependency>
+```
+
+2. Use annotation [`@ComponentScan`]() to scan all libraries
+
+```java
+
+@ComponentScan(basePackages = {
+        "com.reactify",           //Add required default: com.reactify
+        "com.example.myproject"   //Change according to your project path
+})
+@SpringBootApplication
+public class ExampleApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(Example.class, args);
+    }
+}
+```
+
+## Features
+
+### Local cache
+
+```java
+
+@LocalCache(durationInMinute = 30, maxRecord = 10000, autoCache = true)
+@GetMapping("/students")
+public Mono<List<Student>> getStudents() {
+    var lstStudent = studentService.getAllStudents();
+    if (DataUtil.isNullOrEmpty(lstStudent)) {
+        return null;
+    }
+    return lstStudent;
+}
+```
+
+### Call api
+
+```java
+public Mono<GeoPluginResponse> getBaseCurrency(String baseCurrency) {
+    MultiValueMap<String, String> req = new LinkedMultiValueMap<>();
+    req.set("base_currency", baseCurrency);
+    return baseRestClientQualifier.get(baseCurrencyClient, "/json.gp", null, req, GeoPluginResponse.class)
+            .flatMap(optionalResponse -> optionalResponse
+                    .map(Mono::just)
+                    .orElseGet(Mono::empty)
+            );
+}
+```
+
+### Data utils
+
+```java 
+if(DataUtil.isNullOrEmpty(studentDemo)){
+        //TODO 
+        }
+```
+
+## Project demo
+
+- Project using reactify-core library can be
+  referenced: [https://github.com/hoangtien2k3/keycloak-auth-service](https://github.com/hoangtien2k3/keycloak-auth-service)
 
 ## Contributing
 
@@ -241,7 +359,7 @@ If you would like to contribute to the development of this project, please follo
  </picture>
 </a>
 
-## Contributors ✨
+## Contributors
 
 <a href="https://github.com/hoangtien2k3/reactify/graphs/contributors" target="_blank" rel="noopener noreferrer">
   <img src="https://contrib.rocks/image?repo=hoangtien2k3/reactify" alt="Contributors" />
