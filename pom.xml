@@ -64,7 +64,7 @@
 
     <properties>
         <java.version>21</java.version>
-        <spotless.version>2.43.0</spotless.version>
+        <spotless.version>2.44.3</spotless.version>
         <maven-compiler-plugin.version>3.13.0</maven-compiler-plugin.version>
         <maven-surefire-plugin.version>3.4.0</maven-surefire-plugin.version>
         <central-publishing-maven-plugin.version>0.6.0</central-publishing-maven-plugin.version>
