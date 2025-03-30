@@ -16,12 +16,15 @@
 package com.reactify.annotations.cache;
 
 import com.github.benmanes.caffeine.cache.Cache;
-import java.util.Objects;
+import com.reactify.annotations.LocalCache;
+import com.reactify.util.DataUtil;
 import java.util.Optional;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.cache.interceptor.SimpleKeyGenerator;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.util.ClassUtils;
@@ -31,24 +34,12 @@ import reactor.core.publisher.Signal;
 
 /**
  * <p>
- * The {@code CacheAspect} class provides caching functionality for methods
- * annotated with {@link com.reactify.annotations.LocalCache}. This aspect
- * intercepts method calls, checks the cache for existing results, and returns
- * cached results if available. If no cached result is found, the method is
- * executed and the result is stored in the cache for future calls.
+ * Aspect for handling caching via @LocalCache annotation.
  * </p>
  *
  * <p>
- * This class uses Spring AOP (Aspect-Oriented Programming) features to
- * implement caching logic around method executions, providing a way to enhance
- * performance by avoiding redundant computations or data retrievals.
- * </p>
- *
- * <p>
- * The class is annotated with {@link org.aspectj.lang.annotation.Aspect} and
- * {@link org.springframework.context.annotation.Configuration}, making it a
- * Spring managed bean that can intercept method calls. The logging is managed
- * using the Lombok {@link lombok.extern.slf4j.Slf4j} annotation.
+ * This aspect intercepts methods annotated with {@link LocalCache} and provides
+ * caching functionality using Caffeine.
  * </p>
  *
  * @author hoangtien2k3
@@ -58,48 +49,62 @@ import reactor.core.publisher.Signal;
 public class CacheAspect {
 
     /**
-     * <p>
-     * Pointcut that matches methods annotated with
-     * {@link com.reactify.annotations.LocalCache}.
-     * </p>
+     * A static logger instance for logging messages
      */
+    private static final Logger log = LoggerFactory.getLogger(CacheAspect.class);
+
     @Pointcut("@annotation(com.reactify.annotations.LocalCache)")
     private void processAnnotation() {}
 
     /**
      * <p>
-     * Around advice that intercepts method calls annotated with
-     * {@link com.reactify.annotations.LocalCache}. This method checks for a cached
-     * result using the generated key based on the method arguments. If a cached
-     * result is found, it is returned; otherwise, the method is executed, and the
-     * result is stored in the cache.
+     * Handles caching logic for methods annotated with {@link LocalCache}.
      * </p>
      *
      * @param joinPoint
-     *            a {@link org.aspectj.lang.ProceedingJoinPoint} object representing
-     *            the method execution context.
-     * @return an {@link java.lang.Object} that is the result of the method
-     *         execution or the cached result.
-     * @throws java.lang.Throwable
-     *             if any exception occurs during method execution or while
-     *             accessing the cache.
+     *            the intercepted method call
+     * @return cached or computed result
+     * @throws Throwable
+     *             if an exception occurs during method execution
      */
     @Around("processAnnotation()")
     public Object aroundAdvice(ProceedingJoinPoint joinPoint) throws Throwable {
         Object[] args = joinPoint.getArgs();
         Object key = SimpleKeyGenerator.generateKey(args);
-        String name = ClassUtils.getUserClass(joinPoint.getTarget().getClass()).getSimpleName() + "."
-                + joinPoint.getSignature().getName();
-        Cache<Object, Object> cache = CacheStore.getCache(name);
-        return CacheMono.lookup(k -> Mono.justOrEmpty(cache.getIfPresent(key)).map(Signal::next), key)
-                .onCacheMissResume((Mono<Object>) joinPoint.proceed(args))
-                .andWriteWith((k, sig) -> Mono.fromRunnable(() -> {
-                    if (sig != null && sig.get() != null) {
-                        if (!(sig.get() instanceof Optional
-                                && ((Optional<?>) Objects.requireNonNull(sig.get())).isEmpty())) {
-                            cache.put(k, sig.get());
+        String nameCache = ClassUtils.getUserClass(joinPoint.getTarget().getClass())
+                        .getSimpleName() + "." + joinPoint.getSignature().getName();
+        Cache<Object, Object> cache = CacheStore.getCache(nameCache);
+        log.debug("Checking cache for method: {} with key: {}", nameCache, key);
+        return CacheMono.lookup(
+                        k -> Mono.justOrEmpty(!DataUtil.isNullOrEmpty(cache) ? cache.getIfPresent(key) : Mono.empty())
+                                .map(Signal::next),
+                        key)
+                .onCacheMissResume(Mono.defer(() -> {
+                    try {
+                        Object result = joinPoint.proceed(args);
+                        if (!(result instanceof Mono<?>)) {
+                            log.warn(
+                                    "Method {} must return a Mono<?> but got: {}",
+                                    nameCache,
+                                    result.getClass().getSimpleName());
+                            return Mono.error(new IllegalStateException("Method must return Mono<?>"));
                         }
+                        @SuppressWarnings("unchecked")
+                        var resultCast = (Mono<Object>) result;
+                        return resultCast;
+                    } catch (Throwable ex) {
+                        log.error("Execution error in {} - {}", nameCache, ex.getMessage(), ex);
+                        return Mono.error(ex);
                     }
+                }))
+                .andWriteWith((k, sig) -> Mono.fromRunnable(() -> {
+                    Optional.ofNullable(sig)
+                            .map(Signal::get)
+                            .filter(value -> !(value instanceof Optional && ((Optional<?>) value).isEmpty()))
+                            .ifPresent(value -> {
+                                cache.put(k, value);
+                                log.debug("Cached value for key: {} in method: {}", k, nameCache);
+                            });
                 }));
     }
 }

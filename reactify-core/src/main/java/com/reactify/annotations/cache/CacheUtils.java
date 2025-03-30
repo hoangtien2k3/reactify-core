@@ -15,6 +15,7 @@
  */
 package com.reactify.annotations.cache;
 
+import com.reactify.annotations.LocalCache;
 import com.reactify.config.ApplicationContextProvider;
 import java.lang.reflect.Method;
 import org.slf4j.Logger;
@@ -23,18 +24,16 @@ import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
 /**
+ * Utility class for cache management.
  * <p>
- * The {@code CacheUtils} class provides utility methods for invoking methods
- * that are used for cache management, particularly for methods annotated with
- * {@link com.reactify.annotations.LocalCache}. This class is designed to
- * facilitate the auto-loading of cache entries by invoking the specified
- * methods in the appropriate application context.
+ * This class provides methods to dynamically invoke cached methods at runtime,
+ * supporting autoloading and execution in a reactive manner using Project
+ * Reactor.
  * </p>
  *
  * <p>
- * This class is annotated with {@link org.springframework.stereotype.Component}
- * to indicate that it is a Spring-managed bean, and it uses constructor
- * injection to obtain any required dependencies.
+ * It is particularly useful for managing cache entries annotated with
+ * {@link LocalCache}.
  * </p>
  *
  * @author hoangtien2k3
@@ -49,31 +48,38 @@ public class CacheUtils {
 
     /**
      * <p>
-     * Invokes a specified method and subscribes to the returned
-     * {@link reactor.core.publisher.Mono} object to trigger any asynchronous cache
-     * loading operations. This method retrieves the bean of the declaring class
-     * from the application context and executes the method, logging any exceptions
-     * that occur during invocation.
+     * Invokes the specified method and subscribes to its result, enabling the
+     * execution of the method in a reactive context. This method retrieves the bean
+     * instance of the declaring class from the Spring application context and calls
+     * the specified method.
      * </p>
      *
      * @param method
-     *            a {@link java.lang.reflect.Method} object representing the method
-     *            to be invoked for cache loading.
+     *            a {@link Method} object representing the method to be invoked
      */
     public static void invokeMethod(Method method) {
         try {
             Class<?> declaringClass = method.getDeclaringClass();
-            Object t = ApplicationContextProvider.getApplicationContext().getBean(declaringClass);
-            @SuppressWarnings("unchecked")
-            Mono<Object> rs = (Mono<Object>) method.invoke(t);
-            rs.subscribe();
-        } catch (Exception exception) {
+            Object beanInstance = ApplicationContextProvider.getBean(declaringClass);
+            Object result = method.invoke(beanInstance);
+            String methodName = declaringClass.getSimpleName() + "." + method.getName();
+
+            if (result instanceof Mono<?> monoResult) {
+                monoResult.subscribe(
+                        success -> log.debug("Successfully executed {}", methodName),
+                        error -> log.error("Error executing {}", methodName, error));
+            } else {
+                log.warn("Method {} does not return a Mono<?>", methodName);
+            }
+        } catch (IllegalAccessException e) {
+            log.error("Access violation when invoking method {}: {}", method.getName(), e.getMessage(), e);
+        } catch (Exception e) {
             log.error(
                     "Error when autoload cache {}.{}.{}",
                     method.getDeclaringClass().getSimpleName(),
                     method.getName(),
-                    exception.getMessage(),
-                    exception);
+                    e.getMessage(),
+                    e);
         }
     }
 }

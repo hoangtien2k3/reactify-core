@@ -15,7 +15,6 @@
  */
 package com.reactify.config;
 
-import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -23,22 +22,18 @@ import org.springframework.stereotype.Component;
 
 /**
  * <p>
- * The {@code ApplicationContextProvider} class provides a static method to
- * access the Spring {@link org.springframework.context.ApplicationContext}. It
- * implements the {@link org.springframework.context.ApplicationContextAware}
- * interface to receive the application context during initialization.
- * </p>
- *
- * <p>
- * This class can be used to retrieve beans from the application context
- * statically without needing to inject them directly. This is particularly
- * useful in scenarios where dependency injection is not available.
- * </p>
- *
- * <p>
- * The application context is set during the initialization phase when the
- * Spring container creates the beans, allowing it to be accessed throughout the
+ * The {@code ApplicationContextProvider} class serves as a utility for
+ * accessing the {@link ApplicationContext} from anywhere within the
  * application.
+ * </p>
+ * <p>
+ * This class implements {@link ApplicationContextAware} to store a static
+ * reference to the {@link ApplicationContext}, enabling other components to
+ * retrieve Spring beans programmatically without requiring dependency
+ * injection.
+ * </p>
+ * <p>
+ * Use the {@link #getBean(Class)} method to obtain a bean instance by its type.
  * </p>
  *
  * @author hoangtien2k3
@@ -46,23 +41,46 @@ import org.springframework.stereotype.Component;
 @Component
 public class ApplicationContextProvider implements ApplicationContextAware {
 
-    private static ApplicationContext context;
+    /**
+     * The application context instance, stored as a static volatile variable to
+     * ensure thread safety when accessing the context across multiple threads.
+     * <p>
+     * The {@code volatile} keyword guarantees visibility of updates to the variable
+     * across threads, and the double-checked locking mechanism ensures that the
+     * context is initialized only once.
+     * </p>
+     */
+    private static volatile ApplicationContext context;
 
     /**
+     * Retrieves a bean from the {@link ApplicationContext} by its type.
      * <p>
-     * getApplicationContext.
+     * This method allows fetching beans from the Spring container without using
+     * {@code @Autowired} or other dependency injection mechanisms.
      * </p>
      *
-     * @return a {@link org.springframework.context.ApplicationContext} object
+     * @param clazz
+     *            the class type of the desired bean
+     * @param <T>
+     *            the generic type of the bean
+     * @return an instance of the requested bean
+     * @throws org.springframework.beans.factory.NoSuchBeanDefinitionException
+     *             if no bean of the specified type is found
      */
-    public static ApplicationContext getApplicationContext() {
-        return context;
+    public static <T> T getBean(Class<T> clazz) {
+        return context.getBean(clazz);
     }
 
     /** {@inheritDoc} */
     @SuppressWarnings("squid:S2696")
     @Override
-    public void setApplicationContext(@NotNull ApplicationContext ac) throws BeansException {
-        context = ac;
+    public void setApplicationContext(ApplicationContext ac) throws BeansException {
+        if (context == null) {
+            synchronized (ApplicationContextProvider.class) {
+                if (context == null) {
+                    context = ac;
+                }
+            }
+        }
     }
 }
