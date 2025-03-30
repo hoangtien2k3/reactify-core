@@ -6,7 +6,7 @@
 <a href="https://github.com/hoangtien2k3/keycloak-auth-service">✨Live Demo</a>
 </h3>
 
-## Reactify - Powerful Reactive Java Library for Spring WebFlux
+## Powerful Reactive Java Library for Spring WebFlux
 
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=hoangtien2k3_reactify&metric=ncloc)](https://sonarcloud.io/summary/overall?id=hoangtien2k3_reactify)
 [![GitHub Release](https://img.shields.io/github/v/release/hoangtien2k3/reactify?label=latest%20release)](https://mvnrepository.com/artifact/io.github.hoangtien2k3/reactify-core)
@@ -54,16 +54,16 @@ Add the dependency to your project build.gradle file or maven pom:
 ```kotlin
 dependencies {
     //Core reactive framework with Spring WebFlux integration 
-    implementation("io.github.hoangtien2k3:reactify-core:1.2.8")
+    implementation("io.github.hoangtien2k3:reactify-core:1.2.9")
 
     //In-memory reactive caching for high-speed data access
-    implementation("io.github.hoangtien2k3:reactify-cache:1.2.3")
+    implementation("io.github.hoangtien2k3:reactify-cache:1.2.4")
 
     //Reactive REST/SOAP client with fault-tolerant design
-    implementation("io.github.hoangtien2k3:reactify-client:1.2.3")
+    implementation("io.github.hoangtien2k3:reactify-client:1.2.4")
 
     //Essential utilities for reactive development
-    implementation("io.github.hoangtien2k3:reactify-utils:1.2.3")
+    implementation("io.github.hoangtien2k3:reactify-utils:1.2.4")
 }
 ```
 
@@ -73,28 +73,28 @@ dependencies {
    <dependency>
       <groupId>io.github.hoangtien2k3</groupId>
       <artifactId>reactify-core</artifactId>
-      <version>1.2.8</version>
+      <version>1.2.9</version>
    </dependency>
    
    <!-- In-memory reactive caching for high-speed data access -->
    <dependency>
       <groupId>io.github.hoangtien2k3</groupId>
       <artifactId>reactify-cache</artifactId>
-      <version>1.2.3</version>
+      <version>1.2.4</version>
    </dependency>
    
    <!-- Reactive REST/SOAP client with fault-tolerant design -->
    <dependency>
       <groupId>io.github.hoangtien2k3</groupId>
       <artifactId>reactify-client</artifactId>
-      <version>1.2.3</version>
+      <version>1.2.4</version>
    </dependency>
    
    <!-- Essential utilities for reactive development -->
    <dependency>
       <groupId>io.github.hoangtien2k3</groupId>
       <artifactId>reactify-utils</artifactId>
-      <version>1.2.3</version>
+      <version>1.2.4</version>
    </dependency>
 </dependencies>
 ```
@@ -123,23 +123,7 @@ dependencies {
 </dependency>
 ```
 
-2. Use annotation [`@ComponentScan`]() to scan all libraries
-
-```java
-
-@ComponentScan(basePackages = {
-        "com.reactify",           //Add required default: com.reactify
-        "com.example.myproject"   //Change according to your project path
-})
-@SpringBootApplication
-public class ExampleApplication {
-    public static void main(String[] args) {
-        SpringApplication.run(Example.class, args);
-    }
-}
-```
-
-3. Config your project file `application.yml` or `application.properties`
+2. Config your project file `application.yml` or `application.properties`
 
 - Required security configuration `Oauth2 with Keycloak`:
     - Install keycloak and postgresql on docker [docker-compose](docker-compose.yml)
@@ -193,22 +177,6 @@ dependencies {
 </dependency>
 ```
 
-2. Use annotation [`@ComponentScan`]() to scan all libraries
-
-```java
-
-@ComponentScan(basePackages = {
-        "com.reactify",           //Add required default: com.reactify
-        "com.example.myproject"   //Change according to your project path
-})
-@SpringBootApplication
-public class ExampleApplication {
-    public static void main(String[] args) {
-        SpringApplication.run(Example.class, args);
-    }
-}
-```
-
 ### Reactify client configs
 
 1. Add the dependency in `build.gradle` or `maven` pom
@@ -227,23 +195,7 @@ dependencies {
 </dependency>
 ```
 
-2. Use annotation [`@ComponentScan`]() to scan all libraries
-
-```java
-
-@ComponentScan(basePackages = {
-        "com.reactify",           //Add required default: com.reactify
-        "com.example.myproject"   //Change according to your project path
-})
-@SpringBootApplication
-public class ExampleApplication {
-    public static void main(String[] args) {
-        SpringApplication.run(Example.class, args);
-    }
-}
-```
-
-3. Configuration in `application.yml` file
+2. Configuration in `application.yml` file
 
 ```yml
 # web client config
@@ -260,7 +212,7 @@ client:
       write: 1000
 ```
 
-4. Using Rest/Soap API calls
+3. Using Rest/Soap API calls
 
     - See configuration demo in
       client [reactify-test](https://github.com/hoangtien2k3/reactify-core/tree/main/reactify-test/src/main/java/com/reactify/test/client)
@@ -283,28 +235,11 @@ dependencies {
 </dependency>
 ```
 
-2. Use annotation [`@ComponentScan`]() to scan all libraries
-
-```java
-
-@ComponentScan(basePackages = {
-        "com.reactify",           //Add required default: com.reactify
-        "com.example.myproject"   //Change according to your project path
-})
-@SpringBootApplication
-public class ExampleApplication {
-    public static void main(String[] args) {
-        SpringApplication.run(Example.class, args);
-    }
-}
-```
-
 ## Features
 
 ### Local cache
 
 ```java
-
 @LocalCache(durationInMinute = 30, maxRecord = 10000, autoCache = true)
 @GetMapping("/students")
 public Mono<List<Student>> getStudents() {
@@ -323,19 +258,11 @@ public Mono<GeoPluginResponse> getBaseCurrency(String baseCurrency) {
     MultiValueMap<String, String> req = new LinkedMultiValueMap<>();
     req.set("base_currency", baseCurrency);
     return baseRestClientQualifier.get(baseCurrencyClient, "/json.gp", null, req, GeoPluginResponse.class)
-            .flatMap(optionalResponse -> optionalResponse
-                    .map(Mono::just)
-                    .orElseGet(Mono::empty)
-            );
+        .flatMap(optionalResponse -> optionalResponse
+            .map(Mono::just)
+            .orElseGet(Mono::empty)
+        );
 }
-```
-
-### Data utils
-
-```java 
-if(DataUtil.isNullOrEmpty(studentDemo)){
-        //TODO 
-        }
 ```
 
 ## Project demo
