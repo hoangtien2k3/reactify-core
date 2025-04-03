@@ -4,7 +4,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * Autoconfiguration for the reactify-client library.
+ * Autoconfiguration for the reactify-minio library.
  * <p>
  * Automatically scans and registers components in the <code>com.reactify</code> package,
  * enabling seamless integration with Spring Boot.
@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
  *
  * <h3>Usage:</h3>
  * <pre>
- * Add the reactify-client dependency, and Spring Boot will configure its components automatically.
+ * Add the reactify-minio dependency, and Spring Boot will configure its components automatically.
  * </pre>
  *
  * @author @hoangtien2k3
@@ -20,5 +20,5 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 @ComponentScan(basePackages = "com.reactify")
-public class ClientAutoConfiguration {
+public class MinioAutoConfiguration {
 }

@@ -13,9 +13,9 @@
 	<!-- The maven central for all the library       -->
 	<!-- =========================================== -->
 	<groupId>io.github.hoangtien2k3</groupId>
-	<artifactId>reactify-oauth2-keycloak</artifactId>
+	<artifactId>reactify-keycloak</artifactId>
 	<version>1.2.4</version>
-	<name>reactify-oauth2-keycloak</name>
+	<name>reactify-keycloak</name>
 	<description>Java lib base using auth with oauth2 keycloak</description>
 	<url>https://github.com/hoangtien2k3/reactify-core</url>
 
