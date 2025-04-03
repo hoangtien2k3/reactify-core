@@ -55,6 +55,9 @@ public class StudentController {
     @LocalCache
     @GetMapping("/base-currency")
     public Mono<GeoPluginResponse> getBaseCurrency(String baseCurrency) {
+        if (DataUtil.isNullOrEmpty(baseCurrency)) {
+            throw new RuntimeException("Truyền vào Header: base_currency = VN");
+        }
         return baseCurrencyClient.getBaseCurrency(baseCurrency);
     }
 

@@ -20,7 +20,6 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.i18n.LocaleContextHolder;
 
 /**
  * Utility class for data manipulation and processing. This class contains
@@ -31,7 +30,7 @@ public class MessageUtils {
     /**
      * A static logger instance for logging messages
      */
-    private static final Logger log = LoggerFactory.getLogger(AppUtils.class);
+    private static final Logger log = LoggerFactory.getLogger(MessageUtils.class);
 
     private static final String BASE_NAME = "messages";
 
@@ -80,33 +79,5 @@ public class MessageUtils {
         }
 
         return message;
-    }
-
-    /**
-     * <p>
-     * getMessage.
-     * </p>
-     *
-     * @param code
-     *            a {@link String} object
-     * @return a {@link String} object
-     */
-    public static String getMessage(String code) {
-        return getMessage(code, LocaleContextHolder.getLocale(), (Object) null);
-    }
-
-    /**
-     * <p>
-     * getMessage.
-     * </p>
-     *
-     * @param code
-     *            a {@link String} object
-     * @param args
-     *            a {@link Object} object
-     * @return a {@link String} object
-     */
-    public static String getMessage(String code, Object... args) {
-        return getMessage(code, LocaleContextHolder.getLocale(), args);
     }
 }

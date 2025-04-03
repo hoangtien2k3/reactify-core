@@ -23,9 +23,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import org.springframework.stereotype.Component;
 
-@Component
 public class ObjectMapperUtil {
     private static final ObjectMapper objectMapper = new ObjectMapper();
     private static final DateFormat dateFormatYMdHms = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");

@@ -17,9 +17,6 @@ package com.reactify;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
-import java.util.Arrays;
-import java.util.List;
-import org.springframework.http.MediaType;
 
 /**
  * Utility class for logging request and response data buffers. Provides methods
@@ -30,18 +27,6 @@ import org.springframework.http.MediaType;
  * @author hoangtien2k3
  */
 public class LogUtils {
-
-    /**
-     * List of media types that are considered legal for logging.
-     */
-    public static final List<MediaType> legalLogMediaTypes = Arrays.asList(
-            MediaType.TEXT_XML,
-            MediaType.APPLICATION_XML,
-            MediaType.APPLICATION_JSON,
-            MediaType.APPLICATION_JSON_UTF8,
-            MediaType.TEXT_PLAIN,
-            MediaType.TEXT_XML,
-            MediaType.MULTIPART_FORM_DATA);
 
     /**
      * Converts an InputStream to a byte array.

@@ -24,6 +24,7 @@ import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.lang.reflect.Array;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.text.SimpleDateFormat;
@@ -45,7 +46,6 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.ObjectUtils;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 
@@ -562,12 +562,36 @@ public class DataUtil {
      */
     public static String convertLocalDateToString(LocalDateTime date, String format) {
         try {
-            if (ObjectUtils.isEmpty(date)) return null;
+            if (isEmpty(date)) return null;
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern(format);
             return date.format(formatter);
         } catch (Exception e) {
             return null;
         }
+    }
+
+    public static boolean isEmpty(Object obj) {
+        if (obj == null) {
+            return true;
+        }
+
+        if (obj instanceof Optional<?> optional) {
+            return optional.isEmpty();
+        }
+        if (obj instanceof CharSequence charSequence) {
+            return charSequence.isEmpty();
+        }
+        if (obj.getClass().isArray()) {
+            return Array.getLength(obj) == 0;
+        }
+        if (obj instanceof Collection<?> collection) {
+            return collection.isEmpty();
+        }
+        if (obj instanceof Map<?, ?> map) {
+            return map.isEmpty();
+        }
+
+        return false;
     }
 
     /**

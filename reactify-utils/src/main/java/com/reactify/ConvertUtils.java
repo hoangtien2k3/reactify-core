@@ -19,12 +19,9 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
 import java.util.List;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 public class ConvertUtils {
 
-    private static final Logger log = LogManager.getLogger(ConvertUtils.class);
     private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#.###");
 
     public static String convertStringJsonRawValue(String valueRaw) {

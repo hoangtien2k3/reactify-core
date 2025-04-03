@@ -15,8 +15,6 @@
  */
 package com.reactify;
 
-import io.micrometer.common.util.StringUtils;
-import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
@@ -105,12 +103,7 @@ public class SolrUtils {
      * @return the encoded value, or {@code null} if an encoding error occurs
      */
     private String encodeValue(String value) {
-        try {
-            return URLEncoder.encode(value, StandardCharsets.UTF_8.toString());
-        } catch (UnsupportedEncodingException e) {
-            log.error("Exception when encoding value: " + value, e);
-            return null;
-        }
+        return URLEncoder.encode(value, StandardCharsets.UTF_8);
     }
 
     /**
@@ -171,7 +164,7 @@ public class SolrUtils {
          * @return the current {@link SolrQueryBuilder} instance
          */
         public SolrQueryBuilder addSort(String sortColumn, String des) {
-            if (StringUtils.isNotBlank(des)) {
+            if (!isBlank(des)) {
                 if (des.equals(SORT_ASC)) {
                     queryParams.put(SORT_PARAM, sortColumn + " " + SORT_ASC);
                 } else {
@@ -181,6 +174,18 @@ public class SolrUtils {
                 queryParams.put(SORT_PARAM, sortColumn);
             }
             return this;
+        }
+
+        public static boolean isBlank(CharSequence cs) {
+            int strLen = cs == null ? 0 : cs.length();
+            if (strLen != 0) {
+                for (int i = 0; i < strLen; ++i) {
+                    if (!Character.isWhitespace(cs.charAt(i))) {
+                        return false;
+                    }
+                }
+            }
+            return true;
         }
 
         /**

@@ -17,8 +17,6 @@ package com.reactify;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.nio.charset.StandardCharsets;
-import java.util.Set;
-import org.springframework.util.MultiValueMap;
 
 public class TruncateUtils {
 
@@ -48,8 +46,7 @@ public class TruncateUtils {
                 return s;
             }
             return truncateBody(s, maxByte);
-        } catch (Exception ex) {
-
+        } catch (Exception ignored) {
         }
         return s;
     }
@@ -122,24 +119,5 @@ public class TruncateUtils {
         } catch (Exception e) {
             return "Truncated and remove if has exception";
         }
-    }
-
-    /**
-     * Truncates and concatenates form data.
-     * <p>
-     * This method iterates over the entries in a {@link MultiValueMap}, truncates
-     * the values, and concatenates them into a single string representation.
-     * </p>
-     *
-     * @param formData
-     *            The form data to be truncated and concatenated.
-     */
-    private String truncateBody(MultiValueMap<String, String> formData) {
-        StringBuilder messageResponse = new StringBuilder();
-        Set<String> keys = formData.keySet();
-        for (String key : keys) {
-            messageResponse.append(key).append(":").append(truncateBody(formData.get(key)));
-        }
-        return messageResponse.toString();
     }
 }
