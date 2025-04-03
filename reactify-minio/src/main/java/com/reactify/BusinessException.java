@@ -35,29 +35,10 @@ import java.util.Objects;
  * Example usage:
  * </p>
  *
- * <pre>
- * {@code
- * throw new BusinessException("404", "Resource not found");
- * throw new BusinessException("500", "Unexpected error occurred", "User ID", "Order ID");
- * }
- * </pre>
- *
- * <p>
- * This class uses Lombok annotations for boilerplate code:
- * </p>
- * <ul>
- * <li>{@code @EqualsAndHashCode(callSuper = true)} - Ensures hashCode and
- * equals include fields from {@code RuntimeException}.</li>
- * <li>{@code @Data} - Generates getters, setters, toString, and other
- * methods.</li>
- * <li>{@code @NoArgsConstructor} - Provides a no-arguments constructor.</li>
- * </ul>
- *
  * @see RuntimeException
  * @see Arrays
  * @see String
- * @version 1.0
- * @since 1.0
+ * @version 1.2.6
  * @author hoangtien2k3
  */
 public class BusinessException extends RuntimeException {

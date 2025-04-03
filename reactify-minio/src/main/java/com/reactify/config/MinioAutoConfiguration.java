@@ -32,7 +32,7 @@ import org.springframework.context.annotation.Configuration;
  * </pre>
  *
  * @author @hoangtien2k3
- * @since 1.0
+ * @since 1.2.6
  */
 @Configuration
 @ComponentScan(basePackages = "com.reactify")
