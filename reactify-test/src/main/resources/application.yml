@@ -18,11 +18,44 @@ spring:
   messages:
     basename: i18n/messages
 
+  security:
+    oauth2:
+      client:
+        provider:
+          oidc:
+            token-uri: ${keycloak.serverUrl}/realms/${keycloak.realm}/protocol/openid-connect/token
+        registration:
+          oidc:
+            client-id: ${keycloak.clientId}
+            client-secret: ${keycloak.clientSecret}
+            authorization-grant-type: ${keycloak.grantType} #password || #client_credentials
+      resourceserver:
+        jwt:
+          jwk-set-uri: ${keycloak.serverUrl}/realms/${keycloak.realm}/protocol/openid-connect/certs
+      keycloak:
+        client-id: ${keycloak.clientId}
+
 # web client config
 client:
+  #keycloak
+  keycloak:
+    address: http://localhost:8080/realms/ezbuy-server/protocol/openid-connect
+    name: keycloak
+    auth:
+      client-id: ezbuy-client
+      client-secret: mI92QDfvi20tZgFtjpRAPWu8TR6eMHmw
   base-currency:
     address: http://www.geoplugin.net
     name: baseCurrencyClient
+
+#keycloak client config
+keycloak:
+  clientId: ezbuy-client
+  clientSecret: mI92QDfvi20tZgFtjpRAPWu8TR6eMHmw
+  realm: ezbuy-server
+  serverUrl: http://localhost:8080
+  grantType: password
+  host: localhost
 
 # minio server config
 minio:
@@ -35,3 +68,43 @@ minio:
   private:
     bucket: ezbuy-private
 
+
+# unauthenticated endpoints config
+application:
+  http-logging:
+    request:
+      enable: true
+      header: true
+      param: true
+      body: true
+    response:
+      enable: true
+      body: true
+  whiteList:
+    - uri: /login
+      methods:
+        - POST
+    - uri: /students
+      methods:
+        - GET
+    - uri: /base-currency
+      methods:
+        - GET
+    - uri: /base-currency?baseCurrency=VN
+      methods:
+        - GET
+    - uri: /clear-by-name
+      methods:
+        - POST
+    - uri: /clear-all
+      methods:
+        - POST
+    - uri: /get-list-cache
+      methods:
+        - GET
+    - uri: /get-token
+      methods:
+        - GET
+    - uri: /token-user
+      methods:
+        - GET

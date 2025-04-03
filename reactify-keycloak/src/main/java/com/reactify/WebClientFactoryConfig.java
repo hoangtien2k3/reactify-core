@@ -15,24 +15,21 @@
  */
 package com.reactify;
 
-import org.springframework.context.annotation.ComponentScan;
+import com.reactify.properties.KeycloakClientProperties;
+import java.util.List;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-/**
- * Autoconfiguration for the reactify-oauth2-keycloak library.
- * <p>
- * Automatically scans and registers components in the <code>com.reactify</code>
- * package, enabling seamless integration with Spring Boot.
- * </p>
- *
- * <h3>Usage:</h3>
- *
- * <pre>
- * Add the reactify-oauth2-keycloak dependency, and Spring Boot will configure its components automatically.
- * </pre>
- *
- * @author @hoangtien2k3
- */
 @Configuration
-@ComponentScan(basePackages = "com.reactify")
-public class KeycloakAutoConfiguration {}
+public class WebClientFactoryConfig {
+    private final KeycloakClientProperties keycloakClientProperties;
+
+    public WebClientFactoryConfig(KeycloakClientProperties keycloakClientProperties) {
+        this.keycloakClientProperties = keycloakClientProperties;
+    }
+
+    @Bean(name = "webClientFactory")
+    public WebClientFactory webClientFactory() {
+        return new WebClientFactory(List.of(keycloakClientProperties));
+    }
+}

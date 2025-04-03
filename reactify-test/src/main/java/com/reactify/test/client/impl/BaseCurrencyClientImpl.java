@@ -31,7 +31,7 @@ import reactor.core.publisher.Mono;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-@DependsOn("webClientFactory")
+@DependsOn("webClientTestFactory")
 public class BaseCurrencyClientImpl implements BaseCurrencyClient {
 
     @Qualifier("baseCurrencyClient")

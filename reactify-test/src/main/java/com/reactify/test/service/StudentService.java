@@ -17,16 +17,32 @@ package com.reactify.test.service;
 
 import com.reactify.CacheStore;
 import com.reactify.DataUtil;
+import com.reactify.KeyCloakClient;
+import com.reactify.SecurityUtils;
 import com.reactify.exception.BusinessException;
+import com.reactify.model.AccessToken;
+import com.reactify.model.request.LoginRequest;
 import com.reactify.request.LocalCacheRequest;
 import com.reactify.test.model.Student;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class StudentService {
+
+    private final KeyCloakClient keyCloakClient;
+
+    public StudentService(KeyCloakClient keyCloakClient) {
+        this.keyCloakClient = keyCloakClient;
+    }
+
+    public Mono<Optional<AccessToken>> getToken(LoginRequest loginRequest) {
+        return keyCloakClient.getToken(loginRequest);
+    }
+
     public Mono<List<Student>> getAllStudents() {
         // fake list student test
         List<Student> listStudent = List.of(
@@ -88,5 +104,9 @@ public class StudentService {
 
     public Mono<Integer> clearAllCaches() {
         return Mono.just(CacheStore.clearAllCaches());
+    }
+
+    public Mono<String> getTokenUser() {
+        return SecurityUtils.getTokenUser();
     }
 }

@@ -13,26 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.reactify;
+package com.reactify.test.client.config;
 
-import org.springframework.context.annotation.ComponentScan;
+import com.reactify.WebClientFactory;
+import com.reactify.test.client.properties.BaseCurrencyClientProperties;
+import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-/**
- * Autoconfiguration for the reactify-oauth2-keycloak library.
- * <p>
- * Automatically scans and registers components in the <code>com.reactify</code>
- * package, enabling seamless integration with Spring Boot.
- * </p>
- *
- * <h3>Usage:</h3>
- *
- * <pre>
- * Add the reactify-oauth2-keycloak dependency, and Spring Boot will configure its components automatically.
- * </pre>
- *
- * @author @hoangtien2k3
- */
+import java.util.List;
+
 @Configuration
-@ComponentScan(basePackages = "com.reactify")
-public class KeycloakAutoConfiguration {}
+@RequiredArgsConstructor
+public class WebClientTestFactoryConfig {
+    private final BaseCurrencyClientProperties baseCurrencyClientProperties;
+
+    @Bean(name = "webClientTestFactory")
+    public WebClientFactory webClientFactory() {
+        return new WebClientFactory(List.of(baseCurrencyClientProperties));
+    }
+}

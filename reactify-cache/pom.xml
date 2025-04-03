@@ -29,7 +29,7 @@
 	<!-- =========================================== -->
 	<groupId>io.github.hoangtien2k3</groupId>
 	<artifactId>reactify-cache</artifactId>
-	<version>1.2.4</version>
+	<version>1.2.6</version>
 	<name>reactify-cache</name>
 	<packaging>jar</packaging>
 	<description>Java library using caffeine cache</description>
@@ -89,7 +89,7 @@
 		<dependency>
 			<groupId>io.github.hoangtien2k3</groupId>
 			<artifactId>reactify-utils</artifactId>
-			<version>1.2.3</version>
+			<version>1.2.4</version>
 		</dependency>
 		<dependency>
 			<groupId>org.aspectj</groupId>

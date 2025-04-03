@@ -29,7 +29,7 @@
 	<!-- =========================================== -->
 	<groupId>io.github.hoangtien2k3</groupId>
 	<artifactId>reactify-client</artifactId>
-	<version>1.2.4</version>
+	<version>1.2.6</version>
 	<name>reactify-client</name>
 	<packaging>jar</packaging>
 	<description>Java lib base all api rest and soap using web client</description>

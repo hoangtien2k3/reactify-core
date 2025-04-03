@@ -23,7 +23,7 @@
 	<!-- =========================================== -->
 	<groupId>io.github.hoangtien2k3</groupId>
 	<artifactId>reactify-utils</artifactId>
-	<version>1.2.5</version>
+	<version>1.2.6</version>
 	<packaging>jar</packaging>
 	<name>reactify-utils</name>
 	<description>Java library util for developing backend with reactive programming</description>

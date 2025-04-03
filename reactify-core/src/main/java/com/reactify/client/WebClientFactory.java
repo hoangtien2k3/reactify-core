@@ -17,7 +17,7 @@ package com.reactify.client;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
-import com.reactify.client.properties.WebClientProperties;
+import com.reactify.properties.WebClientProperties;
 import com.reactify.constants.Constants;
 import com.reactify.filter.properties.ProxyProperties;
 import com.reactify.filter.webclient.WebClientLoggingFilter;
@@ -66,7 +66,7 @@ import reactor.netty.transport.ProxyProvider;
  * {@link org.springframework.beans.factory.InitializingBean} interface, which
  * triggers the initialization of web clients after the bean properties have
  * been set. Each web client is created based on the specified
- * {@link com.reactify.client.properties.WebClientProperties}.
+ * {@link com.reactify.properties.WebClientProperties}.
  * </p>
  *
  * <p>
@@ -126,13 +126,13 @@ public class WebClientFactory implements InitializingBean {
     /**
      * <p>
      * Initializes web clients based on the provided list of
-     * {@link com.reactify.client.properties.WebClientProperties}. Each client is
+     * {@link com.reactify.properties.WebClientProperties}. Each client is
      * created and registered as a singleton bean in the application context.
      * </p>
      *
      * @param webClients
      *            a {@link java.util.List} of
-     *            {@link com.reactify.client.properties.WebClientProperties} objects
+     *            {@link com.reactify.properties.WebClientProperties} objects
      *            containing configuration for each web client
      */
     public void initWebClients(List<WebClientProperties> webClients) {
@@ -150,13 +150,13 @@ public class WebClientFactory implements InitializingBean {
      * <p>
      * Creates a new instance of
      * {@link org.springframework.web.reactive.function.client.WebClient} using the
-     * provided {@link com.reactify.client.properties.WebClientProperties}. The
+     * provided {@link com.reactify.properties.WebClientProperties}. The
      * client is configured with connection pooling, timeout settings, and
      * additional filters based on the properties specified.
      * </p>
      *
      * @param webClientProperties
-     *            a {@link com.reactify.client.properties.WebClientProperties}
+     *            a {@link com.reactify.properties.WebClientProperties}
      *            object containing configuration for the web client
      * @return a {@link org.springframework.web.reactive.function.client.WebClient}
      *         object configured based on the given properties, or {@code null} if
