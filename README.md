@@ -67,8 +67,11 @@ dependencies {
     //Reactive REST/SOAP client with fault-tolerant design
     implementation("io.github.hoangtien2k3:reactify-client:1.2.4")
 
+    //Use in minio (aws s3)
+    implementation("io.github.hoangtien2k3:reactify-minio:1.2.5")
+
     //Essential utilities for reactive development
-    implementation("io.github.hoangtien2k3:reactify-utils:1.2.4")
+    implementation("io.github.hoangtien2k3:reactify-utils:1.2.5")
 }
 ```
 
@@ -94,12 +97,19 @@ dependencies {
       <artifactId>reactify-client</artifactId>
       <version>1.2.4</version>
    </dependency>
+
+   <!-- //Use in minio (aws s3) -->
+   <dependency>
+     <groupId>io.github.hoangtien2k3</groupId>
+     <artifactId>reactify-minio</artifactId>
+     <version>1.2.5</version>
+   </dependency>
    
    <!-- Essential utilities for reactive development -->
    <dependency>
       <groupId>io.github.hoangtien2k3</groupId>
       <artifactId>reactify-utils</artifactId>
-      <version>1.2.4</version>
+      <version>1.2.5</version>
    </dependency>
 </dependencies>
 ```

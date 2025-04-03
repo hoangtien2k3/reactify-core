@@ -20,5 +20,5 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 @ComponentScan(basePackages = "com.reactify")
-public class Oauth2AutoConfiguration {
+public class AutoConfiguration {
 }
