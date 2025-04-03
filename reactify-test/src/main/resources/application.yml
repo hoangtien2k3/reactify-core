@@ -24,4 +24,14 @@ client:
     address: http://www.geoplugin.net
     name: baseCurrencyClient
 
+# minio server config
+minio:
+  bucket: ezbuy-bucket
+  enabled: true
+  baseUrl: http://localhost:9000
+  publicUrl: http://localhost:9000
+  accessKey: q875aHMpdL6IJ3n9ruil
+  secretKey: Q43tehRDv55Sw67ktA0pQdztEbtQjvinLOk6zwB3
+  private:
+    bucket: ezbuy-private
 
