@@ -94,6 +94,7 @@
         <module>reactify-keycloak</module>
         <module>reactify-logging</module>
         <module>reactify-minio</module>
+        <module>reactify-r2dbc</module>
         <module>reactify-utils</module>
     </modules>
 
