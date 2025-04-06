@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.reactify.annotations.logging;
+package com.reactify.logging;
 
 import brave.Span;
 import com.reactify.model.logging.LoggerDTO;
@@ -71,7 +71,7 @@ public class LoggerQueue {
      * getInstance.
      * </p>
      *
-     * @return a {@link com.reactify.annotations.logging.LoggerQueue} object
+     * @return a {@link com.reactify.logging.LoggerQueue} object
      */
     public static LoggerQueue getInstance() {
         if (mMe == null) {

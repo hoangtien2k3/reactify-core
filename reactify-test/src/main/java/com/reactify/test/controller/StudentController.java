@@ -18,7 +18,6 @@ package com.reactify.test.controller;
 import com.reactify.DataUtil;
 import com.reactify.LocalCache;
 import com.reactify.SecurityUtils;
-import com.reactify.constants.CommonErrorCode;
 import com.reactify.exception.BusinessException;
 import com.reactify.model.AccessToken;
 import com.reactify.model.TokenUser;
@@ -100,6 +99,6 @@ public class StudentController {
     public Mono<Optional<TokenUser>> getUserProfile() {
         return SecurityUtils.getCurrentUser()
                 .flatMap(user -> Mono.just(Optional.ofNullable(user)))
-                .switchIfEmpty(Mono.error(new BusinessException(CommonErrorCode.NOT_FOUND, "query.user.not.found")));
+                .switchIfEmpty(Mono.error(new BusinessException("NOT_FOUND", "query.user.not.found")));
     }
 }

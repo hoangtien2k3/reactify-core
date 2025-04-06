@@ -30,6 +30,7 @@ public class WebClientTestFactoryConfig {
 
     @Bean(name = "webClientTestFactory")
     public WebClientFactory webClientFactory() {
+        System.out.println(">>> Creating WebClientFactory");
         return new WebClientFactory(List.of(baseCurrencyClientProperties));
     }
 }

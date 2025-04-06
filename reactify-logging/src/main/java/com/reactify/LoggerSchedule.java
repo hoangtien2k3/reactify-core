@@ -13,22 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.reactify.annotations.logging;
+package com.reactify;
 
-import static com.reactify.constants.Constants.MAX_BYTE;
-
-import com.reactify.factory.ObjectMapperFactory;
-import com.reactify.model.logging.LogField;
-import com.reactify.model.logging.LoggerDTO;
-import com.reactify.util.DataUtil;
-import com.reactify.util.RequestUtils;
-import com.reactify.util.TruncateUtils;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
+import com.reactify.logging.LogField;
+import com.reactify.logging.LoggerDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Configuration;
@@ -36,6 +24,15 @@ import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
+
+import static com.reactify.constants.Constants.MAX_BYTE;
 
 /**
  * LoggerSchedule class is responsible for scheduling the logging of requests
