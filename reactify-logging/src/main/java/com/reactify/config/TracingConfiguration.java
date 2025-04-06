@@ -17,7 +17,6 @@ package com.reactify.config;
 
 import brave.Tracing;
 import io.micrometer.tracing.Tracer;
-import io.micrometer.tracing.brave.bridge.BraveTracer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -25,9 +24,8 @@ import org.springframework.context.annotation.Configuration;
  * <p>
  * TracingConfiguration class provides configuration for tracing in the
  * application using the Brave library. This class defines beans for the
- * {@link Tracer} and {@link Tracing} objects, which
- * are essential for distributed tracing and monitoring of requests across
- * microservices.
+ * {@link Tracer} and {@link Tracing} objects, which are essential for
+ * distributed tracing and monitoring of requests across microservices.
  * </p>
  *
  * <p>
@@ -49,13 +47,12 @@ public class TracingConfiguration {
      *
      * @param tracing
      *            a {@link Tracing} object that provides tracing capabilities.
-     * @return a {@link Tracer} object configured for tracing
-     *         operations.
+     * @return a {@link Tracer} object configured for tracing operations.
      */
-//    @Bean
-//    public Tracer tracer(Tracing tracing) {
-//        return BraveTracer.NOOP;
-//    }
+    // @Bean
+    // public Tracer tracer(Tracing tracing) {
+    // return BraveTracer.NOOP;
+    // }
 
     /**
      * <p>

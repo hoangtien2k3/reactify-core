@@ -16,10 +16,9 @@
 package com.reactify.logging;
 
 import brave.Span;
-import reactor.util.context.Context;
-
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
+import reactor.util.context.Context;
 
 /**
  * Record representing log information within the system.

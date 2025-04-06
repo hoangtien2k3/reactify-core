@@ -15,28 +15,24 @@
  */
 package com.reactify.filter.http;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import org.springframework.http.codec.HttpMessageWriter;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.web.reactive.function.BodyInserter;
 import org.springframework.web.reactive.function.client.ExchangeStrategies;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
 /**
  * <p>
- * Implementation of the
- * {@link BodyInserter.Context}
- * interface, providing a context for inserting a body into a WebFlux HTTP
- * request.
+ * Implementation of the {@link BodyInserter.Context} interface, providing a
+ * context for inserting a body into a WebFlux HTTP request.
  * </p>
  *
  * <p>
- * This class is responsible for managing the
- * {@link ExchangeStrategies}
- * used for writing HTTP messages, as well as providing default values for the
+ * This class is responsible for managing the {@link ExchangeStrategies} used
+ * for writing HTTP messages, as well as providing default values for the
  * message writers, server request, and hints.
  * </p>
  *
@@ -67,8 +63,7 @@ public class BodyInserterContext implements BodyInserter.Context {
     /**
      * <p>
      * Default constructor for {@code BodyInserterContext} that initializes the
-     * context with default
-     * {@link ExchangeStrategies}.
+     * context with default {@link ExchangeStrategies}.
      * </p>
      */
     public BodyInserterContext() {
@@ -82,9 +77,8 @@ public class BodyInserterContext implements BodyInserter.Context {
      * </p>
      *
      * @param exchangeStrategies
-     *            an
-     *            {@link ExchangeStrategies}
-     *            object defining the strategies for HTTP message handling
+     *            an {@link ExchangeStrategies} object defining the strategies for
+     *            HTTP message handling
      */
     public BodyInserterContext(ExchangeStrategies exchangeStrategies) {
         this.exchangeStrategies = exchangeStrategies;

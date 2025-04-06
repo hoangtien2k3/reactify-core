@@ -135,16 +135,16 @@ public class LoggerAspectUtils {
         }
         if (result instanceof Flux<?> fluxResult) {
             return logFluxResult(
-                    joinPoint,
-                    start,
-                    fluxResult.cast(Object.class),
-                    newSpan,
-                    name,
-                    logType,
-                    actionType,
-                    logOutput,
-                    logInput,
-                    title)
+                            joinPoint,
+                            start,
+                            fluxResult.cast(Object.class),
+                            newSpan,
+                            name,
+                            logType,
+                            actionType,
+                            logOutput,
+                            logInput,
+                            title)
                     .collectList()
                     .map(list -> list);
         } else {

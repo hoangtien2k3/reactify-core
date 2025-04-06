@@ -15,11 +15,18 @@
  */
 package com.reactify.filter.http;
 
+import static com.reactify.constants.Constants.MAX_BYTE;
+import static reactor.core.scheduler.Schedulers.single;
+
 import com.reactify.RequestUtils;
 import com.reactify.TruncateUtils;
 import com.reactify.constants.Constants;
 import com.reactify.filter.properties.HttpLogProperties;
 import com.reactify.logging.GatewayContext;
+import java.net.URI;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 import org.reactivestreams.Publisher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,14 +44,6 @@ import org.springframework.web.server.WebFilter;
 import org.springframework.web.server.WebFilterChain;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
-import java.net.URI;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
-
-import static com.reactify.constants.Constants.MAX_BYTE;
-import static reactor.core.scheduler.Schedulers.single;
 
 /**
  * A filter for logging HTTP requests and responses.

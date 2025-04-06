@@ -17,20 +17,18 @@ package com.reactify;
 
 import brave.Span;
 import com.reactify.logging.LoggerDTO;
-import reactor.util.context.Context;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.atomic.AtomicReference;
+import reactor.util.context.Context;
 
 /**
  * <p>
  * The {@code LoggerQueue} class is a singleton that provides a thread-safe
- * queue for logging operations using an
- * {@link ArrayBlockingQueue} to manage instances of
- * {@link LoggerDTO}. It tracks the number of
- * successful and failed logging attempts.
+ * queue for logging operations using an {@link ArrayBlockingQueue} to manage
+ * instances of {@link LoggerDTO}. It tracks the number of successful and failed
+ * logging attempts.
  * </p>
  *
  * <p>

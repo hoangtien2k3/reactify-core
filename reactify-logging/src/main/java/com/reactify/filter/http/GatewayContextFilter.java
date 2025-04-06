@@ -18,6 +18,10 @@ package com.reactify.filter.http;
 import com.reactify.constants.Constants;
 import com.reactify.filter.properties.HttpLogProperties;
 import com.reactify.logging.GatewayContext;
+import java.net.URLEncoder;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.Ordered;
@@ -41,11 +45,6 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
-import java.net.URLEncoder;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-import java.util.List;
-
 /**
  * <p>
  * The {@code GatewayContextFilter} class implements a filter for processing
@@ -58,8 +57,8 @@ import java.util.List;
  * <p>
  * The filter can conditionally enable or disable logging of request and
  * response data based on configuration properties specified in the
- * {@link HttpLogProperties} class. It also
- * supports handling of both JSON and form data content types.
+ * {@link HttpLogProperties} class. It also supports handling of both JSON and
+ * form data content types.
  * </p>
  *
  * <p>

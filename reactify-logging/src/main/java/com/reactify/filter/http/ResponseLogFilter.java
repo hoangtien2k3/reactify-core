@@ -15,10 +15,14 @@
  */
 package com.reactify.filter.http;
 
+import static reactor.core.scheduler.Schedulers.single;
+
 import com.reactify.DataUtil;
 import com.reactify.LogUtils;
 import com.reactify.logging.GatewayContext;
 import io.netty.buffer.UnpooledByteBufAllocator;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import org.reactivestreams.Publisher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,11 +44,6 @@ import org.springframework.web.server.WebFilter;
 import org.springframework.web.server.WebFilterChain;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-
-import static reactor.core.scheduler.Schedulers.single;
 
 /**
  * <p>

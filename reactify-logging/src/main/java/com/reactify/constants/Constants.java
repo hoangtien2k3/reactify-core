@@ -15,12 +15,11 @@
  */
 package com.reactify.constants;
 
-import org.slf4j.MDC;
-import org.springframework.http.MediaType;
-
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import org.slf4j.MDC;
+import org.springframework.http.MediaType;
 
 /**
  * <p>

@@ -37,10 +37,8 @@ import reactor.core.publisher.Mono;
  * </p>
  *
  * <p>
- * The class is annotated with {@link Aspect} to
- * define it as an aspect, and
- * {@link Configuration} to indicate that
- * it provides Spring configuration.
+ * The class is annotated with {@link Aspect} to define it as an aspect, and
+ * {@link Configuration} to indicate that it provides Spring configuration.
  * </p>
  *
  * <p>
@@ -73,8 +71,7 @@ public class LoggerAspect {
 
     /**
      * <p>
-     * Pointcut for methods annotated with
-     * {@link LogPerformance}.
+     * Pointcut for methods annotated with {@link LogPerformance}.
      * </p>
      */
     @Pointcut("@annotation(com.reactify.LogPerformance)")

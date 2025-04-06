@@ -91,6 +91,7 @@
         <module>reactify-cache</module>
         <module>reactify-client</module>
         <module>reactify-core</module>
+        <module>reactify-exception</module>
         <module>reactify-keycloak</module>
         <module>reactify-logging</module>
         <module>reactify-minio</module>
