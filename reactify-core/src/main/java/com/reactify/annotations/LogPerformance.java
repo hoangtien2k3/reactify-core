@@ -56,6 +56,7 @@ import java.lang.annotation.Target;
 @Target({ElementType.METHOD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface LogPerformance {
+
     /**
      * The type of log for categorizing the log entries.
      *

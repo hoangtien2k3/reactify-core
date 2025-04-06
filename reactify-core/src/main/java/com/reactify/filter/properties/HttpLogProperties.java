@@ -17,7 +17,6 @@ package com.reactify.filter.properties;
 
 import com.reactify.model.logging.HttpLogRequest;
 import com.reactify.model.logging.HttpLogResponse;
-import java.util.Objects;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
@@ -52,6 +51,13 @@ public class HttpLogProperties {
      */
     private HttpLogResponse response = new HttpLogResponse();
 
+    public HttpLogProperties() {}
+
+    public HttpLogProperties(HttpLogRequest request, HttpLogResponse response) {
+        this.request = request;
+        this.response = response;
+    }
+
     public HttpLogRequest getRequest() {
         return request;
     }
@@ -66,24 +72,5 @@ public class HttpLogProperties {
 
     public void setResponse(HttpLogResponse response) {
         this.response = response;
-    }
-
-    public HttpLogProperties() {}
-
-    public HttpLogProperties(HttpLogRequest request, HttpLogResponse response) {
-        this.request = request;
-        this.response = response;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof HttpLogProperties that)) return false;
-        return Objects.equals(getRequest(), that.getRequest()) && Objects.equals(getResponse(), that.getResponse());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getRequest(), getResponse());
     }
 }

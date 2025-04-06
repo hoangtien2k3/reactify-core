@@ -58,8 +58,7 @@ import java.util.Objects;
  * @see Translator
  * @see Arrays
  * @see String
- * @version 1.0
- * @since 1.0
+ * @version 1.2.6
  * @author hoangtien2k3
  */
 public class BusinessException extends RuntimeException {

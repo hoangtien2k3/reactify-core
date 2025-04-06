@@ -21,6 +21,12 @@ import com.reactify.exception.BusinessException;
 import io.minio.*;
 import io.minio.errors.*;
 import io.minio.http.Method;
+import java.io.*;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
+import javax.activation.MimetypesFileTypeMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -29,13 +35,6 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.FluxSink;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
-
-import javax.activation.MimetypesFileTypeMap;
-import java.io.*;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Utility class for data manipulation and processing. This class contains
@@ -169,7 +168,8 @@ public class MinioUtils {
     }
 
     /**
-     * Uploads a media file (image or video) from a Base64-encoded string to MinIO storage.
+     * Uploads a media file (image or video) from a Base64-encoded string to MinIO
+     * storage.
      * <p>
      * This method processes Base64-encoded media data, extracts the file type,
      * decodes it into binary format, and uploads it to the specified MinIO bucket.
@@ -178,19 +178,19 @@ public class MinioUtils {
      * </p>
      *
      * @param data
-     *        The Base64-encoded media data. It must be in the format:
-     *        `"data:[media-type];base64,[encoded-data]"`.
-     *        If `data` is a URL (starting with "http://" or "https://"), it is returned as is.
-     * @return
-     *        A `Mono<String>` containing the public URL of the uploaded media file.
-     *        If `data` is already a URL, it is returned immediately.
+     *            The Base64-encoded media data. It must be in the format:
+     *            `"data:[media-type];base64,[encoded-data]"`. If `data` is a URL
+     *            (starting with "http://" or "https://"), it is returned as is.
+     * @return A `Mono<String>` containing the public URL of the uploaded media
+     *         file. If `data` is already a URL, it is returned immediately.
      */
     public Mono<String> uploadMedia(String data) {
         return this.uploadMediaMinio(data, this.minioProperties.getBucket());
     }
 
     /**
-     * Uploads a media file (image or video) from a Base64-encoded string to MinIO storage.
+     * Uploads a media file (image or video) from a Base64-encoded string to MinIO
+     * storage.
      * <p>
      * This method processes Base64-encoded media data, extracts the file type,
      * decodes it into binary format, and uploads it to the specified MinIO bucket.
@@ -199,15 +199,15 @@ public class MinioUtils {
      * </p>
      *
      * @param data
-     *        The Base64-encoded media data. It must be in the format:
-     *        `"data:[media-type];base64,[encoded-data]"`.
-     *        If `data` is a URL (starting with "http://" or "https://"), it is returned as is.
+     *            The Base64-encoded media data. It must be in the format:
+     *            `"data:[media-type];base64,[encoded-data]"`. If `data` is a URL
+     *            (starting with "http://" or "https://"), it is returned as is.
      * @param bucketName
-     *        The name of the MinIO bucket where the file should be stored.
-     *        If `null` or empty, the default bucket from `this.minioProperties` is used.
-     * @return
-     *        A `Mono<String>` containing the public URL of the uploaded media file.
-     *        If `data` is already a URL, it is returned immediately.
+     *            The name of the MinIO bucket where the file should be stored. If
+     *            `null` or empty, the default bucket from `this.minioProperties` is
+     *            used.
+     * @return A `Mono<String>` containing the public URL of the uploaded media
+     *         file. If `data` is already a URL, it is returned immediately.
      */
     public Mono<String> uploadMedia(String data, String bucketName) {
         return this.uploadMediaMinio(data, bucketName);
@@ -267,7 +267,8 @@ public class MinioUtils {
     private void makeBucketSync(String bucketName) {
         try {
             log.info("Start making bucket with name {}", bucketName);
-            this.minioClient.makeBucket(MakeBucketArgs.builder().bucket(bucketName).build());
+            this.minioClient.makeBucket(
+                    MakeBucketArgs.builder().bucket(bucketName).build());
             log.info("Make bucket successfully");
         } catch (Exception e) {
             log.error(e.getMessage(), e);
@@ -1196,8 +1197,8 @@ public class MinioUtils {
      */
     public InputStream getObject(String bucketName, String objectName)
             throws ServerException, InsufficientDataException, ErrorResponseException, IOException,
-            NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException,
-            InternalException {
+                    NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException,
+                    InternalException {
         return this.minioClient.getObject(
                 GetObjectArgs.builder().bucket(bucketName).object(objectName).build());
     }

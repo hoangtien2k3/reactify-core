@@ -18,18 +18,12 @@ package com.reactify.util;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
-import java.util.List;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 /**
  * Utility class providing methods for string manipulation, number conversion,
  * and comparison operations.
  */
 public class ConvertUtils {
-
-    private static final Logger log = LogManager.getLogger(ConvertUtils.class);
-    private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#.###");
 
     /**
      * Converts a raw string value into a JSON string format. If the input is null
@@ -71,16 +65,13 @@ public class ConvertUtils {
      * @return the formatted string representation of the number
      */
     public static String convertNumber(Number number) {
-        if (number == null) {
-            return "0";
-        } else {
-            DecimalFormat decimalFormat = new DecimalFormat();
-            DecimalFormatSymbols symbols = decimalFormat.getDecimalFormatSymbols();
-            symbols.setGroupingSeparator('.');
-            symbols.setDecimalSeparator(',');
-            decimalFormat.setDecimalFormatSymbols(symbols);
-            return decimalFormat.format(number);
-        }
+        if (number == null) return "0";
+        DecimalFormat df = new DecimalFormat();
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols();
+        symbols.setGroupingSeparator('.');
+        symbols.setDecimalSeparator(',');
+        df.setDecimalFormatSymbols(symbols);
+        return df.format(number);
     }
 
     /**
@@ -92,14 +83,11 @@ public class ConvertUtils {
      * @return the parsed {@link Number} object
      */
     public static Number convertNumber(String number) {
-        if (number == null) {
+        if (number == null) return 0;
+        try {
+            return new DecimalFormat("#.###").parse(number);
+        } catch (ParseException e) {
             return 0;
-        } else {
-            try {
-                return DECIMAL_FORMAT.parse(number);
-            } catch (ParseException e) {
-                return 0;
-            }
         }
     }
 
@@ -117,31 +105,5 @@ public class ConvertUtils {
      */
     public static boolean compareSpecial(Object obj, String target) {
         return obj != null && obj.toString().equals(target);
-    }
-
-    /**
-     * Determines the registration status of a package based on its code. Returns:
-     * <ul>
-     * <li>3 if the package is in the canceled list</li>
-     * <li>1 if the package is in the currently used list</li>
-     * <li>0 if the package is in neither list</li>
-     * </ul>
-     *
-     * @param code
-     *            the package code to check
-     * @param packUsing
-     *            the list of currently used packages
-     * @param canceledList
-     *            the list of canceled packages
-     * @return the registration status of the package
-     */
-    public static int getRegPackage(String code, List<String> packUsing, List<String> canceledList) {
-        if (canceledList.contains(code)) {
-            return 3;
-        } else if (packUsing.contains(code)) {
-            return 1;
-        } else {
-            return 0;
-        }
     }
 }

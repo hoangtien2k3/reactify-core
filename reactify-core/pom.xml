@@ -29,7 +29,7 @@
     <!-- =========================================== -->
     <groupId>io.github.hoangtien2k3</groupId>
     <artifactId>reactify-core</artifactId>
-    <version>1.2.9</version>
+    <version>1.3.0</version>
     <name>reactify-core</name>
     <description>Java library for developing reactive programming(reactor-core) backend systems in microservices</description>
     <url>https://github.com/hoangtien2k3/reactify-core</url>

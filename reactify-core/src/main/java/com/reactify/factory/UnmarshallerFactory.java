@@ -55,8 +55,7 @@ import org.slf4j.LoggerFactory;
  * @see Unmarshaller
  * @see JAXBContext
  * @see JAXBException
- * @since 1.0
- * @version 1.0
+ * @since 1.3.0
  * @author hoangtien2k3
  */
 public class UnmarshallerFactory {

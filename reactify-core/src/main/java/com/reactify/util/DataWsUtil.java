@@ -119,7 +119,9 @@ public class DataWsUtil {
     public static <T> T xmlToObj(String xml, Class<?> clz) {
         try {
             StringReader reader = new StringReader(xml.trim());
-            return (T) UnmarshallerFactory.getInstance(clz).unmarshal(reader);
+            @SuppressWarnings("unchecked")
+            T result = (T) UnmarshallerFactory.getInstance(clz).unmarshal(reader);
+            return result;
         } catch (Exception ex) {
             log.error("Parse data error {}  :", clz.getName() + ex.getMessage(), ex);
         }
@@ -134,10 +136,8 @@ public class DataWsUtil {
      * @param in
      *            a {@link java.lang.String} object
      * @return a {@link org.w3c.dom.Document} object
-     * @throws java.lang.Exception
-     *             if any.
      */
-    public static Document parseXmlFile(String in) throws Exception {
+    public static Document parseXmlFile(String in) {
         try {
             DocumentBuilderFactory dbf = getDocumentBuilderFactory();
             dbf.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);

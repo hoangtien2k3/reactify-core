@@ -20,6 +20,7 @@ import com.reactify.test.client.properties.BaseCurrencyClientProperties;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
 

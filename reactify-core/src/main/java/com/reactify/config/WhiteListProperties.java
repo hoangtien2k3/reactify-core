@@ -17,7 +17,6 @@ package com.reactify.config;
 
 import com.reactify.model.WhiteList;
 import java.util.List;
-import java.util.Objects;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
@@ -60,17 +59,5 @@ public class WhiteListProperties {
 
     public void setWhiteList(List<WhiteList> whiteList) {
         this.whiteList = whiteList;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof WhiteListProperties that)) return false;
-        return Objects.equals(getWhiteList(), that.getWhiteList());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getWhiteList());
     }
 }

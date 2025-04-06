@@ -32,9 +32,8 @@ import org.springframework.context.annotation.Configuration;
  * </pre>
  *
  * @author @hoangtien2k3
- * @since 1.0
+ * @since 1.3.0
  */
 @Configuration
 @ComponentScan(basePackages = "com.reactify")
-public class ReactifyAutoConfiguration {
-}
+public class ReactifyAutoConfiguration {}

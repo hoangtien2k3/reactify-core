@@ -19,7 +19,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
@@ -46,7 +45,6 @@ import org.springframework.util.CollectionUtils;
  * @author hoangtien2k3
  */
 @Component
-@ConfigurationProperties(value = "spring.plugin.config")
 public class GatewayPluginProperties implements InitializingBean {
 
     /**

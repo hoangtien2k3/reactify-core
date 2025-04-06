@@ -127,7 +127,6 @@ public class Regex {
      * Supports both "http" and "https" protocols, with optional "www", and ensures
      * a valid domain and path structure.
      * </p>
-     * Example matches: "https://www.example.com", "http://domain.com/path"
      */
     public static final String LINK =
             "^(http:\\/\\/|https:\\/\\/)(www\\.)?[a-zA-Z0-9@:%._\\+~#=]{2,256}(\\.[a-z]{2,6})?(:\\d+)?\\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*)$";
@@ -143,13 +142,13 @@ public class Regex {
     public static final String TAX_CODE_REGEX = "^\\d\\d{9}$|^\\d\\d{12}$";
 
     /**
-     * Regular expression to validate Viettel mobile numbers in Vietnam.
+     * Regular expression to validate Phone mobile numbers in Vietnam.
      * <p>
-     * Supports both old and new prefixes for Viettel, including optional "0" at the
+     * Supports both old and new prefixes for Phone, including optional "0" at the
      * start.
      * </p>
      * Example matches: "84961234567", "0971234567"
      */
-    public static final String VIETTEL_NUMBER_FORMAT =
+    public static final String PHONE_NUMBER_FORMAT =
             "^8496\\d{7}$|^8497\\d{7}$|^8498\\d{7}$|^8416\\d{8}$|0?96\\d{7}$|0?97\\d{7}$|^0?98\\d{7}$|^0?16\\d{8}$";
 }

@@ -20,7 +20,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.reactify.constants.CommonErrorCode;
-import com.reactify.exception.UnRetryableException;
+import com.reactify.exception.BusinessException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -34,7 +34,7 @@ import org.springframework.stereotype.Component;
  * Jackson. Provides methods to convert objects to JSON strings and vice versa.
  * Also supports conversion of lists and byte arrays to objects.
  *
- * @since 20/07/2024
+ * @since 1.3.0
  * @author hoangtien2k3
  */
 @Component
@@ -141,7 +141,7 @@ public class ObjectMapperUtil {
         try {
             return objectMapper.readValue(byteArray, valueType);
         } catch (Exception ex) {
-            throw new UnRetryableException(CommonErrorCode.UN_DESERIALIZE, ex.getMessage());
+            throw new BusinessException(CommonErrorCode.UN_DESERIALIZE, ex.getMessage());
         }
     }
 
@@ -164,7 +164,7 @@ public class ObjectMapperUtil {
             }
             return results;
         } catch (Exception ex) {
-            throw new UnRetryableException(CommonErrorCode.UN_DESERIALIZE, ex.getMessage());
+            throw new BusinessException(CommonErrorCode.UN_DESERIALIZE, ex.getMessage());
         }
     }
 
@@ -183,7 +183,7 @@ public class ObjectMapperUtil {
         try {
             return objectMapper.convertValue(input, valueType);
         } catch (Exception ex) {
-            throw new UnRetryableException(CommonErrorCode.UN_DESERIALIZE, ex.getMessage());
+            throw new BusinessException(CommonErrorCode.UN_DESERIALIZE, ex.getMessage());
         }
     }
 

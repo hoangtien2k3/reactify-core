@@ -17,9 +17,10 @@ package com.reactify.client;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
-import com.reactify.properties.WebClientProperties;
+import com.reactify.client.properties.WebClientProperties;
 import com.reactify.constants.Constants;
 import com.reactify.filter.properties.ProxyProperties;
+import com.reactify.filter.webclient.TokenRelayFilter;
 import com.reactify.filter.webclient.WebClientLoggingFilter;
 import com.reactify.filter.webclient.WebClientMonitoringFilter;
 import com.reactify.filter.webclient.WebClientRetryHandler;
@@ -39,6 +40,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.security.oauth2.client.ReactiveOAuth2AuthorizedClientManager;
 import org.springframework.security.oauth2.client.web.reactive.function.client.ServerOAuth2AuthorizedClientExchangeFilterFunction;
@@ -66,7 +68,7 @@ import reactor.netty.transport.ProxyProvider;
  * {@link org.springframework.beans.factory.InitializingBean} interface, which
  * triggers the initialization of web clients after the bean properties have
  * been set. Each web client is created based on the specified
- * {@link com.reactify.properties.WebClientProperties}.
+ * {@link com.reactify.client.properties.WebClientProperties}.
  * </p>
  *
  * <p>
@@ -126,13 +128,13 @@ public class WebClientFactory implements InitializingBean {
     /**
      * <p>
      * Initializes web clients based on the provided list of
-     * {@link com.reactify.properties.WebClientProperties}. Each client is
+     * {@link com.reactify.client.properties.WebClientProperties}. Each client is
      * created and registered as a singleton bean in the application context.
      * </p>
      *
      * @param webClients
      *            a {@link java.util.List} of
-     *            {@link com.reactify.properties.WebClientProperties} objects
+     *            {@link com.reactify.client.properties.WebClientProperties} objects
      *            containing configuration for each web client
      */
     public void initWebClients(List<WebClientProperties> webClients) {
@@ -150,13 +152,13 @@ public class WebClientFactory implements InitializingBean {
      * <p>
      * Creates a new instance of
      * {@link org.springframework.web.reactive.function.client.WebClient} using the
-     * provided {@link com.reactify.properties.WebClientProperties}. The
+     * provided {@link com.reactify.client.properties.WebClientProperties}. The
      * client is configured with connection pooling, timeout settings, and
      * additional filters based on the properties specified.
      * </p>
      *
      * @param webClientProperties
-     *            a {@link com.reactify.properties.WebClientProperties}
+     *            a {@link com.reactify.client.properties.WebClientProperties}
      *            object containing configuration for the web client
      * @return a {@link org.springframework.web.reactive.function.client.WebClient}
      *         object configured based on the given properties, or {@code null} if
@@ -194,7 +196,7 @@ public class WebClientFactory implements InitializingBean {
                 WebClient.builder().baseUrl(webClientProperties.getAddress()).exchangeStrategies(strategies);
         if (!DataUtil.isNullOrEmpty(webClientProperties.getUsername())) {
             exchangeStrategies.defaultHeader(
-                    Constants.Security.AUTHORIZATION,
+                    HttpHeaders.AUTHORIZATION,
                     Constants.Security.BEARER + " "
                             + Base64.getEncoder()
                                     .encodeToString((webClientProperties.getUsername() + ":"
@@ -220,6 +222,9 @@ public class WebClientFactory implements InitializingBean {
                     new ServerOAuth2AuthorizedClientExchangeFilterFunction(authorizedClientManager);
             oauth2.setDefaultClientRegistrationId(Constants.Security.DEFAULT_REGISTRATION_ID);
             exchangeStrategies.filter(oauth2);
+        }
+        if (webClientProperties.isTokenRelay()) {
+            exchangeStrategies.filter(new TokenRelayFilter());
         }
 
         List<ExchangeFilterFunction> customFilters = webClientProperties.getCustomFilters();

@@ -35,12 +35,14 @@ public class KeyCloakProperties {
     /**
      * the client ID used for authenticating with the Keycloak server
      */
-    private final String clientId;
+    private String clientId;
 
     /**
      * the client secret used for authenticating with the Keycloak server
      */
-    private final String clientSecret;
+    private String clientSecret;
+
+    public KeyCloakProperties() {}
 
     public KeyCloakProperties(String clientId, String clientSecret) {
         this.clientId = clientId;

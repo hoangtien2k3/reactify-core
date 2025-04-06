@@ -50,8 +50,7 @@ import javax.xml.bind.Marshaller;
  * </pre>
  *
  * @author hoangtien2k3
- * @since 1.0
- * @version 1.0
+ * @since 1.3.0
  */
 public class MarshallerFactory {
 

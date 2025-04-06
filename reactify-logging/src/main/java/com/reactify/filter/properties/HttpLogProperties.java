@@ -51,6 +51,14 @@ public class HttpLogProperties {
      */
     private HttpLogResponse response = new HttpLogResponse();
 
+    public HttpLogProperties() {
+    }
+
+    public HttpLogProperties(HttpLogRequest request, HttpLogResponse response) {
+        this.request = request;
+        this.response = response;
+    }
+
     public HttpLogRequest getRequest() {
         return request;
     }
@@ -64,13 +72,6 @@ public class HttpLogProperties {
     }
 
     public void setResponse(HttpLogResponse response) {
-        this.response = response;
-    }
-
-    public HttpLogProperties() {}
-
-    public HttpLogProperties(HttpLogRequest request, HttpLogResponse response) {
-        this.request = request;
         this.response = response;
     }
 }

@@ -69,18 +69,57 @@ public class RequestUtils {
     }
 
     /**
-     * Generates an offline cache key using the provided IP address and port.
+     * Generates an offline cache key based on the given IP and port.
      *
      * @param ip
-     *            the IP address to be used in the cache key
+     *            the client IP address
      * @param port
-     *            the port number to be used in the cache key
-     * @return the generated cache key as a String, or null if the IP address is
-     *         null
+     *            the client port
+     * @return the formatted cache key, or null if IP is null
      */
     public static String getOfflineCacheKey(String ip, int port) {
-        if (ip != null) {
-            return ip + ":" + port;
+        return ip != null ? ip + ":" + port : null;
+    }
+
+    /**
+     * Checks whether the given IP is local (127.0.0.1 or ::1).
+     *
+     * @param ip
+     *            the IP address to check
+     * @return true if the IP is local, false otherwise
+     */
+    public static boolean isLocalAddress(String ip) {
+        return "127.0.0.1".equals(ip) || "localhost".equals(ip) || "::1".equals(ip);
+    }
+
+    /**
+     * Checks if the current request is coming from localhost or not.
+     *
+     * @param request
+     *            the {@link ServerHttpRequest}
+     * @return true if the request comes from localhost
+     */
+    public static boolean isLocalRequest(ServerHttpRequest request) {
+        String ip = getIpAddress(request);
+        return isLocalAddress(ip);
+    }
+
+    /**
+     * Iterates through multiple headers to find the first non-empty and
+     * non-"unknown" value.
+     *
+     * @param headers
+     *            the {@link HttpHeaders} object
+     * @param headerNames
+     *            list of header keys to try
+     * @return the first valid header value, or null if none found
+     */
+    private static String getFirstValidHeader(HttpHeaders headers, String... headerNames) {
+        for (String header : headerNames) {
+            String value = headers.getFirst(header);
+            if (value != null && !value.isEmpty() && !UNKNOWN.equalsIgnoreCase(value)) {
+                return value;
+            }
         }
         return null;
     }

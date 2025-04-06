@@ -54,8 +54,7 @@ import java.io.IOException;
  * @see DeserializationFeature
  * @see SimpleModule
  * @see JavaTimeModule
- * @since 1.0
- * @version 1.0
+ * @since 1.3.0
  * @author hoangtien2k3
  */
 public class ObjectMapperFactory {
@@ -167,7 +166,7 @@ public class ObjectMapperFactory {
      */
     private static class NumericBooleanDeserializer extends JsonDeserializer<Boolean> {
         @Override
-        public Boolean deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
+        public Boolean deserialize(JsonParser p, DeserializationContext deserializationContext) throws IOException {
             String text = p.getText().trim();
             return switch (text) {
                 case "1", "true" -> Boolean.TRUE;

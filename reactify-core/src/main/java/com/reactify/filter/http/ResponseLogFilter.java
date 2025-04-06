@@ -18,7 +18,6 @@ package com.reactify.filter.http;
 import static reactor.core.scheduler.Schedulers.single;
 
 import com.reactify.model.GatewayContext;
-import com.reactify.util.CacheUtils;
 import com.reactify.util.DataUtil;
 import com.reactify.util.LogUtils;
 import io.netty.buffer.UnpooledByteBufAllocator;
@@ -74,7 +73,7 @@ public class ResponseLogFilter implements WebFilter, Ordered {
     /**
      * A static logger instance for logging messages
      */
-    private static final Logger log = LoggerFactory.getLogger(CacheUtils.class);
+    private static final Logger log = LoggerFactory.getLogger(ResponseLogFilter.class);
 
     private final ExchangeStrategies exchangeStrategies = ExchangeStrategies.builder()
             .codecs(cl -> cl.defaultCodecs().maxInMemorySize(50 * 1024 * 1024))

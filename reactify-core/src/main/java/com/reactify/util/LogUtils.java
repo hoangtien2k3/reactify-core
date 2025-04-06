@@ -32,7 +32,7 @@ import org.springframework.http.MediaType;
  * to log the content of DataBuffer objects. Supports various media types for
  * logging.
  *
- * @since 20/07/2024
+ * @since 1.3.0
  * @author hoangtien2k3
  */
 public class LogUtils {
@@ -65,7 +65,6 @@ public class LogUtils {
      *            the type of DataBuffer
      * @return the original DataBuffer wrapped in a new DataBuffer
      */
-    @SuppressWarnings("unchecked")
     public static <T extends DataBuffer> T loggingRequest(Logger log, T buffer) {
         return logging(log, "request: ", buffer);
     }
@@ -104,7 +103,9 @@ public class LogUtils {
         NettyDataBufferFactory nettyDataBufferFactory = new NettyDataBufferFactory(new UnpooledByteBufAllocator(false));
         log.info("{}: {}", inOrOut, new String(bytes));
         DataBufferUtils.release(buffer);
-        return (T) nettyDataBufferFactory.wrap(bytes);
+        @SuppressWarnings("unchecked")
+        T result = (T) nettyDataBufferFactory.wrap(bytes);
+        return result;
     }
 
     /**

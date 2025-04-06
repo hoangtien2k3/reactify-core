@@ -197,39 +197,4 @@ public class WebClientProperties {
     public void setInternalOauth(boolean internalOauth) {
         this.internalOauth = internalOauth;
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof WebClientProperties that)) return false;
-        return isInternalOauth() == that.isInternalOauth()
-                && Objects.equals(getName(), that.getName())
-                && Objects.equals(getAddress(), that.getAddress())
-                && Objects.equals(getUsername(), that.getUsername())
-                && Objects.equals(getPassword(), that.getPassword())
-                && Objects.equals(getAuthorization(), that.getAuthorization())
-                && Objects.equals(getPool(), that.getPool())
-                && Objects.equals(getTimeout(), that.getTimeout())
-                && Objects.equals(getRetry(), that.getRetry())
-                && Objects.equals(getLog(), that.getLog())
-                && Objects.equals(getProxy(), that.getProxy())
-                && Objects.equals(getCustomFilters(), that.getCustomFilters());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(
-                getName(),
-                getAddress(),
-                getUsername(),
-                getPassword(),
-                getAuthorization(),
-                getPool(),
-                getTimeout(),
-                getRetry(),
-                getLog(),
-                getProxy(),
-                getCustomFilters(),
-                isInternalOauth());
-    }
 }
