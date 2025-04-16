@@ -59,7 +59,8 @@ Add the dependency to your project build.gradle file or maven pom:
 ```groovy
 dependencies {
     //Core reactive framework with Spring WebFlux integration 
-    implementation("io.github.hoangtien2k3:reactify-core:1.2.9")
+    // https://mvnrepository.com/artifact/io.github.hoangtien2k3/reactify-core
+    implementation("io.github.hoangtien2k3:reactify-core:1.3.0")
 
     //In-memory reactive caching for high-speed data access
     implementation("io.github.hoangtien2k3:reactify-cache:1.2.4")
@@ -78,10 +79,11 @@ dependencies {
 ```xml
 <dependencies>
    <!-- Core reactive framework with Spring WebFlux integration -->
+   <!-- https://mvnrepository.com/artifact/io.github.hoangtien2k3/reactify-core -->
    <dependency>
       <groupId>io.github.hoangtien2k3</groupId>
       <artifactId>reactify-core</artifactId>
-      <version>1.2.9</version>
+      <version>1.3.0</version>
    </dependency>
    
    <!-- In-memory reactive caching for high-speed data access -->
